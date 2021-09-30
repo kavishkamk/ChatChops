@@ -1,0 +1,72 @@
+html, body {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-weight: bold;
+  }
+  
+  html {
+    background:linear-gradient(to right, #03203C 0%, #207398 50%, #03203C 99%);
+  }
+  
+  .logform {
+   line-height: 30px;
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 1.1em;
+  }
+  
+  .flog {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+  
+  .container {
+   position: relative;
+   min-width: 300px;
+   height: 90vh;
+   border-radius: 10px;
+   text-align: center;
+  }
+  
+  .fpwd {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 1;
+  }
+  
+  .logerr{
+    color:#FFF;
+    background-color: #b71414;
+    padding: 15px;
+  }
+  
+  #logcont {
+    position: relative;
+    background: #FFF;
+    width:auto;
+    border-radius: 10px;
+    top:1%;
+  }
+  
+  #logcont > p {
+    font-size: 1.5em;
+    background:#04072f;
+    color: #57c1eb;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+  }
+
+  .logbutn {
+    position: relative;
+    color: #FFF;
+    background-color: #04072f;
+    width: 85%;
+    padding: 5px 15px;
+    margin: 20px 0px 10px;
+    transition: background 1.5s ease;
+  }
+  
+  .logbutn:hover {
+    background-color: #222dc3;
+  }

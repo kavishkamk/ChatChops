@@ -1,0 +1,74 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+
+
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    
+    /*fixed top position*/
+    position: fixed;
+    top: 0;
+    width: 100%;
+    
+}
+
+li {
+    top: 0;
+    float: left; /*blocks float next to each other*/
+}
+
+li a {
+    display: block; /*allow to specify padding*/
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+/*active class will change color of the current link*/
+.active {
+    background-color: #207398;
+}
+
+/*ChatApp name */
+#proName{
+    display: block;
+    color: #23C4ED;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    opacity: 0.5;
+    border-right: 2px solid #207398;
+    text-shadow: 2px 2px 5px #23C4ED;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.logo img{
+    display: block;
+    padding: 1px;
+    margin-top: -10px;
+    width:200px;
+    height:auto;
+}
+
+#login-link{
+    font-style: italic;
+    color: rgb(65, 184, 231);
+}
