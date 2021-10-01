@@ -17,6 +17,13 @@
             exit();
         }
     }
+
+    if(isset($_GET['logstat'])){
+        if(isset($_GET['logstat']) != "notactived"){
+            header("Location:login.php");
+            exit();
+        }
+    }
 ?> 
 
 <!DOCTYPE html>
