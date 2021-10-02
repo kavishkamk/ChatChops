@@ -1,8 +1,9 @@
 <?php
 
+    // check outhentication
     if(isset($_POST['otp-submit'])){
-        $username = $_POST['username'];
-        $otpcode = $_POST['verification'];
+        $username = test_input($_POST['username']);
+        $otpcode = test_input($_POST['verification']);
 
         if(empty($username) || empty($otpcode)){
             header("Location:../otpcode.php?otpstatus=emptyfield&username=$username");
@@ -48,4 +49,12 @@
     else{
         header("Location:../otpcode.php");
         exit();
+    }
+
+    // filter inputs
+    function test_input($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
     }

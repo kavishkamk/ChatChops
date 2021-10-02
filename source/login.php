@@ -28,8 +28,17 @@
                         }
                     }
                     else if(isset($_GET['reotpstatus'])){
-                            $errmsg = setOtpResendErrorMsg();
-                            echo '<p class="logerr">'.$errmsg.'</p>';
+                        $errmsg = setOtpResendErrorMsg();
+                        echo '<p class="logerr">'.$errmsg.'</p>';
+                    }
+                    else if(isset($_GET['signerror'])){
+                        $errmsg = setRegistrationErrorMsg();
+                        echo '<p class="logerr">'.$errmsg.'</p>';
+                    }
+                    else if(isset($_GET['logout'])){
+                        if($_GET['logout'] == "logoutok"){
+                            echo '<p class="logsuss">You are logged out.!</p>';
+                        }
                     }
                     else{
                         echo '<p class="logok"> . </p>';
@@ -105,15 +114,26 @@
                 return "Not availabal Account";
             }
             else if($_GET['otpstatus'] == "sqlError" || $_GET['otpstatus'] == "sqlError1"){
-                return "Something Wrong. Try Again";
+                return "Something Wrong. Try Again.";
             }
         }
     }
 
     function setOtpResendErrorMsg(){
-        $errtyp = $_GET['reotpstatus'];
-        if($errtyp == "emptyusername" || $errtyp == "nouser" || $errtyp == "alradyactive" || $errtyp == "emailnotfound"){
-            return "Something Wrong. Try Again";
+        if(isset($_GET['reotpstatus'])){
+            $errtyp = $_GET['reotpstatus'];
+            if($errtyp == "emptyusername" || $errtyp == "nouser" || $errtyp == "alradyactive" || $errtyp == "emailnotfound"){
+                return "Something Wrong. Try Again.";
+            }
+        }
+    }
+
+    function setRegistrationErrorMsg(){
+        if(isset($_GET['signerror'])){
+            $errtyp = $_GET['signerror'];
+            if($errtyp == "sqlerror" || $errtyp == "notaregistermail" || $errtyp == "otpsenderror"){
+                return "Something Wrong. Try Again.";
+            }
         }
     }
 ?>

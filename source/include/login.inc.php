@@ -1,8 +1,11 @@
 <?php
+    session_start();
+
+    // for loing
     if(isset($_POST['log-submit'])){
         
-        $unameormail = $_POST['unameormail'];
-        $pwd = $_POST['pwd'];
+        $unameormail = test_input($_POST['unameormail']);
+        $pwd = test_input($_POST['pwd']);
 
         if(empty($unameormail) || empty($pwd)){
             header("Location:../login.php?logstat=emptyfield&username=$unameormail");
@@ -56,4 +59,12 @@
     else{
         header("Location:../login.php");
         exit();
+    }
+
+    // filter inputs
+    function test_input($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
     }

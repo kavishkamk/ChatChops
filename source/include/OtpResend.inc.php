@@ -1,6 +1,7 @@
 <?php
+    // for reseng OTP code
     if(isset($_POST['reotp-submit'])){
-        $username = $_POST['usernameotp'];
+        $username = test_input($_POST['usernameotp']);
 
         if(empty($username)){
             header("Location:../login.php?reotpstatus=emptyusername");
@@ -36,4 +37,12 @@
     else{
         header("Location:../login.php");
         exit();
+    }
+
+    // filter inputs
+    function test_input($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
     }

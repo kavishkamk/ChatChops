@@ -38,6 +38,15 @@
             else if($this->pwd != $this->cpwd){
                 return 6;
             }
+            else if(strlen($this->firstName) > 30){
+                return 7;
+            }
+            else if(strlen($this->lastName) > 30){
+                return 8;
+            }
+            else if(strlen($this->username) > 50){
+                return 8;
+            }
             else{
                 return 0;
             }

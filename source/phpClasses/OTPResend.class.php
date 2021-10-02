@@ -79,6 +79,7 @@
             }
         }
 
+        // genarate and change new OTP code for user accout activation
         private function genarateAndchageOTPcode(){
             $sqlQ = "UPDATE users SET otpCode = ? WHERE username = ?;";
             $conn = $this->connect();
@@ -97,6 +98,7 @@
             }
         }
 
+        // send updated OTP with email
         private function sendMailWithChangedMail(){
             require_once "MailHandle.class.php";
 

@@ -1,6 +1,8 @@
 <?php
+    session_start();
 
-require_once "DbConnection.class.php";
+    // this class for login handle
+    require_once "DbConnection.class.php";
 
     class LoginHandle extends DbConnection {
 
@@ -34,7 +36,9 @@ require_once "DbConnection.class.php";
                             exit();
                         }
                         else if($pwdCheck == true){
-                            return "1";
+                            session_start();
+                            $_SESSION['userid'] = $this->user_id;
+                            return "1"; // login success
                             exit();
                         }
                         else{

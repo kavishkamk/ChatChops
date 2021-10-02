@@ -197,6 +197,15 @@
             else if($_GET['signerror'] == 'abailableuname'){
                 return "This username is alrady used to create account..";
             }
+            else if($_GET['signerror'] == 'fnamemax'){
+                return "Max 30 for first Name.";
+            }
+            else if($_GET['signerror'] == 'lnamemax'){
+                return "Max 30 for last Name.";
+            }
+            else if($_GET['signerror'] == 'unamemax'){
+                return "Max 50 for username";
+            }
         }
     }
 ?>
