@@ -146,7 +146,7 @@
                     <input type="password" name="confirm-password" placeholder="enter your password again" class="form-input">
                 </div>
             </div>
-
+            
             <!-- form footer -->
             <div class="form-footer">
                 <span class= "status" >* required</span>
@@ -262,11 +262,17 @@ $(document).ready(function(){
 			var reader = new FileReader();
 			reader.readAsDataURL(blob);
 			reader.onloadend = function(){
+
+                var prePhoto = document.getElementById("prouppic").value;
+                if(prePhoto == "unknownPerson.jpg" || prePhoto == ""){
+                    prePhoto = "000";
+                }
+
 				var base64data = reader.result;
 				$.ajax({
 					url:'profileUpload.php',
 					method:'POST',
-					data:{image:base64data},
+					data:{image:base64data, pre:prePhoto},
 					success:function(data)
 					{
 						$modal.modal('hide');
