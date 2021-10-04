@@ -1,6 +1,4 @@
 <?php
-    session_start();
-
     // this class for login handle
     require_once "DbConnection.class.php";
 
@@ -15,6 +13,7 @@
         private $activeStatus;
         private $deleteStatus;
         private $registerdUName;
+        private $logInsertId;
         
         public function checkUserwithPasswerd($username, $pwd){
             $this->username = $username;
@@ -36,9 +35,27 @@
                             exit();
                         }
                         else if($pwdCheck == true){
-                            session_start();
-                            $_SESSION['userid'] = $this->user_id;
-                            return "1"; // login success
+
+                            require_once "OnlineOffline.class.php";
+
+                            $onlineObj = new OnlineOffline();
+                            $onlineRes = $onlineObj->setUserOnlie($this->user_id);
+                            $this->setLoginRecords();
+                            $this->setMappingTable();
+                            if($onlineRes == "1"){
+
+                                session_unset();
+                                session_destroy();
+                                session_start();
+                                
+                                $_SESSION['userid'] = $this->user_id; // set user id of the user table
+                                $_SESSION['onlineRecordid'] = $this->logInsertId; // set with record id to set offline time
+                                return "1"; // login success
+                            }
+                            else{
+                                return "3"; // sql error
+                            }
+                            unset($onlineObj);
                             exit();
                         }
                         else{
@@ -59,7 +76,7 @@
                             return "0"; // user not found
                         }
                         else if($resendres == "3"){
-                            return "3";
+                            return "3"; // sql error
                         }
                         else if($resendres == "5"){
                             return "6";
@@ -109,6 +126,49 @@
                     exit();
                 }
             }
+        }
+
+        // when user login insert that data to the relavent table
+        private function setLoginRecords(){
+            $sqlQ = "INSERT INTO user_active_time(online_date_and_time, offline_date_and_time) VALUES(?,?);";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                return "sqlerror";
+                $this->connclose($stmt, $conn);
+                exit();
+            }
+            else{
+                $onlieTime = date("Y-n-d H:i:s"); // acout log date and time
+                mysqli_stmt_bind_param($stmt, "ss", $onlieTime, $onlieTime);
+                mysqli_stmt_execute($stmt);
+                $this->logInsertId = mysqli_stmt_insert_id($stmt);
+                return "1";
+                $this->connclose($stmt, $conn);
+                exit();
+            }
+        }
+
+        // update mapping table
+        private function setMappingTable(){
+            $sqlQ = "INSERT INTO user_user_act_id_map(user_id, active_id) VALUES(?,?);";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                return "sqlerror";
+                $this->connclose($stmt, $conn);
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($stmt, "ss", $this->user_id, $this->logInsertId);
+                mysqli_stmt_execute($stmt);
+                return "1";
+                $this->connclose($stmt, $conn);
+                exit();
+            }
+
         }
 
         private function connclose($stmt, $conn){

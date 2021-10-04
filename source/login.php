@@ -1,4 +1,10 @@
 <!-- This is login interface -->
+<?php
+    if(session_start()){
+        session_unset();
+        session_destroy();
+    }
+?>
 <!DOCTYPE HTML>
 <html lang="en">
     <head>
