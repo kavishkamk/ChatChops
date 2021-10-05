@@ -2,10 +2,11 @@
 
     require_once "DbConnection.class.php";
 
+    // this class used to set user online, offline status with time and set login records
     class OnlineOffline extends DbConnection{
 
         // set user online status in the database
-        public function setUserOnlie($userid){
+        public function setUserOnline($userid){
             $val = 1; $recId = 0;
             $res = $this->setOnlineOffle($userid, $val, $recId);
             return $res;
@@ -40,11 +41,12 @@
             }
             else{
                 $offTime = date("Y-n-d H:i:s"); // acout cration date and time
-                mysqli_stmt_bind_param($stmt, "iss", $val, $offTime, $userid);
+                mysqli_stmt_bind_param($stmt, "isi", $val, $offTime, $userid);
                 mysqli_stmt_execute($stmt);
                 if($recId != 0){
                     $this->setLogoutTime($offTime, $recId);
                 }
+                $this->connclose($stmt, $conn);
                 return "1";
                 exit();
             }

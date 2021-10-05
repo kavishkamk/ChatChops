@@ -39,7 +39,7 @@
                             require_once "OnlineOffline.class.php";
 
                             $onlineObj = new OnlineOffline();
-                            $onlineRes = $onlineObj->setUserOnlie($this->user_id);
+                            $onlineRes = $onlineObj->setUserOnline($this->user_id);
                             $this->setLoginRecords();
                             $this->setMappingTable();
                             if($onlineRes == "1"){
@@ -57,6 +57,8 @@
                                     $_SESSION['userid'] = $this->user_id; // set user id of the user table
                                     $_SESSION['onlineRecordid'] = $this->logInsertId; // set with record id to set offline time
                                     $_SESSION['sessionId'] = $sessionVal; // set with record id to set offline time
+                                    $_SESSION['fname'] = $this->fname;
+                                    $_SESSION['lname'] = $this->lname;
                                     return "1"; // login success
                                 }
                                 else{
@@ -91,7 +93,7 @@
                             return "3"; // sql error
                         }
                         else if($resendres == "5"){
-                            return "6";
+                            return "6"; // OTPsenderror
                         }
                         unset($resendObj);
                         exit();

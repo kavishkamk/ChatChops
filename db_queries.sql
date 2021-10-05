@@ -420,3 +420,16 @@ CREATE TABLE user_session(
 
 ALTER TABLE user_session
 ADD FOREIGN KEY (users_id) REFERENCES users(user_id);
+
+ALTER TABLE admins
+ADD online_status BOOLEAN NOT NULL DEFAULT 0;
+
+CREATE TABLE admin_session(
+    admin_id int NOT NULL,
+    session_id varchar(100) NOT NULL,
+    session_expire DATETIME NOT NULL,
+    PRIMARY KEY (admin_id)
+);
+
+ALTER TABLE admin_session
+ADD FOREIGN KEY (admin_id) REFERENCES admins(admin_id);
