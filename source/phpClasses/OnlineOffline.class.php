@@ -14,6 +14,12 @@
 
         // set user offline status and add record to database
         public function setUserOffline($userid, $recId){
+            // delete sessionid from database
+            require_once "SessionHandle.class.php";
+            $sesObj = new SessionHandle();
+            $sesResult = $sesObj->deleteSesseion($userid);
+            unset($sesObj);
+
             $val = 0;
             $res = $this->setOnlineOffle($userid, $val, $recId);
             return $res;

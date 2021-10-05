@@ -410,3 +410,13 @@ ADD deleteStatus BOOLEAN NOT NULL;
 
 ALTER TABLE users
 ALTER deleteStatus SET DEFAULT 0;
+
+CREATE TABLE user_session(
+    users_id int NOT NULL,
+    session_id varchar(100) NOT NULL,
+    session_expire DATETIME NOT NULL,
+    PRIMARY KEY (users_id)
+);
+
+ALTER TABLE user_session
+ADD FOREIGN KEY (users_id) REFERENCES users(user_id);

@@ -43,17 +43,29 @@
                             $this->setLoginRecords();
                             $this->setMappingTable();
                             if($onlineRes == "1"){
-
                                 session_unset();
                                 session_destroy();
                                 session_start();
+                                require_once "SessionHandle.class.php";
+                                $sesObj = new SessionHandle();
+                                $sessionVal = session_id(); // genarete session id
+                                $sesResult = $sesObj->setSession($this->user_id, $sessionVal);
+                                unset($sesObj);
+
+                                if($sesResult == "1"){
                                 
-                                $_SESSION['userid'] = $this->user_id; // set user id of the user table
-                                $_SESSION['onlineRecordid'] = $this->logInsertId; // set with record id to set offline time
-                                return "1"; // login success
+                                    $_SESSION['userid'] = $this->user_id; // set user id of the user table
+                                    $_SESSION['onlineRecordid'] = $this->logInsertId; // set with record id to set offline time
+                                    $_SESSION['sessionId'] = $sessionVal; // set with record id to set offline time
+                                    return "1"; // login success
+                                }
+                                else{
+                                    return "3"; // sql error
+                                }
                             }
                             else{
                                 return "3"; // sql error
+                                exit();
                             }
                             unset($onlineObj);
                             exit();
@@ -102,8 +114,8 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
-                return "sqlerror";
                 $this->connclose($stmt, $conn);
+                return "sqlerror";
                 exit();
             }
             else{
@@ -118,10 +130,12 @@
                     $this->activeStatus = $row['active_status'];
                     $this->deleteStatus = $row['deleteStatus'];
                     $this->registerdUName = $row['username'];
+                    $this->connclose($stmt, $conn);
                     return "ok";
                     exit();
                 }
                 else{
+                    $this->connclose($stmt, $conn);
                     return "usernotfund";
                     exit();
                 }
@@ -135,8 +149,8 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
-                return "sqlerror";
                 $this->connclose($stmt, $conn);
+                return "sqlerror";
                 exit();
             }
             else{
@@ -144,8 +158,8 @@
                 mysqli_stmt_bind_param($stmt, "ss", $onlieTime, $onlieTime);
                 mysqli_stmt_execute($stmt);
                 $this->logInsertId = mysqli_stmt_insert_id($stmt);
-                return "1";
                 $this->connclose($stmt, $conn);
+                return "1";
                 exit();
             }
         }
@@ -157,15 +171,15 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
-                return "sqlerror";
                 $this->connclose($stmt, $conn);
+                return "sqlerror";
                 exit();
             }
             else{
                 mysqli_stmt_bind_param($stmt, "ss", $this->user_id, $this->logInsertId);
                 mysqli_stmt_execute($stmt);
-                return "1";
                 $this->connclose($stmt, $conn);
+                return "1";
                 exit();
             }
 
