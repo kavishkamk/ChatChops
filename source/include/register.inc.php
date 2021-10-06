@@ -22,13 +22,13 @@
             require_once "../phpClasses/RegisterDbHandle.class.php";
 
             $regHandlerObj = new RegisterDbHandle();
-            $userCheck = $regHandlerObj->isItAvailableEmail($usermail);
+            $userCheck = $regHandlerObj->isItAvailableEmail($usermail, "user");
 
             if($userCheck == "1"){
                 header("Location:../registration.php?signerror=abailableEmail&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");     
             }
             else if($userCheck == "0"){
-                $unameCheck = $regHandlerObj->isItAvailableUserName($username);
+                $unameCheck = $regHandlerObj->isItAvailableUserName($username, "user");
                 // alrady available user name
                 if($unameCheck == "1"){
                     header("Location:../registration.php?signerror=abailableuname&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");
@@ -71,8 +71,7 @@
             }
             else if($userCheck == "sqlerror"){
                 header("Location:../registration.php?signerror=sqlerror");
-           }
-
+            }
             unset($regHandlerObj);
         }
         // user inputs not compleate given conditions

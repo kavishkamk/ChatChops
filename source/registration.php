@@ -45,7 +45,7 @@
                     <label for="firstname" class="label-title" >First Name</label><br>
                     <?php 
                         if(isset($_GET['firstname'])){
-                            echo '<input type="text" name="firstname" placeholder="enter your first name" value='.$_GET['firstname'].' class="form-input" required>';
+                            echo '<input type="text" name="firstname" placeholder="enter your first name" value="'.$_GET['firstname'].'" class="form-input" required>';
                         }
                         else{
                             echo '<input type="text" name="firstname" placeholder="enter your first name" class="form-input" required>';
@@ -57,7 +57,7 @@
                     <label for="lastname" class="label-title">Last Name</label><br>
                     <?php
                     if(isset($_GET['lastname'])){
-                        echo '<input type="text" name="lastname" placeholder="enter your last name" value='.$_GET['lastname'].' class="form-input" required>';
+                        echo '<input type="text" name="lastname" placeholder="enter your last name" value="'.$_GET['lastname'].'" class="form-input" required>';
                     }
                     else{
                         echo '<input type="text" name="lastname" placeholder="enter your last name" class="form-input" required>';
@@ -117,7 +117,7 @@
                     <label for="uemail" class="label-title">Email*</label><br>
                     <?php
                         if(isset($_GET['umail'])){
-                            echo '<input type="email" name="uemail" placeholder="enter your email"  value='.$_GET['umail'].' class="form-input">';
+                            echo '<input type="email" name="uemail" placeholder="enter your email"  value="'.$_GET['umail'].'" class="form-input">';
                         }
                         else{
                             echo '<input type="email" name="uemail" placeholder="enter your email" class="form-input">';
@@ -129,7 +129,7 @@
                     <label for="username" class="label-title">Username</label><br>
                     <?php
                         if(isset($_GET['username'])){
-                            echo '<input type="text" name="username" placeholder="enter your user name" value='.$_GET['username'].' class="form-input">';
+                            echo '<input type="text" name="username" placeholder="enter your user name" value="'.$_GET['username'].'" class="form-input">';
                         }
                         else{
                             echo '<input type="text" name="username" placeholder="enter your user name" class="form-input">';
@@ -158,7 +158,7 @@
                         $errmsg = setErrMessage();
                     }
 
-                    echo '<span id="error-bar" >'.$errmsg.'</span>';
+                    echo '<span class="error-bar" >'.$errmsg.'</span>';
                 ?>
 
                 <button type="submit" name="register-submit" class="btn" >Create</button>
@@ -182,11 +182,14 @@
             else if($_GET['signerror'] == "wrongmail"){
                 return "Wrong email address";
             }
-            else if($_GET['signerror'] == "wrongfname" || $_GET['signerror'] == "errlname"){
-                return "Use Only characters (A-Z and a-z)";
+            else if($_GET['signerror'] == "wrongfname"){
+                return "Use Only characters (A-Z and a-z) for first name";
+            }
+            else if($_GET['signerror'] == "errlname"){
+                return "Use Only characters (A-Z and a-z) for last name";
             }
             else if($_GET['signerror'] == "errusername"){
-                return "Use Only characters and numbers (A-Z , a-z, 0-9)";
+                return "Use Only characters and numbers (A-Z , a-z, 0-9) for username";
             }
             else if($_GET['signerror'] == "errpwd"){
                 return "Wrong password";

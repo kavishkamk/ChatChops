@@ -1,5 +1,6 @@
 <?php
 
+    // this class can use to admins and users
     class Register{
 
         private $firstName;
@@ -45,7 +46,7 @@
                 return 8;
             }
             else if(strlen($this->username) > 50){
-                return 8;
+                return 9;
             }
             else{
                 return 0;
