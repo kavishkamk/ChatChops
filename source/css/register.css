@@ -48,18 +48,27 @@ body {
     display: grid;
     grid-template-columns: 33.3% 33.3% 6% 20%;
 }
+
+.admin-form-body {
+    position: relative;
+    padding:10px 40px;
+    color: darkgray;
+    width:auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
   
 .form-group{
     margin-bottom:30px;
 }
   
-.form-body .label-title {
+.form-body .label-title, .admin-form-body .label-title {
     color:#03203C;
     font-size: 17px;
     font-weight: bold;
 }
   
-.form-body .form-input {
+.form-body .form-input, .admin-form-body .form-input{
     font-size: 17px;
     box-sizing: border-box;
     width: 90%;
@@ -72,6 +81,10 @@ body {
     border-radius: 4px;
     background: white;
     outline: none;
+}
+
+.admin-form-body .form-input {
+    margin-bottom: 10px;
 }
 
 .err-input{
@@ -119,13 +132,21 @@ input[type="file"] {
     text-align: left;
 }
 
-#error-bar {
+.error-bar {
     position : relative;
     text-align: center;
     place-items: center;
     color: red;
     font-weight: bold;
     
+}
+
+.success-bar{
+    position : relative;
+    text-align: center;
+    place-items: center;
+    color: green;
+    font-weight: bold;
 }
 
 .btn {
@@ -141,6 +162,23 @@ input[type="file"] {
 }
 
 .btn:hover {
+    background-color: #12B0E8;
+    color:white;
+}
+
+.back-button {
+    padding:10px 20px;
+    width: 100px;
+    background-color: #207398;
+    font-size:17px;
+    border:none;
+    border-radius:5px;
+    color:#caeef5;
+    cursor:pointer;
+    justify-self: left;
+}
+
+.back-button:hover {
     background-color: #12B0E8;
     color:white;
 }
@@ -205,4 +243,3 @@ img {
     transform: translate(-50%, -50%);
     text-align: center;
 }
-

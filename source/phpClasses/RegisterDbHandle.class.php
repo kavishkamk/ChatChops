@@ -5,8 +5,13 @@
    class RegisterDbHandle extends DbConnection {
 
         // to comfirm, given email is not in the database
-        public function isItAvailableEmail($mail){
-            $sqlQ = "SELECT user_id FROM users WHERE email = ?;";
+        public function isItAvailableEmail($mail, $utype){
+            if($utype == "user"){
+                $sqlQ = "SELECT user_id FROM users WHERE email = ?;";
+            }
+            else if($utype == "admin"){
+                $sqlQ = "SELECT admin_id FROM admins WHERE email = ?;";
+            }
             $conn = $this->connect();
             $stmt = mysqli_stmt_init($conn);
 
@@ -34,8 +39,13 @@
         }
 
         // check, given user name is not available in the database
-        public function isItAvailableUserName($uname){
-            $sqlQ = "SELECT user_id FROM users WHERE username = ?;";
+        public function isItAvailableUserName($uname, $utype){
+            if($utype == "user"){
+                $sqlQ = "SELECT user_id FROM users WHERE username = ?;";
+            }
+            else if($utype == "admin"){
+                $sqlQ = "SELECT admin_id FROM admins WHERE username = ?;";
+            }
             $conn = $this->connect();
             $stmt = mysqli_stmt_init($conn);
 
@@ -83,6 +93,30 @@
                 $createTime = date("Y-n-d H:i:s"); // acout cration date and time
                 $userotp = rand(100000 , 999999); // genatate OTP code
                 mysqli_stmt_bind_param($stmt, "ssssssssi", $fname, $lname, $mail, $hashedPwd, $createTime, $uname, $propic , $createTime, $userotp);
+                mysqli_stmt_execute($stmt);
+                return "Success";
+                $this->connclose($stmt, $conn);
+                exit();
+
+            }
+        }
+
+        // register user
+        public function adminRegisterUser($fname, $lname, $mail, $uPwd, $uname){
+            $sqlQ = "INSERT INTO admins(fname, lname, email, pwd, lastSeenDT, username, actSTatus) VALUES(?,?,?,?,?,?,?);";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                return "sqlerror";
+                $this->connclose($stmt, $conn);
+                exit();
+            }
+            else{
+                $hashedPwd = password_hash($uPwd, PASSWORD_DEFAULT); // hashing password
+                $createTime = date("Y-n-d H:i:s"); // acout cration date and time
+                $val = 1;
+                mysqli_stmt_bind_param($stmt, "ssssssi", $fname, $lname, $mail, $hashedPwd, $createTime, $uname, $val);
                 mysqli_stmt_execute($stmt);
                 return "Success";
                 $this->connclose($stmt, $conn);

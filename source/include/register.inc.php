@@ -4,13 +4,13 @@
 
     if(isset($_POST['register-submit'])){
 
-        $firstName = $_POST['firstname'];
-        $lastName = $_POST['lastname'];
-        $usermail = $_POST['uemail'];
-        $username = $_POST['username'];
-        $userpwd = $_POST['upassword'];
-        $comfirmPwd = $_POST['confirm-password'];
-        $impic = $_POST['foo'];
+        $firstName = test_input($_POST['firstname']);
+        $lastName = test_input($_POST['lastname']);
+        $usermail = test_input($_POST['uemail']);
+        $username = test_input($_POST['username']);
+        $userpwd = test_input($_POST['upassword']);
+        $comfirmPwd = test_input($_POST['confirm-password']);
+        $impic = test_input($_POST['foo']);
 
         $regObj = new Register($firstName, $lastName, $usermail, $username, $userpwd, $comfirmPwd);
 
@@ -22,13 +22,13 @@
             require_once "../phpClasses/RegisterDbHandle.class.php";
 
             $regHandlerObj = new RegisterDbHandle();
-            $userCheck = $regHandlerObj->isItAvailableEmail($usermail);
+            $userCheck = $regHandlerObj->isItAvailableEmail($usermail, "user");
 
             if($userCheck == "1"){
                 header("Location:../registration.php?signerror=abailableEmail&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");     
             }
             else if($userCheck == "0"){
-                $unameCheck = $regHandlerObj->isItAvailableUserName($username);
+                $unameCheck = $regHandlerObj->isItAvailableUserName($username, "user");
                 // alrady available user name
                 if($unameCheck == "1"){
                     header("Location:../registration.php?signerror=abailableuname&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");
@@ -53,13 +53,13 @@
                         }
                         // OTP send with errors
                         else if($sendotpResult == "sqlerror"){
-                            header("Location:../registration.php?signerror=sqlerror");
+                            header("Location:../login.php?signerror=sqlerror");
                         }
                         else if($sendotpResult == "noemail"){
-                            header("Location:../registration.php?signerror=notaregistermail&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");
+                            header("Location:../login.php?signerror=notaregistermail&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");
                         }
                         else if($sendotpResult == "OTPSENDERROR"){
-                            header("Location:../registration.php?signerror=OTPSENDERROR");
+                            header("Location:../login.php?signerror=otpsenderror");
                         }
 
                         unset($mailObj);
@@ -71,8 +71,7 @@
             }
             else if($userCheck == "sqlerror"){
                 header("Location:../registration.php?signerror=sqlerror");
-           }
-
+            }
             unset($regHandlerObj);
         }
         // user inputs not compleate given conditions
@@ -94,13 +93,28 @@
         else if($checkInput == 6){
             header("Location:../registration.php?signerror=errpwd&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");
         }
+        else if($checkInput == 7){
+            header("Location:../registration.php?signerror=fnamemax&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");
+        }
+        else if($checkInput == 8){
+            header("Location:../registration.php?signerror=lnamemax&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");
+        }
+        else if($checkInput == 9){
+            header("Location:../registration.php?signerror=unamemax&firstname=$firstName&lastname=$lastName&umail=$usermail&username=$username&picn=$impic");
+        }
 
         unset($regObj);
         exit();
-
 
     }
     else{
         header("Location:../registration.php");
         exit();
+    }
+
+    function test_input($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
     }

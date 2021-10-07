@@ -3,6 +3,7 @@
 <html lang="en">
     <head>
         <title>Registration</title>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -45,7 +46,7 @@
                     <label for="firstname" class="label-title" >First Name</label><br>
                     <?php 
                         if(isset($_GET['firstname'])){
-                            echo '<input type="text" name="firstname" placeholder="enter your first name" value='.$_GET['firstname'].' class="form-input" required>';
+                            echo '<input type="text" name="firstname" placeholder="enter your first name" value="'.$_GET['firstname'].'" class="form-input" required>';
                         }
                         else{
                             echo '<input type="text" name="firstname" placeholder="enter your first name" class="form-input" required>';
@@ -57,7 +58,7 @@
                     <label for="lastname" class="label-title">Last Name</label><br>
                     <?php
                     if(isset($_GET['lastname'])){
-                        echo '<input type="text" name="lastname" placeholder="enter your last name" value='.$_GET['lastname'].' class="form-input" required>';
+                        echo '<input type="text" name="lastname" placeholder="enter your last name" value="'.$_GET['lastname'].'" class="form-input" required>';
                     }
                     else{
                         echo '<input type="text" name="lastname" placeholder="enter your last name" class="form-input" required>';
@@ -117,7 +118,7 @@
                     <label for="uemail" class="label-title">Email*</label><br>
                     <?php
                         if(isset($_GET['umail'])){
-                            echo '<input type="email" name="uemail" placeholder="enter your email"  value='.$_GET['umail'].' class="form-input">';
+                            echo '<input type="email" name="uemail" placeholder="enter your email"  value="'.$_GET['umail'].'" class="form-input">';
                         }
                         else{
                             echo '<input type="email" name="uemail" placeholder="enter your email" class="form-input">';
@@ -129,7 +130,7 @@
                     <label for="username" class="label-title">Username</label><br>
                     <?php
                         if(isset($_GET['username'])){
-                            echo '<input type="text" name="username" placeholder="enter your user name" value='.$_GET['username'].' class="form-input">';
+                            echo '<input type="text" name="username" placeholder="enter your user name" value="'.$_GET['username'].'" class="form-input">';
                         }
                         else{
                             echo '<input type="text" name="username" placeholder="enter your user name" class="form-input">';
@@ -146,7 +147,7 @@
                     <input type="password" name="confirm-password" placeholder="enter your password again" class="form-input">
                 </div>
             </div>
-
+            
             <!-- form footer -->
             <div class="form-footer">
                 <span class= "status" >* required</span>
@@ -158,7 +159,7 @@
                         $errmsg = setErrMessage();
                     }
 
-                    echo '<span id="error-bar" >'.$errmsg.'</span>';
+                    echo '<span class="error-bar" >'.$errmsg.'</span>';
                 ?>
 
                 <button type="submit" name="register-submit" class="btn" >Create</button>
@@ -182,11 +183,14 @@
             else if($_GET['signerror'] == "wrongmail"){
                 return "Wrong email address";
             }
-            else if($_GET['signerror'] == "wrongfname" || $_GET['signerror'] == "errlname"){
-                return "Use Only characters (A-Z and a-z)";
+            else if($_GET['signerror'] == "wrongfname"){
+                return "Use Only characters (A-Z and a-z) for first name";
+            }
+            else if($_GET['signerror'] == "errlname"){
+                return "Use Only characters (A-Z and a-z) for last name";
             }
             else if($_GET['signerror'] == "errusername"){
-                return "Use Only characters and numbers (A-Z , a-z, 0-9)";
+                return "Use Only characters and numbers (A-Z , a-z, 0-9) for username";
             }
             else if($_GET['signerror'] == "errpwd"){
                 return "Wrong password";
@@ -196,6 +200,15 @@
             }
             else if($_GET['signerror'] == 'abailableuname'){
                 return "This username is alrady used to create account..";
+            }
+            else if($_GET['signerror'] == 'fnamemax'){
+                return "Max 30 for first Name.";
+            }
+            else if($_GET['signerror'] == 'lnamemax'){
+                return "Max 30 for last Name.";
+            }
+            else if($_GET['signerror'] == 'unamemax'){
+                return "Max 50 for username";
             }
         }
     }
@@ -253,11 +266,17 @@ $(document).ready(function(){
 			var reader = new FileReader();
 			reader.readAsDataURL(blob);
 			reader.onloadend = function(){
+
+                var prePhoto = document.getElementById("prouppic").value;
+                if(prePhoto == "unknownPerson.jpg" || prePhoto == ""){
+                    prePhoto = "000";
+                }
+
 				var base64data = reader.result;
 				$.ajax({
 					url:'profileUpload.php',
 					method:'POST',
-					data:{image:base64data},
+					data:{image:base64data, pre:prePhoto},
 					success:function(data)
 					{
 						$modal.modal('hide');

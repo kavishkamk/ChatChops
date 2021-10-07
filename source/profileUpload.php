@@ -5,6 +5,13 @@
 if(isset($_POST['image']))
 {
 	$data = $_POST['image'];
+	$prePic = $_POST['pre'];
+
+	if($prePic != "000"){
+		if(file_exists("profile-pic/".$prePic)){
+			unlink("profile-pic/".$prePic);
+		}
+	}
 
 	$image_array_1 = explode(";", $data);
 

@@ -17,6 +17,13 @@
             exit();
         }
     }
+
+    if(isset($_GET['logstat'])){
+        if(isset($_GET['logstat']) != "notactived"){
+            header("Location:login.php");
+            exit();
+        }
+    }
 ?> 
 
 <!DOCTYPE html>
@@ -44,6 +51,17 @@
                     }
                     else{
                         echo '<p class="logok"></p>';
+                    }
+                }
+                else if(isset($_GET['reotpstatus'])){
+                    if($_GET['reotpstatus'] == "ok"){
+                        echo '<p class="otpok">Resended verification Code..</p>';
+                    }
+                    else if($_GET['reotpstatus'] == "sqlerror"){
+                        echo '<p class="otperr">Please try again..</p>';
+                    }
+                    else if($_GET['reotpstatus'] == "otpsenderr"){
+                        echo '<p class="otperr">Please try again..</p>';
                     }
                 }
                 else{

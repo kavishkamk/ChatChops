@@ -49,6 +49,12 @@ html, body {
     padding: 15px;
   }
 
+  .otpok{
+    color:#FFF;
+    background-color: green;
+    padding: 15px;
+  }
+
   .logok{
     padding: 15px;
   }
