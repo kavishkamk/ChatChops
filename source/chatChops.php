@@ -42,10 +42,8 @@
                 <li><a href="profile.php">Friends</a></li>
             </ul>
             <script>
-                if(){
-                    document.getElementById("userprofile").src = "<?php echo 'profile-pic/'.$_SESSION["profileLink"].'';?>";
-                    document.getElementById("userprofile-dropdown").src = "<?php echo 'profile-pic/'.$_SESSION["profileLink"].'';?>";
-                }
+                document.getElementById("userprofile").src = "<?php echo 'profile-pic/'.$_SESSION["profileLink"].'';?>";
+                document.getElementById("userprofile-dropdown").src = "<?php echo 'profile-pic/'.$_SESSION["profileLink"].'';?>";
                 var name = "<?php echo ''.$_SESSION["fname"].' '.$_SESSION["lname"].'';?>";
                 document.getElementById("profileuser").innerHTML = name;
                 var usename = '<?php echo $_SESSION['uname'];?>';
