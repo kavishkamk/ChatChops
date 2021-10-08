@@ -44,7 +44,76 @@
                     </div>
                 </div>
             </div>
-            <div style="grid-column:2 / 3;">
+            <div style="grid-column:2 / 3;" class="edit-details">
+                <form class= "profile-edit-form" action="" method="post">
+                    <div class="form-header">
+                        <h1>Profile Edit</h1>
+                    </div>
+                    <div class="edit-form-body">
+                        <div style="grid-column:1 / 2; grid-row: 1 / 2">
+                            <label for="firstname" class="label-title" >First Name</label><br>
+                            <?php 
+                                if(isset($_GET['firstname'])){
+                                    echo '<input type="text" name="firstname" placeholder="enter your first name" value="'.$_GET['firstname'].'" class="form-input" required>';
+                                }
+                                else{
+                                    echo '<input type="text" name="firstname" placeholder="enter your first name" class="form-input" required>';
+                                }
+                            ?>
+                        </div>
+                        <!-- for last name -->
+                        <div style="grid-column:2 / 3; grid-row: 1 / 2">
+                            <label for="lastname" class="label-title">Last Name</label><br>
+                            <?php
+                            if(isset($_GET['lastname'])){
+                                echo '<input type="text" name="lastname" placeholder="enter your last name" value="'.$_GET['lastname'].'" class="form-input" required>';
+                            }
+                            else{
+                                echo '<input type="text" name="lastname" placeholder="enter your last name" class="form-input" required>';
+                            }
+                            ?>
+                        </div>
+                        <!-- for email -->
+                        <div style="grid-column:1 / 2; grid-row: 2 / 3">
+                            <label for="uemail" class="label-title">Email*</label><br>
+                            <?php
+                                if(isset($_GET['umail'])){
+                                    echo '<input type="email" name="uemail" placeholder="enter your email"  value="'.$_GET['umail'].'" class="form-input">';
+                                }
+                                else{
+                                    echo '<input type="email" name="uemail" placeholder="enter your email" class="form-input">';
+                                }
+                            ?>
+                        </div>
+                        <!-- for username -->
+                        <div style="grid-column:2 / 3; grid-row: 2 / 3">
+                            <label for="username" class="label-title">Username</label><br>
+                            <?php
+                                if(isset($_GET['username'])){
+                                    echo '<input type="text" name="username" placeholder="enter your user name" value="'.$_GET['username'].'" class="form-input">';
+                                }
+                                else{
+                                    echo '<input type="text" name="username" placeholder="enter your user name" class="form-input">';
+                                }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" name="register-submit" class="btn" style="grid-column:3 / 4; margin-right:20px">Save</button>
+                    </div>
+                </form>
+                <form class= "profile-edit-form" action="" method="post">
+                    <div style="margin:30px 0px 0px 30px; text-align: left;">
+                        <label for="upassword" class="label-title" style="margin-right:30px">Change Password : </label>
+                        <input type="password" size="20" name="upassword" placeholder="enter current password" class="form-input-pwd" style="margin-right:20px">
+                        <button type="submit" name="pwd-change-submit" class="btn" text-align="right">Change Password</button>
+                    </div>
+                </form>
+                <form class= "profile-edit-form" action="" method="post">
+                    <div style="margin:30px 7% 0px 30px; float: right;">
+                        <button type="submit" name="acc-delete-submit" class="btn" style="background-color: red; margin-bottom:20px">Delete Account</button>
+                    </div>
+                </form>
             </div>
         </div>
 

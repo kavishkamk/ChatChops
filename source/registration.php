@@ -144,7 +144,7 @@
                 </div>
                 <div style="grid-column:2 / 3; grid-row: 3 / 4">
                     <label for="confirm-password" class="label-title">Comfirm Password</label><br>
-                    <input type="password" name="confirm-password" placeholder="enter your password again" class="form-input">
+                    <input type="password" name="confirm-password" placeholder="enter your password again" class="form-input" id="pwd-change">
                 </div>
             </div>
             
