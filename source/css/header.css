@@ -111,3 +111,12 @@ li a:hover:not(.active) {
     padding: 15px;
     text-align: center;
 }
+
+.pronav{
+    min-height:0px !important;
+    margin-bottom: 0px !important;
+}
+
+#userprofile {
+    margin: 5px;
+}
