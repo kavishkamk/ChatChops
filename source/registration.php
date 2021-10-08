@@ -22,6 +22,10 @@
             Already have an Account?
             <a href= "login.php" id= "login-link">Login</a></b>
         </div>
+        <div>
+            <?php //google sign-in button
+            require "google-login/google-signin.php";?>
+        </div>
     </center>
 
     <div id= "box" style= "position: center;">
