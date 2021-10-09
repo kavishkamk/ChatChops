@@ -103,6 +103,7 @@
                         <button type="submit" name="profile-submit" class="btn" style="grid-column:3 / 4; margin-right:20px">Save</button>
                     </div>
                 </form>
+                <!-- Change email -->
                 <form class= "profile-edit-form" action="include/ChangeMail.inc.php" method="post">
                     <div style="margin:30px 0px 0px 30px; text-align: left;">
                         <label for="uemail" class="label-title" style="margin-right:30px">Change Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label>
@@ -110,7 +111,8 @@
                         <button type="submit" name="email-change-submit" class="btn" text-align="right">Change Email</button>
                     </div>
                 </form>
-                <form class= "profile-edit-form" action="" method="post">
+                <!-- Change password -->
+                <form class= "profile-edit-form" action="include/PwdChange.inc.php" method="post">
                     <div style="margin:30px 0px 0px 30px; text-align: left;">
                         <label for="upassword" class="label-title" style="margin-right:30px">Change Password : </label>
                         <input type="password" size="29" name="upassword" placeholder="enter current password" class="form-input-pwd" style="margin-right:20px; margin-bottom:0px">
@@ -118,8 +120,25 @@
                     </div>
                 </form>
                 <form class= "profile-edit-form" action="" method="post">
-                    <div style="margin:30px 7% 0px 30px; float: right;">
-                        <button type="submit" name="acc-delete-submit" class="btn" style="background-color: red; margin-bottom:20px">Delete Account</button>
+                    <div style="margin:30px 7% 0px 30px; ">
+                        <?php
+                            $errmsg = "";
+
+                            if(isset($_GET['mailedit'])){
+                                $errmsg = setMailErrMessage();
+                                echo '<span style="grid-column:1 / 3;" class="error-bar">'.$errmsg.'</span>';
+                            }
+                            else if(isset($_GET['pwdedit'])){
+                                if($_GET['pwdedit'] == "ok"){
+                                    echo '<span style="grid-column:1 / 3;" class="success-bar">Password Change Success</span>';
+                                }
+                                else{
+                                    $errmsg = setPwdErrMessage();
+                                    echo '<span style="grid-column:1 / 3;" class="error-bar">'.$errmsg.'</span>';
+                                } 
+                            }
+                        ?>
+                        <button type="submit" name="acc-delete-submit" class="btn" style="background-color: red; margin-bottom:20px; float: right;">Delete Account</button>
                     </div>
                 </form>
             </div>
@@ -167,6 +186,37 @@
         if(isset($_GET['proedits'])){
             if($_GET['proedits'] == "success" || $_GET['proedits'] == "unameok"){
                 return "Successfully Changed";
+            }
+        }
+    }
+
+    function setMailErrMessage(){
+        if(isset($_GET['mailedit'])){
+            if($_GET['mailedit'] == "empty"){
+                return "Nothing to Change";
+            }
+            else if($_GET['mailedit'] == "invalid"){
+                return "Wrong Email";
+            }
+            else if($_GET['mailedit'] == "avilablemail"){
+                return "Available Email. User another one";
+            }
+            else if($_GET['mailedit'] == "sqlerr"){
+                return "Something Wrong. Try again";
+            }
+        }
+    }
+
+    function setPwdErrMessage(){
+        if(isset($_GET['pwdedit'])){
+            if($_GET['pwdedit'] == "empty"){
+                return "Nothing to Change";
+            }
+            else if($_GET['pwdedit'] == "wrongpwd"){
+                return "Wrong Password";
+            }
+            else {
+                return "Something Wrong. Try again";
             }
         }
     }

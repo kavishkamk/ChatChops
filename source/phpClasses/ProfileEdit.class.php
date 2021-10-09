@@ -225,9 +225,68 @@
             exit();
         }
 
+        // check user password
+        public function CheckCurrentPwd($uid, $pwd){
+            $sqlQ = "SELECT pwd FROM users WHERE user_id = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                return "sqlerror";
+                $this->connclose($stmt, $conn);
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($stmt, "i", $uid);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                if($row = mysqli_fetch_assoc($result)){
+                    $pwdCheck = password_verify($pwd, $row['pwd']); // check password
+                    if($pwdCheck == false){
+                        return "4";
+                        $this->connclose($stmt, $conn);
+                        exit(); // wrong password
+                    }
+                    else if($pwdCheck == true){
+                        return "1";
+                        $this->connclose($stmt, $conn);
+                        exit(); // ok
+                    }
+                    else{
+                        return "5";
+                        $this->connclose($stmt, $conn);
+                        exit(); // something was wrang
+                    }
+                }
+                else{
+                    $this->connclose($stmt, $conn);
+                    return "usernotfund";
+                    exit();
+                }
+            }
+        }
+
+        public function changePassword($uid, $pwd){
+            $sqlQ = "UPDATE users SET pwd = ? WHERE user_id = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "0"; // sql error
+                exit();
+            }
+            else{
+                $hashpwd = password_hash($pwd, PASSWORD_DEFAULT); // hashing password
+                mysqli_stmt_bind_param($stmt, "si", $hashpwd, $uid);
+                mysqli_stmt_execute($stmt);
+                return "1"; // sql error
+                exit();
+            }
+        }
+
         private function connclose($stmt, $conn){
             mysqli_stmt_close($stmt);
             mysqli_close($conn);
         }
-
     }
