@@ -214,6 +214,43 @@
             }
         }
 
+        // send otp to delete account
+        public function deleteAccOTP($uid, $mail){
+            $sqlQ = "UPDATE users SET otpCode = ? WHERE user_id = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "0"; // sql error
+                exit();
+            }
+            else{
+                $userotp = rand(100000 , 999999); // genatate OTP code
+                mysqli_stmt_bind_param($stmt, "ii", $userotp, $uid);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+
+                $sendres = $this->sendOTPWithChangedMail($mail);
+
+                if($sendres == "SENDOTP"){
+                    return "1";
+                    exit();
+                }
+                else if($sendres == "sqlerror"){
+                    return "3";
+                    exit();
+                }
+                else if($sendres == "noemail"){
+                    return "4";
+                    exit();
+                }
+                else if($sendres = "OTPSENDERROR"){
+                    return "5";
+                }
+            }
+        }
+
         // send updated OTP with email
         private function sendOTPWithChangedMail($mail){
             require_once "MailHandle.class.php";

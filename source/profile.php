@@ -119,7 +119,7 @@
                         <button type="submit" name="pwd-change-submit" class="btn" text-align="right">Change Password</button>
                     </div>
                 </form>
-                <form class= "profile-edit-form" action="" method="post">
+                <form class= "profile-edit-form" action="include/deleteacc.inc.php" method="post" name="delacc">
                     <div style="margin:30px 7% 0px 30px; ">
                         <?php
                             $errmsg = "";
@@ -138,7 +138,8 @@
                                 } 
                             }
                         ?>
-                        <button type="submit" name="acc-delete-submit" class="btn" style="background-color: red; margin-bottom:20px; float: right;">Delete Account</button>
+                        <input type="hidden" name="delstat" value="okDelete" required>
+                        <button type="submit" name="acc-delete-submit" class="btn" onclick = "clicked();" style="background-color: red; margin-bottom:20px; float: right;">Delete Account</button>
                     </div>
                 </form>
             </div>
@@ -147,6 +148,17 @@
     </main>
     </body>
 </html>
+
+<script type="text/javascript">
+    function clicked() {
+       if (confirm('Do you realy want to Delete your accout?')) {
+            delacc.submit();
+       } else {
+           return false;
+       }
+    }
+
+</script>
 
 <!-- set registration error messages -->
 <?php

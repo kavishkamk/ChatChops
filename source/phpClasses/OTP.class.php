@@ -70,7 +70,6 @@
                     exit();
                 }
             }
-
         }
 
         // activate user account

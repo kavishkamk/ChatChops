@@ -15,6 +15,7 @@
         private $registerdUName;
         private $logInsertId;
         private $profilelink;
+        private $umail;
         
         public function checkUserwithPasswerd($username, $pwd){
             $this->username = $username;
@@ -62,6 +63,7 @@
                                     $_SESSION['lname'] = $this->lname;
                                     $_SESSION['profileLink'] = $this->profilelink;
                                     $_SESSION['uname'] = $this->registerdUName;
+                                    $_SESSION['umail'] = $this->umail;
                                     return "1"; // login success
                                 }
                                 else{
@@ -114,7 +116,7 @@
         }
 
         private function getReleventDetais(){
-            $sqlQ = "SELECT user_id, first_name, last_name, pwd, username, active_status, profilePicLink, deleteStatus FROM users WHERE username=? OR email=?;";
+            $sqlQ = "SELECT user_id, first_name, last_name, email, pwd, username, active_status, profilePicLink, deleteStatus FROM users WHERE username=? OR email=?;";
             $conn = $this->connect();
             $stmt = mysqli_stmt_init($conn);
 
@@ -136,6 +138,7 @@
                     $this->profilelink = $row['profilePicLink'];
                     $this->deleteStatus = $row['deleteStatus'];
                     $this->registerdUName = $row['username'];
+                    $this->umail = $row['email'];
                     $this->connclose($stmt, $conn);
                     return "ok";
                     exit();

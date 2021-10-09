@@ -137,13 +137,13 @@
                         }
                     ?>
                 </div>
-                <!-- for password and comfirm password-->
+                <!-- for password and confirm password-->
                 <div style="grid-column:1 / 2; grid-row: 3 / 4">
                     <label for="upassword" class="label-title">Password</label><br>
                     <input type="password" name="upassword" placeholder="enter password" class="form-input">
                 </div>
                 <div style="grid-column:2 / 3; grid-row: 3 / 4">
-                    <label for="confirm-password" class="label-title">Comfirm Password</label><br>
+                    <label for="confirm-password" class="label-title">Confirm Password</label><br>
                     <input type="password" name="confirm-password" placeholder="enter your password again" class="form-input" id="pwd-change">
                 </div>
             </div>

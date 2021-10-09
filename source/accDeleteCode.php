@@ -16,6 +16,11 @@
             exit();
         }
     }
+
+    if(!isset($_GET['uid'])){
+        header("Location:profile.php"); // no session
+            exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -23,22 +28,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Change Password</title>
+    <title>Logging</title>
     <link rel="stylesheet" type="text/css" href="css/otpstyle.css">
 </head>
 <body>
-<div class=container>
+    <div class=container>
         <div id="logo">
             <img src= "images/chatchops.png">
         </div>
         <div>
             <?php
-                if(isset($_GET['pwdtatus'])){
-                    if($_GET['pwdtatus'] == "wrongpwd"){
-                        echo '<p class="otperr">Wrong Password</p>';
+                if(isset($_GET['otpstatus'])){
+                    if($_GET['otpstatus'] == "WrongOtp"){
+                        echo '<p class="otperr">Invalid Verification Code..</p>';
                     }
-                    else if($_GET['pwdtatus'] == "emptyfield"){
-                        echo '<p class="otperr">Please Enter Passwords</p>';
+                    else if($_GET['otpstatus'] == "emptyfield"){
+                        echo '<p class="otperr">Please Enter Code</p>';
                     }
                     else{
                         echo '<p class="logok"></p>';
@@ -47,26 +52,24 @@
             ?>
         </div>
         <div id="logcont">
-            <p>Change Password</p>
-            <!-- form for get passwords -->
-            <form action="include/pwdCompare.inc.php" class="logform" method="post">
-                <input type="hidden" name="userid" value="<?php echo $_SESSION['userid']; ?>" required>
-                <label for="upwd">Password</label><br>
-                <input type="password" name="upwd" placeholder="enter new Password" size="30" class="flog"><br>
-                <label for="ucpwd">Confirm Password</label><br>
-                <input type="password" name="ucpwd" placeholder="Confirm Password" size="30" class="flog">
+            <p>Account Delete Verification</p>
+            <!-- form for check reserved OTP code -->
+            <form action="include/DeleteAccOk.inc.php" class="logform" method="post">
+                <input type="hidden" name="uid" value="<?php echo $_GET['uid']; ?>" required>
+                <label for="verification">Verification Code</label><br>
+                <input type="text" name="verification" placeholder="enter verification" size="30" class="flog">
                 <br>
-                <button type="submit" name="pwd-submit" class="logbutn">Submit</button>
+                <button type="submit" name="delete-submit" class="logbutn">Submit</button>
             </form>
-            <!-- for back -->
+            <!-- to resend OTP code -->
             <form method="post" action="profile.php">
-                <button type="submit" name="goback" class="link-button">
-                    BACK
+                <button type="submit" name="back-submit" class="link-button">
+                    Back
                 </button>  
             </form>
             <br>
         </div>
     </div>
-
+    
 </body>
 </html>
