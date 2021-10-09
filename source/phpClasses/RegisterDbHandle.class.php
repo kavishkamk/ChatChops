@@ -63,7 +63,8 @@
         }
 
         // register user
-        public function registerUser($fname, $lname, $mail, $uPwd, $uname, $propic){
+        /**$google var added to check whether the registration type is manual or google authentication */
+        public function registerUser($fname, $lname, $mail, $uPwd, $uname, $propic, $google){
             $sqlQ = "INSERT INTO users(first_name, last_name, email, pwd, last_seen, username, profilePicLink, created_time, otpCode) VALUES(?,?,?,?,?,?,?,?,?);";
             $conn = $this->connect();
             $stmt = mysqli_stmt_init($conn);
@@ -76,7 +77,7 @@
             else{
                 $hashedPwd = password_hash($uPwd, PASSWORD_DEFAULT); // hashing password
                 //rename user profile emage with username if user upload image
-                if($propic != "unknownPerson.jpg"){
+                if($propic != "unknownPerson.jpg" && $google == "0"){
                     rename("../profile-pic/$propic","../profile-pic/$uname.png");
                     $propic = "$uname.png";
                 }

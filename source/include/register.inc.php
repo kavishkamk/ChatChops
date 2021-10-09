@@ -35,7 +35,7 @@
                 }
                 // this user name is not avilable in database, so ok
                 else if($unameCheck == "0"){
-                    $regres = $regHandlerObj->registerUser($firstName, $lastName, $usermail, $userpwd, $username, $impic);
+                    $regres = $regHandlerObj->registerUser($firstName, $lastName, $usermail, $userpwd, $username, $impic, "0");
 
                     if($regres == "sqlerror"){
                         header("Location:../registration.php?signerror=sqlerror");
