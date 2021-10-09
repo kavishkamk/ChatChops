@@ -26,7 +26,7 @@ if(isset($_POST['pswd-submit']))
         $userCheck = $regHandlerObj->isItAvailableEmail($email);
 
         if($userCheck == "1"){
-            header("Location:../registration.php?signerror=abailableEmail&firstname=$fname&lastname=$lname&umail=$email&username=$username");     
+            header("Location:../registration.php?signerror=abailableEmail&umail=$email");     
         }
         else if($userCheck == "0"){
             
@@ -86,14 +86,12 @@ if(isset($_POST['pswd-submit']))
         unset($regHandlerObj);
     } 
     
-    else if($checkInput == 2){
-        header("Location:../registration.php?signerror=wrongmail&firstname=$fname&lastname=$lname&umail=$email&username=$username");
-    }
-    else if($checkInput == 5){
-        header("Location:../registration.php?signerror=errusername&firstname=$fname&lastname=$lname&umail=$email&username=$username");
+    //checking user data errors
+    else if($checkInput == 1){
+        header("Location:../google-login/logged-in.php?signerror=emptyfield&firstname=$fname&lastname=$lname&umail=$email&username=$username");
     }
     else if($checkInput == 6){
-        header("Location:../registration.php?signerror=errpwd&firstname=$fname&lastname=$lname&umail=$email&username=$username");
+        header("Location:../google-login/logged-in.php?signerror=errpwd&firstname=$fname&lastname=$lname&umail=$email&username=$username");
     }
 
     unset($regObj);
