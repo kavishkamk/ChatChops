@@ -196,10 +196,10 @@
                 return "Wrong password";
             }
             else if($_GET['signerror'] == "abailableEmail"){
-                return "This email is alrady used to create account..";
+                return "This email is already used to create account..";
             }
             else if($_GET['signerror'] == 'abailableuname'){
-                return "This username is alrady used to create account..";
+                return "This username is already used to create account..";
             }
         }
     }
