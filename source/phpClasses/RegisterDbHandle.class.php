@@ -27,12 +27,12 @@
                 $resultcheck = mysqli_stmt_num_rows($stmt);
                 if($resultcheck == 0){
                     $this->connclose($stmt, $conn);
-                    return "0";
+                    return "0"; // not a available in this moment
                     exit();
                 }
                 else{
                     $this->connclose($stmt, $conn);
-                    return "1";
+                    return "1"; // alrady have
                     exit();
                 }
             }

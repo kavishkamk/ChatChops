@@ -175,6 +175,56 @@
             }
         }
 
+        // this function can use to change the mail.
+        // but befor it you should enshure that email is not a availabale in the database
+        public function changeUserMail($mail, $uid){
+            $sqlQ = "UPDATE users SET email = ?, active_status = ?, otpCode = ?, onlineStatus = ? WHERE user_id = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "0"; // sql error
+                exit();
+            }
+            else{
+                $val = 0;
+                $userotp = rand(100000 , 999999); // genatate OTP code
+                mysqli_stmt_bind_param($stmt, "siiii", $mail, $val, $userotp, $val, $uid);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+
+                $sendres = $this->sendOTPWithChangedMail($mail);
+
+                if($sendres == "SENDOTP"){
+                    return "1";
+                    exit();
+                }
+                else if($sendres == "sqlerror"){
+                    return "3";
+                    exit();
+                }
+                else if($sendres == "noemail"){
+                    return "4";
+                    exit();
+                }
+                else if($sendres = "OTPSENDERROR"){
+                    return "5";
+                }
+            }
+        }
+
+        // send updated OTP with email
+        private function sendOTPWithChangedMail($mail){
+            require_once "MailHandle.class.php";
+
+            $mailObj = new MailHandle();
+            $sendres = $mailObj->sendOTP($mail);
+            return $sendres;
+            unset($mailObj);
+            exit();
+        }
+
         private function connclose($stmt, $conn){
             mysqli_stmt_close($stmt);
             mysqli_close($conn);

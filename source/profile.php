@@ -103,7 +103,7 @@
                         <button type="submit" name="profile-submit" class="btn" style="grid-column:3 / 4; margin-right:20px">Save</button>
                     </div>
                 </form>
-                <form class= "profile-edit-form" action="" method="post">
+                <form class= "profile-edit-form" action="include/ChangeMail.inc.php" method="post">
                     <div style="margin:30px 0px 0px 30px; text-align: left;">
                         <label for="uemail" class="label-title" style="margin-right:30px">Change Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label>
                         <input type="email" size="29" name="uemail" placeholder="enter your email" class="form-input-pwd" style="margin-right:20px; margin-bottom:0px">

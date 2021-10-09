@@ -2,6 +2,7 @@
     // this class for change user first, last and usernames
     session_start();
 
+    // session checking
     if(!isset($_SESSION['userid'])){
         header("Location:../login.php?logout=logoutok"); // no session
         exit();
@@ -78,15 +79,15 @@
                 exit();
             }
         }
-   }
-   else{
-       header("Location:../profile.php?");
-       exit();
-   }
+    }
+    else{
+        header("Location:../profile.php?");
+        exit();
+    }
 
-   function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
+    function test_input($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
