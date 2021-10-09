@@ -26,7 +26,7 @@ if(isset($_POST['pswd-submit']))
         $userCheck = $regHandlerObj->isItAvailableEmail($email);
 
         if($userCheck == "1"){
-            header("Location:../registration.php?signerror=abailableEmail&firstname=$fname&lastname=$lname&umail=$email&username=$username&picn=$pic");     
+            header("Location:../registration.php?signerror=abailableEmail&firstname=$fname&lastname=$lname&umail=$email&username=$username");     
         }
         else if($userCheck == "0"){
             
@@ -53,13 +53,56 @@ if(isset($_POST['pswd-submit']))
                 if($regres == "sqlerror"){
                     header("Location:../registration.php?signerror=sqlerror");
                 }
+                else if($regres == "Success"){
+                    require_once "../phpClasses/MailHandle.class.php";
+
+                    $mailObj = new MailHandle();
+                    $sendotpResult = $mailObj->sendOTP($email);
+
+                    // OTP send succes // redirect page to get OTP code
+                    if($sendotpResult == "SENDOTP"){
+                        header("Location:../otpcode.php?otpsend=sendok&username=$username");   
+                    }
+                    // OTP send with errors
+                    else if($sendotpResult == "sqlerror"){
+                        header("Location:../registration.php?signerror=sqlerror");
+                    }
+                    else if($sendotpResult == "noemail"){
+                        header("Location:../registration.php?signerror=notaregistermail&firstname=$fname&lastname=$lname&umail=$email&username=$username");
+                    }
+                    else if($sendotpResult == "OTPSENDERROR"){
+                        header("Location:../registration.php?signerror=OTPSENDERROR");
+                    }
+
+                    unset($mailObj);
+                }
+            }else if($unameCheck == "sqlerror"){
+                header("Location:../registration.php?signerror=sqlerror");
             }
 
-            /*****************code the rest comparing register.inc.php**************** */
-
+        }else if($userCheck == "sqlerror"){
+                header("Location:../registration.php?signerror=sqlerror");
         }
-    }    
+        unset($regHandlerObj);
+    } 
+    
+    else if($checkInput == 2){
+        header("Location:../registration.php?signerror=wrongmail&firstname=$fname&lastname=$lname&umail=$email&username=$username");
+    }
+    else if($checkInput == 5){
+        header("Location:../registration.php?signerror=errusername&firstname=$fname&lastname=$lname&umail=$email&username=$username");
+    }
+    else if($checkInput == 6){
+        header("Location:../registration.php?signerror=errpwd&firstname=$fname&lastname=$lname&umail=$email&username=$username");
+    }
 
+    unset($regObj);
+    exit();
+
+}
+else{
+    header("Location:../registration.php");
+    exit();
 }
 
 ?>
