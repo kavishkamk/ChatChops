@@ -6,46 +6,76 @@
         public function changeUserProfile($fname, $lname, $uname){
             $res = 0;
             if(!empty($fname)){
-                $fRes = $this->changeFirstname($fname, $_SESSION['userid']);
-                if($fRes == "1"){
-                    $_SESSION['fname'] = $fname;
-                    $res = "1";
+                if(!preg_match("/^[a-zA-Z]*$/", $fname)){
+                    return "4"; // invalid characters
+                    exit();
+                }
+                else if(strlen($fname) > 30){
+                    return "5"; // characters shoud be <30
+                    exit();
                 }
                 else{
-                    $res = "0";
+                    $fRes = $this->changeFirstname($fname, $_SESSION['userid']);
+                    if($fRes == "1"){
+                        $_SESSION['fname'] = $fname;
+                        $res = "1"; //success
+                    }
+                    else{
+                        $res = "0"; // error
+                    }
                 }
             }
             if(!empty($lname)){
-                $LRes = $this->changeLastname($lname, $_SESSION['userid']);
-                if($LRes == "1"){
-                    $_SESSION['lname'] = $lname;
-                    $res = "1";
+                if(!preg_match("/^[a-zA-Z]*$/", $lname)){
+                    return "6"; // invalid characters
+                    exit();
+                }
+                else if(strlen($lname) > 30){
+                    return "7"; // characters shoud be <30
+                    exit();
                 }
                 else{
-                    $res = "0";
+                    $LRes = $this->changeLastname($lname, $_SESSION['userid']);
+                    if($LRes == "1"){
+                        $_SESSION['lname'] = $lname;
+                        $res = "1"; // success
+                    }
+                    else{
+                        $res = "0"; // error
+                    }
                 }
             }
             if(!empty($uname)){
-                require_once "RegisterDbHandle.class.php";
-                $regObj = new RegisterDbHandle();
-                $unameRes = $regObj->isItAvailableUserName($uname, "user");
-                unset($regObj);
-                if($unameRes == "sqlerror"){
-                    $res = "0"; // sql error
+                if(!preg_match("/^[a-zA-Z0-9]*$/", $uname)){
+                    return "8"; // invalid characters
+                    exit();
                 }
-                else if($unameRes == "1"){
-                    $res = "2";
+                else if(strlen($uname) > 50){
+                    return "9"; // characters shoud be 50>
+                    exit();
                 }
-                else if($unameRes == "0"){
-                    $uRes = $this->changeUsername($uname);
-                    if($uRes == "1"){
-                        $preUserName = $_SESSION['uname'];
-                        $_SESSION['uname'] = $uname;
-                        $this->chageProfilePhotoNames($uname, $preUserName);
-                        $res = "3";
+                else{
+                    require_once "RegisterDbHandle.class.php";
+                    $regObj = new RegisterDbHandle();
+                    $unameRes = $regObj->isItAvailableUserName($uname, "user");
+                    unset($regObj);
+                    if($unameRes == "sqlerror"){
+                        $res = "0"; // sql error
                     }
-                    else{
-                        $res = "0";
+                    else if($unameRes == "1"){
+                        $res = "2";
+                    }
+                    else if($unameRes == "0"){
+                        $uRes = $this->changeUsername($uname);
+                        if($uRes == "1"){
+                            $preUserName = $_SESSION['uname'];
+                            $_SESSION['uname'] = $uname;
+                            $this->chageProfilePhotoNames($uname, $preUserName);
+                            $res = "3";
+                        }
+                        else{
+                            $res = "0";
+                        }
                     }
                 }
             }

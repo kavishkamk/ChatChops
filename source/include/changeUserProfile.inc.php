@@ -1,11 +1,12 @@
 <?php
+    // this class for change user first, last and usernames
     session_start();
 
     if(!isset($_SESSION['userid'])){
         header("Location:../login.php?logout=logoutok"); // no session
         exit();
-   }
-   else{
+    }
+    else{
        require_once "../phpClasses/SessionHandle.class.php";
        $sessObj = new SessionHandle();
        $sessRes = $sessObj->checkSession($_SESSION['sessionId'], $_SESSION['userid']); // invalid session
@@ -14,7 +15,7 @@
            header("Location:../login.php?logout=logoutok"); // no session
            exit();
        }
-   }
+    }
 
    if(isset($_POST['profile-submit'])){
         $fname = test_input($_POST['firstname']);
@@ -33,7 +34,7 @@
             unset($proObj);
 
             if($prores == "3"){
-                header("Location:../profile.php?proedit=unameok");
+                header("Location:../profile.php?proedits=unameok");
                 exit();
             }
             else if($prores == "2"){
@@ -45,7 +46,31 @@
                 exit();
             }
             else if($prores == "1"){
-                header("Location:../profile.php?proedit=success");
+                header("Location:../profile.php?proedits=success");
+                exit();
+            }
+            else if($prores == "4"){
+                header("Location:../profile.php?proedit=fnamechar");
+                exit();
+            }
+            else if($prores == "5"){
+                header("Location:../profile.php?proedit=fnamenum");
+                exit();
+            }
+            else if($prores == "6"){
+                header("Location:../profile.php?proedit=lnamechar");
+                exit();
+            }
+            else if($prores == "7"){
+                header("Location:../profile.php?proedit=lnamenum");
+                exit();
+            }
+            else if($prores == "8"){
+                header("Location:../profile.php?proedit=unamechar");
+                exit();
+            }
+            else if($prores == "9"){
+                header("Location:../profile.php?proedit=unamenum");
                 exit();
             }
             else{
@@ -55,7 +80,7 @@
         }
    }
    else{
-       header("Location:../profile.php?proedit=emptyall");
+       header("Location:../profile.php?");
        exit();
    }
 

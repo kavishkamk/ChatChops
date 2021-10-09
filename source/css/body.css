@@ -187,3 +187,20 @@ h1 {
   outline: none;
   margin-bottom: 20px;
 }
+
+.error-bar {
+  position : relative;
+  text-align: center;
+  place-items: center;
+  color: red;
+  font-weight: bold;
+  
+}
+
+.success-bar{
+  position : relative;
+  text-align: center;
+  place-items: center;
+  color: green;
+  font-weight: bold;
+}

@@ -87,20 +87,33 @@
                         </div>
                     </div>
                     <div class="form-footer">
+                        
+                        <?php
+                            $errmsg = "";
+
+                            if(isset($_GET['proedit'])){
+                                $errmsg = setErrMessage();
+                                echo '<span style="grid-column:1 / 3;" class="error-bar">'.$errmsg.'</span>';
+                            }
+                            else if(isset($_GET['proedits'])){
+                                $msg = setMessage();
+                                echo '<span style="grid-column:1 / 3;" class="success-bar">'.$msg.'</span>';
+                            }   
+                        ?>
                         <button type="submit" name="profile-submit" class="btn" style="grid-column:3 / 4; margin-right:20px">Save</button>
                     </div>
                 </form>
                 <form class= "profile-edit-form" action="" method="post">
                     <div style="margin:30px 0px 0px 30px; text-align: left;">
                         <label for="uemail" class="label-title" style="margin-right:30px">Change Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label>
-                        <input type="email" size="20" name="uemail" placeholder="enter your email" class="form-input-pwd" style="margin-right:20px; margin-bottom:0px">
+                        <input type="email" size="29" name="uemail" placeholder="enter your email" class="form-input-pwd" style="margin-right:20px; margin-bottom:0px">
                         <button type="submit" name="email-change-submit" class="btn" text-align="right">Change Email</button>
                     </div>
                 </form>
                 <form class= "profile-edit-form" action="" method="post">
                     <div style="margin:30px 0px 0px 30px; text-align: left;">
                         <label for="upassword" class="label-title" style="margin-right:30px">Change Password : </label>
-                        <input type="password" size="20" name="upassword" placeholder="enter current password" class="form-input-pwd" style="margin-right:20px; margin-bottom:0px">
+                        <input type="password" size="29" name="upassword" placeholder="enter current password" class="form-input-pwd" style="margin-right:20px; margin-bottom:0px">
                         <button type="submit" name="pwd-change-submit" class="btn" text-align="right">Change Password</button>
                     </div>
                 </form>
@@ -115,6 +128,49 @@
     </main>
     </body>
 </html>
+
+<!-- set registration error messages -->
+<?php
+    function setErrMessage(){
+        if(isset($_GET['proedit'])){
+            if($_GET['proedit'] == "allempty"){
+                return "Nothing to Change";
+            }
+            else if($_GET['proedit'] == "availableuname"){
+                return "Alrady have this. Use another one";
+            }
+            else if($_GET['proedit'] == "sqlerr" || $_GET['proedit'] == "error"){
+                return "Somting wrong. Please try again";
+            }
+            else if($_GET['proedit'] == "fnamechar"){
+                return "Use Only characters (A-Z and a-z) for first name";
+            }
+            else if($_GET['proedit'] == "fnamenum"){
+                return "Max 30 for first Name.";
+            }
+            else if($_GET['proedit'] == "lnamechar"){
+                return "Use Only characters (A-Z and a-z) for last name";
+            }
+            else if($_GET['proedit'] == "lnamenum"){
+                return "Max 30 for last Name.";
+            }
+            else if($_GET['proedit'] == "unamechar"){
+                return "Use Only characters and numbers (A-Z , a-z, 0-9) for username";
+            }
+            else if($_GET['proedit'] == "unamenum"){
+                return "Max 50 for username";
+            }
+        }
+    }
+
+    function setMessage(){
+        if(isset($_GET['proedits'])){
+            if($_GET['proedits'] == "success" || $_GET['proedits'] == "unameok"){
+                return "Successfully Changed";
+            }
+        }
+    }
+?>
 
 <script>
 // frofile change script
