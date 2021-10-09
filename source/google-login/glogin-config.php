@@ -21,6 +21,8 @@ $client -> setRedirectUri($redirectUri);
 $client-> addScope('profile');
 $client-> addScope('email');
 
+session_start();
+
 if(isset($_GET['code']))
 {
 	$token = $client-> fetchAccessTokenWithAuthCode($_GET['code']);
@@ -42,23 +44,19 @@ if(isset($_GET['code']))
 
         //Get profile data and store into $_SESSION variable
         if(!empty($data['given_name'])){
-            $_SESSION['user_first_name'] = $data['given_name'];
+            $_SESSION['fname'] = $data['given_name'];
         }
 
         if(!empty($data['family_name'])){
-            $_SESSION['user_last_name'] = $data['family_name'];
+            $_SESSION['lname'] = $data['family_name'];
         }
 
         if(!empty($data['email'])){
-            $_SESSION['user_email_address'] = $data['email'];
-        }
-
-        if(!empty($data['gender'])){
-            $_SESSION['user_gender'] = $data['gender'];
+            $_SESSION['email'] = $data['email'];
         }
 
         if(!empty($data['picture'])){
-            $_SESSION['user_image'] = $data['picture'];
+            $_SESSION['picture'] = $data['picture'];
         }
     }
 
