@@ -36,6 +36,17 @@ $lname = $_SESSION['lname'];
             <br>
                     
             <button type="submit" name="pswd-submit" class="logbutn">Enter</button>
+
+            <?php   //error message display
+                    $errmsg = "";
+
+                    if(isset($_GET['signerror'])){
+                        $errmsg = setErrMessage();
+                    }
+
+                    echo '<span id="error-bar" >'.$errmsg.'</span>';
+            ?>
+
         </div>
         </form>
     </center>
@@ -48,17 +59,16 @@ $lname = $_SESSION['lname'];
 </html>
 
 <?php
-/*
-    if($login_button == ''){
-        echo '<div>Welcome User</div>';
-        echo '<img src="'.$_SESSION["user_image"].'" />';
-        echo '<h3><b>Name :</b> '.$_SESSION['user_first_name'].' '.$_SESSION['user_last_name'].'</h3>';
-        echo '<h3><b>Email :</b> '.$_SESSION['user_email_address'].'</h3>';
-        echo '<h3><a href="../logout.php">Logout</a></h3></div>';
 
-        //require_once 'send-data-to-db.php';
+function setErrMessage()
+{
+    if(isset($_GET['signerror'])){
+        if($_GET['signerror'] == "emptyfield"){
+            return "Fill all the fields";
+        }
+        else if($_GET['signerror'] == "errpwd"){
+            return "Check password again";
+        }
     }
-    else{
-        echo '<div align="center">'.$login_button . '</div>';
-    }*/
+}
 ?>
