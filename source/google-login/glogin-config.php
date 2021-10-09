@@ -4,7 +4,8 @@
 
 $login_button = "";
 
-require '../GoogleAuth/vendor/autoload.php'; 
+//root = /htdocs/
+require $_SERVER['DOCUMENT_ROOT'].'/chatchops/source/GoogleAuth/vendor/autoload.php'; 
 
 $clientID = '98629541381-h09adtlbp8nru45h09if0i8b7m9l3qd0.apps.googleusercontent.com';
 $clientSecret = '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';
