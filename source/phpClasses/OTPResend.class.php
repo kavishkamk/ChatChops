@@ -59,6 +59,7 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
                 return "sqlerror";
                 exit();
             }
@@ -70,9 +71,11 @@
                 if($row = mysqli_fetch_assoc($result)){
                     $this->emaistatus = $row['active_status'];
                     $this->usermail = $row['email'];
+                    $this->connclose($stmt, $conn);
                     return "ok"; // user found
                 }
                 else{
+                    $this->connclose($stmt, $conn);
                     return "nouser"; // no user match
                     exit();
                 }
@@ -86,6 +89,7 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
                 return "sqlerror";
                 exit();
             }
@@ -93,6 +97,7 @@
                 $userotp = rand(100000 , 999999); // genatate OTP code
                 mysqli_stmt_bind_param($stmt, "is", $userotp, $this->username);
                 mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
                 return "success";
                 exit();
             }
@@ -107,6 +112,11 @@
             return $sendres;
             unset($mailObj);
             exit();
+        }
+
+        private function connclose($stmt, $conn){
+            mysqli_stmt_close($stmt);
+            mysqli_close($conn);
         }
 
     }

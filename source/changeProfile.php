@@ -16,6 +16,13 @@ if(isset($_POST['image']))
 
 	$image_name = 'profile-pic/' . $_SESSION['uname'] . '.png';
 
+	$_SESSION['profileLink'] = $_SESSION['uname'].'.png';
+
+	require_once "phpClasses/ProfileEdit.class.php";
+	$proObj = new ProfileEdit();
+	$proObj->changeProfileLink('' . $_SESSION['uname'] . '.png', $_SESSION['userid']);
+	unset($proObj);
+
 	file_put_contents($image_name, $data);
 
 	echo $image_name;

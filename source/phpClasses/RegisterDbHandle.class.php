@@ -16,8 +16,8 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
-                return "sqlerror";
                 $this->connclose($stmt, $conn);
+                return "sqlerror";
                 exit();
             }
             else {
@@ -26,13 +26,13 @@
                 mysqli_stmt_store_result($stmt);
                 $resultcheck = mysqli_stmt_num_rows($stmt);
                 if($resultcheck == 0){
-                    return "0";
                     $this->connclose($stmt, $conn);
+                    return "0";
                     exit();
                 }
                 else{
-                    return "1";
                     $this->connclose($stmt, $conn);
+                    return "1";
                     exit();
                 }
             }
@@ -50,8 +50,8 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
-                return "sqlerror";
                 $this->connclose($stmt, $conn);
+                return "sqlerror";
                 exit();
             }
             else {
@@ -60,13 +60,13 @@
                 mysqli_stmt_store_result($stmt);
                 $resultcheck = mysqli_stmt_num_rows($stmt);
                 if($resultcheck == 0){
-                    return "0";
                     $this->connclose($stmt, $conn);
+                    return "0"; // ok to use
                     exit();
                 }
                 else{
-                    return "1";
                     $this->connclose($stmt, $conn);
+                    return "1"; // user name available
                     exit();
                 }
             }
@@ -79,8 +79,8 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
-                return "sqlerror";
                 $this->connclose($stmt, $conn);
+                return "sqlerror";
                 exit();
             }
             else{
@@ -94,8 +94,8 @@
                 $userotp = rand(100000 , 999999); // genatate OTP code
                 mysqli_stmt_bind_param($stmt, "ssssssssi", $fname, $lname, $mail, $hashedPwd, $createTime, $uname, $propic , $createTime, $userotp);
                 mysqli_stmt_execute($stmt);
-                return "Success";
                 $this->connclose($stmt, $conn);
+                return "Success";
                 exit();
 
             }
@@ -108,8 +108,8 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
-                return "sqlerror";
                 $this->connclose($stmt, $conn);
+                return "sqlerror";
                 exit();
             }
             else{
@@ -118,8 +118,8 @@
                 $val = 1;
                 mysqli_stmt_bind_param($stmt, "ssssssi", $fname, $lname, $mail, $hashedPwd, $createTime, $uname, $val);
                 mysqli_stmt_execute($stmt);
-                return "Success";
                 $this->connclose($stmt, $conn);
+                return "Success";
                 exit();
 
             }
