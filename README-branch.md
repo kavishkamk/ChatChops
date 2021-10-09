@@ -5,6 +5,8 @@
 - Update the database connection details in <br>
 source/phpClasses/DbConnection.class.php
 <br><br>
+- Update the require vendor/autoload.php file dir in <br>
+source/google-login/glogin-config.php
 
 
 
