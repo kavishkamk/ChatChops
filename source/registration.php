@@ -23,6 +23,10 @@
             Already have an Account?
             <a href= "login.php" id= "login-link">Login</a></b>
         </div>
+        <div>
+            <?php //google sign-in button
+            require "google-login/google-signin.php";?>
+        </div>
     </center>
 
     <div id= "box" style= "position: center;">
@@ -196,10 +200,10 @@
                 return "Wrong password";
             }
             else if($_GET['signerror'] == "abailableEmail"){
-                return "This email is alrady used to create account..";
+                return "This email is already used to create account..";
             }
             else if($_GET['signerror'] == 'abailableuname'){
-                return "This username is alrady used to create account..";
+                return "This username is already used to create account..";
             }
             else if($_GET['signerror'] == 'fnamemax'){
                 return "Max 30 for first Name.";
