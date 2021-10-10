@@ -1,7 +1,7 @@
 <?php
     session_start();
 
-    // for loing
+    // for login
     if(isset($_POST['log-submit'])){
         
         $unameormail = test_input($_POST['unameormail']);

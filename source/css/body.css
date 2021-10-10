@@ -1,0 +1,230 @@
+html, body {
+  width:100vw;
+  height: 100vh;
+}
+
+body {
+    /*background-color: #207398;*/
+    background:linear-gradient(to right, #03203C 0%, #207398 50%, #03203C 99%);
+}
+
+h1 {
+    text-align: center;
+}
+
+.chatContainer {
+  height: 90vh;
+  display: grid;
+  grid-template-columns: 30% 40% 30%;
+  grid-template-rows: 50% 50%;
+}
+
+.main-grid {
+    height: 85vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    position: relative;
+}
+
+.propic-change {
+    position: relative;
+    padding: 20% 20% 10% 20%;
+    text-align: center;
+}
+
+.image_area {
+  position: relative;
+  
+  }
+
+.conteiner img {
+    display: block;
+    width: 100%;
+}
+
+  .preview {
+    overflow: hidden;
+    width: 160px; 
+    height: 160px;
+    margin: 10px;
+    border: 1px solid red;
+  }
+
+  .modal-lg{
+    max-width: 1000px !important;
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+    height: 0;
+    transition: .5s ease;
+    width: 100%;
+  }
+
+  .image_area:hover .overlay {
+    height: 50%;
+    cursor: pointer;
+  }
+
+  .text {
+    color: #333;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .edit-details{
+    background-color:white;
+    margin-right: 30px;
+    text-align: center;
+    grid-template-columns: 33.3% 33.3% 6% 20%;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .profile-edit-form {
+    font-family: "Roboto", sans-serif;
+    background:linear-gradient(to right, #ffffff 0%, #fafafa 50%, #ffffff 99%);
+    border-radius: 10px;
+    position:relative;;
+    font-weight: bold;
+    font-size: 1.1em;
+    line-height: 30px;
+}
+
+.form-header  {
+  background-color: #03203C;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.form-header h1 {
+  font-size: 30px;
+  text-align:center;
+  color:#46B2E0;
+  padding:20px 0;
+  border-bottom:1px solid #cccccc;
+  text-shadow: 2px 2px 10px #207398;
+}
+
+  .edit-form-body {
+    position: relative;
+    padding:0px 40px;
+    color: darkgray;
+    width:auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+
+  ::-webkit-input-placeholder {
+    color:#d9d9d9;
+ }
+
+ .profile-edit-form .form-footer  {
+    background-color: #EFF0F1;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding:10px 40px;
+    text-align: center;
+    border-top: 1px solid #cccccc;
+    display:grid;
+    grid-template-columns : 20% 60% 20%;
+}
+
+.btn {
+  padding:10px 20px;
+  width: 150px;
+  background-color: #207398;
+  font-size:17px;
+  border:none;
+  border-radius:5px;
+  color:#caeef5;
+  cursor:pointer;
+  justify-self: right;
+}
+
+.btn:hover {
+  background-color: #12B0E8;
+  color:white;
+}
+
+.profile-edit-form .label-title {
+  color:#03203C;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.profile-edit-form .form-input{
+  font-size: 17px;
+  box-sizing: border-box;
+  width: 87%;
+  height: 33px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #333333;
+  text-align: left;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  background: white;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+.form-input-pwd {
+  font-size: 17px;
+  box-sizing: border-box;
+  height: 33px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #333333;
+  text-align: left;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  background: white;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+.error-bar {
+  position : relative;
+  text-align: center;
+  place-items: center;
+  color: red;
+  font-weight: bold;
+  
+}
+
+.success-bar{
+  position : relative;
+  text-align: center;
+  place-items: center;
+  color: green;
+  font-weight: bold;
+}
+
+#private-chat {
+  background-color: greenyellow;
+}
+
+#chat-gui {
+  background-color: grey;
+}
+
+#private-group {
+  background-color: indigo;
+}
+
+#public-group {
+  background-color: black;
+}
