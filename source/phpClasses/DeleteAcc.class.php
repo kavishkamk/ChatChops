@@ -4,6 +4,7 @@
     require_once "DbConnection.class.php";
     class DeleteAcc extends DbConnection{
 
+        // check otp with DB OTP
         public function checkOTP($otpcode, $uid){
             $sqlQ = "SELECT otpCode FROM users WHERE user_id = ?;";
             $conn = $this->connect();
@@ -21,19 +22,20 @@
                 if($row = mysqli_fetch_assoc($result)){
                     $dbotp = $row['otpCode'];
                     if($dbotp == $otpcode){
-                        return "1";
+                        return "1"; // success
                     }
                     else{
-                        return "0";
+                        return "0"; // wrong
                     }
                 }
                 else{
-                    return "nouser";
+                    return "nouser"; // user not found
                     exit();
                 }
             }
         }
 
+        // delete account
         public function deleteAcc($uid){
             $sqlQ = "UPDATE users SET active_status = ?, deleteStatus = ?, onlineStatus = ? WHERE user_id = ?;";
             $conn = $this->connect();

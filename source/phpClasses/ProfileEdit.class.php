@@ -3,6 +3,7 @@
     require_once "DbConnection.class.php";
     class ProfileEdit extends DbConnection {
 
+        // change first name, last name, user name
         public function changeUserProfile($fname, $lname, $uname){
             $res = 0;
             if(!empty($fname)){
@@ -303,6 +304,7 @@
             }
         }
 
+        // change user password
         public function changePassword($uid, $pwd){
             $sqlQ = "UPDATE users SET pwd = ? WHERE user_id = ?;";
             $conn = $this->connect();

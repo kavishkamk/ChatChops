@@ -112,7 +112,7 @@ h1 {
 
   .edit-form-body {
     position: relative;
-    padding:10px 40px;
+    padding:0px 40px;
     color: darkgray;
     width:auto;
     display: grid;
@@ -160,7 +160,7 @@ h1 {
 .profile-edit-form .form-input{
   font-size: 17px;
   box-sizing: border-box;
-  width: 90%;
+  width: 87%;
   height: 33px;
   padding-left: 10px;
   padding-right: 10px;
