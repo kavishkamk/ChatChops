@@ -1,5 +1,6 @@
 html, body {
-    height: 100%;
+  width:100vw;
+  height: 100vh;
 }
 
 body {
@@ -9,6 +10,13 @@ body {
 
 h1 {
     text-align: center;
+}
+
+.chatContainer {
+  height: 90vh;
+  display: grid;
+  grid-template-columns: 30% 40% 30%;
+  grid-template-rows: 50% 50%;
 }
 
 .main-grid {
@@ -203,4 +211,20 @@ h1 {
   place-items: center;
   color: green;
   font-weight: bold;
+}
+
+#private-chat {
+  background-color: greenyellow;
+}
+
+#chat-gui {
+  background-color: grey;
+}
+
+#private-group {
+  background-color: indigo;
+}
+
+#public-group {
+  background-color: black;
 }

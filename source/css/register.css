@@ -11,8 +11,8 @@ body {
 
 .signup-form {
     font-family: "Roboto", sans-serif;
-    width:90vw;
-    margin:30px auto;
+    width:82vw;
+    margin:20px auto;
     background:linear-gradient(to right, #ffffff 0%, #fafafa 50%, #ffffff 99%);
     border-radius: 10px;
     position:relative; top: 50px;
