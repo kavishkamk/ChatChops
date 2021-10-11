@@ -29,7 +29,7 @@
                         if($_GET['otpstatus'] == "otpverified"){
                             echo '<p class="logsuss">Your Account Activated</p>';
                         }
-                        if($_GET['otpstatus'] == "deleteacc"){
+                        else if($_GET['otpstatus'] == "deleteacc"){
                             echo '<p class="logsuss">Account Deleted</p>';
                         }
                         else{
