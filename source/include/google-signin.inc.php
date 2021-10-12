@@ -23,7 +23,7 @@ if(isset($_POST['pswd-submit']))
         require_once "../phpClasses/RegisterDbHandle.class.php";
 
         $regHandlerObj = new RegisterDbHandle();
-        $userCheck = $regHandlerObj->isItAvailableEmail($email);
+        $userCheck = $regHandlerObj->isItAvailableEmail($email, "user");
 
         if($userCheck == "1"){
             header("Location:../registration.php?signerror=abailableEmail&umail=$email");     
@@ -36,7 +36,7 @@ if(isset($_POST['pswd-submit']))
             //until it generate a unique username
             while(true)
             {
-                $unameCheck = $regHandlerObj->isItAvailableUserName($username);
+                $unameCheck = $regHandlerObj->isItAvailableUserName($username, "user");
                 // already available user name
                 if($unameCheck == "1"){
                     $random = rand(100, 999);
