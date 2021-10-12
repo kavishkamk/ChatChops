@@ -1,3 +1,7 @@
+*{
+  margin:0;
+  padding:0;
+}
 
 html, body {
     height: 100%;
@@ -5,7 +9,7 @@ html, body {
     place-items: center;
     font-weight: bold;
   }
-
+  
   html {
     background:linear-gradient(to right, #03203C 0%, #207398 50%, #03203C 99%);
   }
