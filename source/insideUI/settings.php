@@ -6,6 +6,12 @@
     <head>
         <title>Settings</title>
         <link rel="stylesheet" href="../css/header.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <style>
+        body {
+            font-family: 'Roboto';
+        }
+        </style>
     </head>
     <body>
         <header>

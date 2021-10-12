@@ -35,6 +35,13 @@
 		<link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet"/>
 		<script src="https://unpkg.com/dropzone"></script>
 		<script src="https://unpkg.com/cropperjs"></script>
+
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <style>
+        body {
+            font-family: 'Roboto';
+        }
+        </style>
     </head>
     <body>
         <!--navigation bar-->
