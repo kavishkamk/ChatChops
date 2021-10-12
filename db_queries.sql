@@ -1,6 +1,6 @@
 -- chatchops
 
-------------------------------------------
+-- ----------------------------------------
 CREATE TABLE admins (
     admin_id int AUTO_INCREMENT,
     fname VARCHAR(255) NOT NULL,
@@ -433,3 +433,6 @@ CREATE TABLE admin_session(
 
 ALTER TABLE admin_session
 ADD FOREIGN KEY (admin_id) REFERENCES admins(admin_id);
+
+ALTER TABLE users
+ADD onlineStatus BOOLEAN NOT NULL DEFAULT 0;
