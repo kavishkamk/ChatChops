@@ -15,6 +15,13 @@
         <link rel="stylesheet" type="text/css" href="css/register.css">
         <link rel="stylesheet" type="text/css" href="css/header.css">
         <link rel="stylesheet" type="text/css" href="css/footer.css">
+
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <style>
+        body {
+            font-family: 'Roboto';
+        }
+        </style>
     </head>
     <body>
     <center>
