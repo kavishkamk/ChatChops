@@ -28,7 +28,7 @@
                 exit();
             }
             if($logresult == "1"){
-                header("Location:../chatChops.php");
+                header("Location:../insideUI/chatChops.php");
                 unset($logObj);
                 exit();
             }
@@ -39,7 +39,7 @@
             }
             else if($logresult[0] == "4"){
                 $uname = substr($logresult, 1, strlen($logresult) - 1);
-                header("Location:../otpcode.php?logstat=notactived&username=$uname");
+                header("Location:../insideUI/otpcode.php?logstat=notactived&username=$uname");
                 unset($logObj);
                 exit();
             }

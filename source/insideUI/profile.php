@@ -7,7 +7,7 @@
                 <div class="conteiner" style= "position: center;">
                     <div class="image_area">
                         <label for="upload_image">
-                            <img src="<?php echo 'profile-pic/'.$_SESSION["profileLink"].'';?>" id="uploaded_image" class="img-responsive img-circle" />
+                            <img src="<?php echo '../profile-pic/'.$_SESSION["profileLink"].'';?>" id="uploaded_image" class="img-responsive img-circle" />
                             <div class="overlay">
                                 <div class="text">Click to Change Profile Image</div>
                             </div>
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div style="grid-column:2 / 3;" class="edit-details">
-                <form class= "profile-edit-form" action="include/changeUserProfile.inc.php" method="post">
+                <form class= "profile-edit-form" action="../include/changeUserProfile.inc.php" method="post">
                     <div class="form-header">
                         <h1>Profile Edit</h1>
                     </div>
@@ -104,7 +104,7 @@
                     </div>
                 </form>
                 <!-- Change email -->
-                <form class= "profile-edit-form" action="include/ChangeMail.inc.php" method="post">
+                <form class= "profile-edit-form" action="../include/ChangeMail.inc.php" method="post">
                     <div style="margin:30px 0px 0px 30px; text-align: left;">
                         <label for="uemail" class="label-title" style="margin-right:30px">Change Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </label>
                         <input type="email" size="29" name="uemail" placeholder="enter your email" class="form-input-pwd" style="margin-right:20px; margin-bottom:0px">
@@ -112,14 +112,14 @@
                     </div>
                 </form>
                 <!-- Change password -->
-                <form class= "profile-edit-form" action="include/PwdChange.inc.php" method="post">
+                <form class= "profile-edit-form" action="../include/PwdChange.inc.php" method="post">
                     <div style="margin:30px 0px 0px 30px; text-align: left;">
                         <label for="upassword" class="label-title" style="margin-right:30px">Change Password : </label>
                         <input type="password" size="29" name="upassword" placeholder="enter current password" class="form-input-pwd" style="margin-right:20px; margin-bottom:0px">
                         <button type="submit" name="pwd-change-submit" class="btn" text-align="right">Change Password</button>
                     </div>
                 </form>
-                <form class= "profile-edit-form" action="include/deleteacc.inc.php" method="post" name="delacc">
+                <form class= "profile-edit-form" action="../include/deleteacc.inc.php" method="post" name="delacc">
                     <div style="margin:30px 7% 0px 30px; ">
                         <?php
                             $errmsg = "";

@@ -24,64 +24,64 @@
         $uname = test_input($_POST['username']);
 
         if(empty($fname) && empty($lname) && empty($uname)){
-            header("Location:../profile.php?proedit=allempty");
+            header("Location:../insideUI/profile.php?proedit=allempty");
             exit();
         }
         else{
-            require_once "../phpClasses/ProfileEdit.class.php";
+            require_once "../insideUI/phpClasses/ProfileEdit.class.php";
 
             $proObj = new ProfileEdit();
             $prores = $proObj->changeUserProfile($fname, $lname, $uname);
             unset($proObj);
 
             if($prores == "3"){
-                header("Location:../profile.php?proedits=unameok");
+                header("Location:../insideUI/profile.php?proedits=unameok");
                 exit();
             }
             else if($prores == "2"){
-                header("Location:../profile.php?proedit=availableuname");
+                header("Location:../insideUI/profile.php?proedit=availableuname");
                 exit();
             }
             else if($prores == "0"){
-                header("Location:../profile.php?proedit=sqlerr");
+                header("Location:../insideUI/profile.php?proedit=sqlerr");
                 exit();
             }
             else if($prores == "1"){
-                header("Location:../profile.php?proedits=success");
+                header("Location:../insideUI/profile.php?proedits=success");
                 exit();
             }
             else if($prores == "4"){
-                header("Location:../profile.php?proedit=fnamechar");
+                header("Location:../insideUI/profile.php?proedit=fnamechar");
                 exit();
             }
             else if($prores == "5"){
-                header("Location:../profile.php?proedit=fnamenum");
+                header("Location:../insideUI/profile.php?proedit=fnamenum");
                 exit();
             }
             else if($prores == "6"){
-                header("Location:../profile.php?proedit=lnamechar");
+                header("Location:../insideUI/profile.php?proedit=lnamechar");
                 exit();
             }
             else if($prores == "7"){
-                header("Location:../profile.php?proedit=lnamenum");
+                header("Location:../insideUI/profile.php?proedit=lnamenum");
                 exit();
             }
             else if($prores == "8"){
-                header("Location:../profile.php?proedit=unamechar");
+                header("Location:../insideUI/profile.php?proedit=unamechar");
                 exit();
             }
             else if($prores == "9"){
-                header("Location:../profile.php?proedit=unamenum");
+                header("Location:../insideUI/profile.php?proedit=unamenum");
                 exit();
             }
             else{
-                header("Location:../profile.php?proedit=error");
+                header("Location:../insideUI/profile.php?proedit=error");
                 exit();
             }
         }
     }
     else{
-        header("Location:../profile.php?");
+        header("Location:../insideUI/profile.php?");
         exit();
     }
 

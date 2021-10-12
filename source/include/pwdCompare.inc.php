@@ -24,7 +24,7 @@
         $uid = test_input($_POST['userid']);
 
         if(empty($upwd) || empty($compwd) || empty($uid)){
-            header("Location:../pwdChange.php?pwdtatus=emptyfield&userid=$uid");
+            header("Location:../insideUI/pwdChange.php?pwdtatus=emptyfield&userid=$uid");
             exit();
         }
         else{
@@ -34,22 +34,22 @@
                 $prores = $proObj->changePassword($uid, $upwd);
                 unset($proObj);
                 if($prores == "1"){
-                    header("Location:../profile.php?pwdedit=ok");
+                    header("Location:../insideUI/profile.php?pwdedit=ok");
                     exit();
                 }
                 else{
-                    header("Location:../profile.php?pwdedit=err");
+                    header("Location:../insideUI/profile.php?pwdedit=err");
                     exit();
                 }
             }
             else{
-                header("Location:../pwdChange.php?pwdtatus=wrongpwd&userid=$uid");
+                header("Location:../insideUI/pwdChange.php?pwdtatus=wrongpwd&userid=$uid");
                 exit();
             }
         }
     }
     else{
-        header("Location:../profile.php");
+        header("Location:../insideUI/profile.php");
         exit();
     }
 

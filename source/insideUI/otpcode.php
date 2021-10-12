@@ -5,7 +5,7 @@
     // if this access come after registration, to access this page registraion should be error free
     if(isset($_GET['otpsend'])){
         if($_GET['otpsend'] != "sendok"){
-            header("Location:registration.php");
+            header("Location:../registration.php");
             exit();
         }
     }
@@ -13,14 +13,14 @@
     // wrong verification code or empty field
     if(isset($_GET['otpstatus'])){
         if(!($_GET['otpstatus'] == "WrongOtp" || $_GET['otpstatus'] == "emptyfield")){
-            header("Location:login.php");
+            header("Location:../login.php");
             exit();
         }
     }
 
     if(isset($_GET['logstat'])){
         if(isset($_GET['logstat']) != "notactived"){
-            header("Location:login.php");
+            header("Location:../login.php");
             exit();
         }
     }
@@ -32,12 +32,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logging</title>
-    <link rel="stylesheet" type="text/css" href="css/otpstyle.css">
+    <link rel="stylesheet" type="text/css" href="../css/otpstyle.css">
 </head>
 <body>
     <div class=container>
         <div id="logo">
-            <img src= "images/chatchops.png">
+            <img src= "../images/chatchops.png">
         </div>
         <div>
             <?php
@@ -72,7 +72,7 @@
         <div id="logcont">
             <p>Verification</p>
             <!-- form for check reserved OTP code -->
-            <form action="include/OtpOthentication.inc.php" class="logform" method="post">
+            <form action="../include/OtpOthentication.inc.php" class="logform" method="post">
                 <input type="hidden" name="username" value="<?php echo $_GET['username']; ?>" required>
                 <label for="verification">Verification Code</label><br>
                 <input type="text" name="verification" placeholder="enter verification" size="30" class="flog">
@@ -82,7 +82,7 @@
                 <button type="submit" name="otp-submit" class="logbutn">Submit</button>
             </form>
             <!-- to resend OTP code -->
-            <form method="post" action="include/OtpResend.inc.php">
+            <form method="post" action="../include/OtpResend.inc.php">
                 <input type="hidden" name="usernameotp" value="<?php echo $_GET['username']; ?>" required>
                 <button type="submit" name="reotp-submit" class="link-button">
                     resend OTP code..

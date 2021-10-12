@@ -6,7 +6,7 @@
         $otpcode = test_input($_POST['verification']);
 
         if(empty($username) || empty($otpcode)){
-            header("Location:../otpcode.php?otpstatus=emptyfield&username=$username");
+            header("Location:../insideUI/otpcode.php?otpstatus=emptyfield&username=$username");
             exit();
         }
         else{
@@ -20,7 +20,7 @@
                 exit();
             }
             else if($otpCheck ==  "0"){
-                header("Location:../otpcode.php?otpstatus=WrongOtp&username=$username");
+                header("Location:../insideUI/otpcode.php?otpstatus=WrongOtp&username=$username");
                 unset($OTPob);
                 exit();
             }
@@ -47,7 +47,7 @@
         }
     }
     else{
-        header("Location:../otpcode.php");
+        header("Location:../insideUI/otpcode.php");
         exit();
     }
 

@@ -40,18 +40,18 @@
                 }
             }
             else{
-                header("Location:../accDeleteCode.php?otpstatus=WrongOtp&uid=$uid");
+                header("Location:../insideUI/accDeleteCode.php?otpstatus=WrongOtp&uid=$uid");
                 unset($delObj);
                 exit();
             }
         }
         else{
-            header("Location:../accDeleteCode.php?otpstatus=emptyfield&uid=$uid");
+            header("Location:../insideUI/accDeleteCode.php?otpstatus=emptyfield&uid=$uid");
             exit();
         }
     }
     else{
-        header("Location:../accDeleteCode.php?");
+        header("Location:../insideUI/accDeleteCode.php?");
         exit();
     }
 

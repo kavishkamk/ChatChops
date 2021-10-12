@@ -22,11 +22,11 @@
         $umail = test_input($_POST['uemail']);
 
         if(empty($umail)){
-            header("Location:../profile.php?mailedit=empty");
+            header("Location:../insideUI/profile.php?mailedit=empty");
             exit();
         }
         else if(!filter_var($umail, FILTER_VALIDATE_EMAIL)){
-            header("Location:../profile.php?mailedit=invalid");
+            header("Location:../insideUI/profile.php?mailedit=invalid");
             exit();
         }
         else{
@@ -45,7 +45,7 @@
 
                 if($prores == "1"){
                     $uname = $_SESSION['uname'];
-                    header("Location:../otpcode.php?otpsend=sendok&username=$uname");
+                    header("Location:../insideUI/otpcode.php?otpsend=sendok&username=$uname");
                     exit();
                 }
                 else{
@@ -54,17 +54,17 @@
                 }
             }
             else if($regRes == "1"){
-                header("Location:../profile.php?mailedit=avilablemail");
+                header("Location:../insideUI/profile.php?mailedit=avilablemail");
                 exit();
             }
             else if($regRes == "sqlerror"){
-                header("Location:../profile.php?mailedit=sqlerr");
+                header("Location:../insideUI/profile.php?mailedit=sqlerr");
                 exit();
             }
         }
     }
     else{
-        header("Location:../profile.php?");
+        header("Location:../insideUI/profile.php?");
         exit();
     }
 

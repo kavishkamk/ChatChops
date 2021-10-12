@@ -14,11 +14,11 @@ if(isset($_POST['image']))
 
 	$data = base64_decode($image_array_2[1]);
 
-	$image_name = 'profile-pic/' . $_SESSION['uname'] . '.png';
+	$image_name = '../profile-pic/' . $_SESSION['uname'] . '.png';
 
 	$_SESSION['profileLink'] = $_SESSION['uname'].'.png';
 
-	require_once "phpClasses/ProfileEdit.class.php";
+	require_once "../phpClasses/ProfileEdit.class.php";
 	$proObj = new ProfileEdit();
 	$proObj->changeProfileLink('' . $_SESSION['uname'] . '.png', $_SESSION['userid']);
 	unset($proObj);

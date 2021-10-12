@@ -5,7 +5,7 @@
 <html>
     <head>
         <title>Settings</title>
-        <link rel="stylesheet" href="css/header.css">
+        <link rel="stylesheet" href="../css/header.css">
     </head>
     <body>
         <header>

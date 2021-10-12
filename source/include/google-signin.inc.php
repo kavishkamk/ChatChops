@@ -61,7 +61,7 @@ if(isset($_POST['pswd-submit']))
 
                     // OTP send succes // redirect page to get OTP code
                     if($sendotpResult == "SENDOTP"){
-                        header("Location:../otpcode.php?otpsend=sendok&username=$username");   
+                        header("Location:../insideUI/otpcode.php?otpsend=sendok&username=$username");   
                     }
                     // OTP send with errors
                     else if($sendotpResult == "sqlerror"){

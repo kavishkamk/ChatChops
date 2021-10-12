@@ -26,16 +26,16 @@
             unset($mailObj);
             if($prores == "1"){
                 $userid = $_SESSION['userid'];
-                header("Location:../accDeleteCode.php?delete=ok&uid=$userid"); // send mail
+                header("Location:../insideUI/accDeleteCode.php?delete=ok&uid=$userid"); // send mail
                 exit();
             }
             else{
-                header("Location:../profile.php?logout=err"); // error
+                header("Location:../insideUI/profile.php?logout=err"); // error
                 exit();
             }
         }
     }
     else{
-        header("Location:../profile.php");
+        header("Location:../insideUI/profile.php");
         exit();
     }

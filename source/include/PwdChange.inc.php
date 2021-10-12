@@ -23,7 +23,7 @@
         $upwd = test_input($_POST['upassword']);
 
         if(empty($upwd)){
-            header("Location:../profile.php?pwdedit=empty");
+            header("Location:../insideUI/profile.php?pwdedit=empty");
             exit();
         }
         else{
@@ -34,25 +34,25 @@
 
             if($pwdres == "1"){
                 $uid = $_SESSION['userid'];
-                header("Location:../pwdChange.php?pwdchange=want&userid=$uid");
+                header("Location:../insideUI/pwdChange.php?pwdchange=want&userid=$uid");
                 exit();
             }
             else if($pwdres == "4"){
-                header("Location:../profile.php?pwdedit=wrongpwd");
+                header("Location:../insideUI/profile.php?pwdedit=wrongpwd");
                 exit();
             }
             else if($pwdres == "usernotfund"){
-                header("Location:../profile.php?pwdedit=nouser");
+                header("Location:../insideUI/profile.php?pwdedit=nouser");
                 exit();
             }
             else if($pwdres == "sqlerror" || $pwdres == "5"){
-                header("Location:../profile.php?pwdedit=sqlerr");
+                header("Location:../insideUI/profile.php?pwdedit=sqlerr");
                 exit();
             }
         }
     }
     else{
-        header("Location:../profile.php?");
+        header("Location:../insideUI/profile.php?");
         exit();
     }
 
