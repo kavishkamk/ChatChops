@@ -28,7 +28,7 @@
             exit();
         }
         else{
-            require_once "../insideUI/phpClasses/ProfileEdit.class.php";
+            require_once "../phpClasses/ProfileEdit.class.php";
 
             $proObj = new ProfileEdit();
             $prores = $proObj->changeUserProfile($fname, $lname, $uname);
