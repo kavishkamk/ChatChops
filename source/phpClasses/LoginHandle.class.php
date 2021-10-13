@@ -199,4 +199,92 @@
             mysqli_close($conn);
         }
 
+        //for google login
+        public function googleLoginCheck($email)
+        {
+            $this->username = $email;
+
+            $getdetails = $this->getReleventDetais();
+
+            if($getdetails == "ok"){
+                // check blocked accounts
+                if($this->deleteStatus == 1){
+                    return "2"; // account is deleted
+                    exit();
+                }
+                else{
+                    if($this->activeStatus == 1){
+                        require_once "OnlineOffline.class.php";
+
+                        $onlineObj = new OnlineOffline();
+                        $onlineRes = $onlineObj->setUserOnline($this->user_id);
+                        $this->setLoginRecords();
+                        $this->setMappingTable();
+                        if($onlineRes == "1"){
+                            session_unset();
+                            session_destroy();
+                            session_start();
+                            require_once "SessionHandle.class.php";
+                            $sesObj = new SessionHandle();
+                            $sessionVal = session_id(); // genarete session id
+                            $sesResult = $sesObj->setSession($this->user_id, $sessionVal);
+                            unset($sesObj);
+
+                            if($sesResult == "1"){
+                            
+                                $_SESSION['userid'] = $this->user_id; // set user id of the user table
+                                $_SESSION['onlineRecordid'] = $this->logInsertId; // set with record id to set offline time
+                                $_SESSION['sessionId'] = $sessionVal; // set with record id to set offline time
+                                $_SESSION['fname'] = $this->fname;
+                                $_SESSION['lname'] = $this->lname;
+                                $_SESSION['profileLink'] = $this->profilelink;
+                                $_SESSION['uname'] = $this->registerdUName;
+                                $_SESSION['umail'] = $this->umail;
+                                return "1"; // login success
+                            }
+                            else{
+                                return "3"; // sql error
+                            }
+                        }
+                        else{
+                            return "3"; // sql error
+                            exit();
+                        }
+                        unset($onlineObj);
+                        exit();
+                    }
+                    else{
+                        // actount created, but still deactivated
+                        require_once "../phpClasses/OTPResend.class.php";
+                        $resendObj = new OTPResend();
+                        $resendres = $resendObj->resendOTP($this->registerdUName);
+
+                        if($resendres == "1"){
+                            return "4$this->registerdUName"; // OTP code resend successfully
+                        }
+                        else if($resendres == "2"){
+                            return "0"; // user not found
+                        }
+                        else if($resendres == "3"){
+                            return "3"; // sql error
+                        }
+                        else if($resendres == "5"){
+                            return "6"; // OTPsenderror
+                        }
+                        unset($resendObj);
+                        exit();
+                    }
+                    
+                }
+            
+            }
+            else if($getdetails == "usernotfund"){
+                return "0"; // user not found
+                exit();
+            }
+            else if($getdetails == "sqlerror"){
+                return "3"; // sql error
+                exit();
+            }
+        }
     }

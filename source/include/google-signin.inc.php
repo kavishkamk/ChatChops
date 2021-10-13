@@ -8,7 +8,6 @@ if(isset($_POST['pswd-submit']))
     $fname = $_SESSION['fname'];
     $lname = $_SESSION['lname'];
     $email = $_SESSION['email'];
-    $pic   = $_SESSION['picture'];
 
     $pswd = $_POST['pswd'];
     $confpswd = $_POST['confirm-pswd'];
@@ -48,7 +47,7 @@ if(isset($_POST['pswd-submit']))
             }
 
             if($unameCheck == "0"){
-                $regres = $regHandlerObj->registerUser($fname, $lname, $email, $pswd, $username, $pic, "1");
+                $regres = $regHandlerObj->registerUser($fname, $lname, $email, $pswd, $username,"unknownPerson.jpg", "1");
 
                 if($regres == "sqlerror"){
                     header("Location:../registration.php?signerror=sqlerror");

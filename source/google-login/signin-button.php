@@ -2,14 +2,14 @@
 ?>
 <html>
     <head>
-        <title>Google Sign-up</title>
-        <link rel="stylesheet" href="css/google-button.css" />
+        <title>Google Sign-in</title>
+        <link rel="stylesheet" href="css/google-button2.css" />
     </head>
     <body>
     <center>
     <div class = "full-button">
         <?php
-        require 'glogin-config.php';
+        require 'gsign-in-config.php';
         echo "<a href= '" .$client-> createAuthUrl(). "'>";
         ?>
             <div class="google-btn" >
@@ -17,7 +17,7 @@
                 <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
             </div>
             <p class="btn-text">
-                <b> Signup with google</b>
+                <b> Signin with google</b>
             </p>
             </div>
 

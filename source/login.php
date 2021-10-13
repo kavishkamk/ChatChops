@@ -23,8 +23,12 @@
     </head>
     <body>
         <div class=container>
-            <div id="logo">
+            <div class="logo">
                 <img src= "images/chatchops.png">
+            </div>
+            <div>
+            <?php //google sign-in button
+                require "google-login/signin-button.php";?>
             </div>
             <div>
                 <?php
@@ -63,7 +67,7 @@
                 ?>
             </div>
             <div id="logcont">
-                <p>Log-In</p>
+                <p>Log-in</p>
                 <form action="include/login.inc.php" class="logform" method="post">
                     <label for="unameormail">User Name or Email*</label><br>
                     <?php

@@ -1,6 +1,6 @@
 <?php
 
-/*google signup configuration data*/
+/*google login configuration data*/
 
 $login_button = "";
 
@@ -9,7 +9,7 @@ require $_SERVER['DOCUMENT_ROOT'].'/chatchops/source/GoogleAuth/vendor/autoload.
 
 $clientID = '98629541381-h09adtlbp8nru45h09if0i8b7m9l3qd0.apps.googleusercontent.com';
 $clientSecret = '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';
-$redirectUri = 'http://localhost/chatchops/source/google-login/logged-in.php';
+$redirectUri = 'http://localhost/chatchops/source/google-login/sign-in.php';
 
 //creating client request for google
 $client = new Google_Client();
@@ -41,15 +41,6 @@ if(isset($_GET['code']))
 
         //Get user profile data from google
         $data = $google_service->userinfo->get();
-
-        //Get profile data and store into $_SESSION variable
-        if(!empty($data['given_name'])){
-            $_SESSION['fname'] = $data['given_name'];
-        }
-
-        if(!empty($data['family_name'])){
-            $_SESSION['lname'] = $data['family_name'];
-        }
 
         if(!empty($data['email'])){
             $_SESSION['email'] = $data['email'];
