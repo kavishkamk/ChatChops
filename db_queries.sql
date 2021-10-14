@@ -436,3 +436,8 @@ ADD FOREIGN KEY (admin_id) REFERENCES admins(admin_id);
 
 ALTER TABLE users
 ADD onlineStatus BOOLEAN NOT NULL DEFAULT 0;
+
+-- last added query for friend status
+
+ALTER TABLE friend_request
+ADD friendStatus BOOLEAN NOT NULL DEFAULT 0;
