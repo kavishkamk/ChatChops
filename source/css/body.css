@@ -305,8 +305,15 @@ h1 {
   margin-right: 30px;
 }
 
-#frinds {
+#frinds, #friend-request {
   overflow-y: scroll;
+}
+
+.search-bar {
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
 }
 
 /* #friend-request {
