@@ -2,6 +2,13 @@
     require_once "DbConnection.class.php";
     class FriendList extends DbConnection{
 
+        // this method for get user list for send friend request
+        // get output as user_id, profilePicLink, first_name, last_name
+        // check alrady have a friend requst. if yes this query ignore that user
+        // check friends table both side to check connections
+        // check user block status. if user blocked this query ignore that user
+        // check user is alray friend. if yes this query igore that user
+        // if user accout deactive or deleted thid query ignore that user
         public function getFriendList($uid){
             $sqlQ = "SELECT users.user_id, users.profilePicLink, users.first_name, users.last_name FROM users WHERE users.user_id NOT IN
             (SELECT friends.to_user_id FROM ((friends INNER JOIN friend_req_friend_map ON friends.friend_id = friend_req_friend_map.friend_id)
@@ -30,6 +37,7 @@
             }
         }
 
+        // this for send comfirm friend requests
         public function addFriends($uid, $fid){
 
             $friendInsertId = $this->set_friends_table($uid, $fid);
@@ -51,6 +59,7 @@
             }
         }
 
+        // this query used for get reserved friend requests from other users
         public function getfriendRequestList($uid){
             $sqlQ = "SELECT users.user_id, users.profilePicLink, users.first_name, users.last_name FROM users WHERE users.user_id IN(
                 SELECT friends.from_user_id FROM 
@@ -77,6 +86,7 @@
                 }
         }
 
+        // this used for accept friend request. this set req_status to 0 and friendStatus as 1
         public function requestconfirm($userId, $friendId){
 
             $friendfieldid = $this->getFriendId($userId, $friendId);
@@ -101,6 +111,7 @@
             }
         }
 
+        // this for get friend_id for friends table for given users and friend
         private function getFriendId($userId, $friendId){
             $sqlQ = "SELECT friend_id FROM friends WHERE from_user_id = ? AND  to_user_id = ?;";
             $conn = $this->connect();
@@ -126,6 +137,7 @@
             }
         }
 
+        // this function for get req_id accourding to friend_id
         private function getRequestId($friendId){
             $sqlQ = "SELECT req_id FROM friend_req_friend_map WHERE friend_id = ?";
             $conn = $this->connect();
@@ -151,6 +163,7 @@
             }
         }
 
+        // this is used for set friend_req_friend_map table
         private function set_friend_req_friend_map_table($friendInsertId, $detailsInsertId){
             $sqlQ = "INSERT INTO friend_req_friend_map(req_id, friend_id) VALUES(?,?);";
             $conn = $this->connect();
@@ -169,6 +182,7 @@
             }
         }
 
+        // this for send a friend request data and set it as friend request (set req_status = 1)
         private function set_friend_request_table(){
             $sqlQ = "INSERT INTO friend_request(req_status, block_status, req_time, accept_time) VALUES(?,?,?,?);";
             $conn = $this->connect();
@@ -191,6 +205,7 @@
             }
         }
 
+        // set friends request as sender and resever
         private function set_friends_table($uid, $fid){
             $sqlQ = "INSERT INTO friends(from_user_id, to_user_id) VALUES(?, ?);";
             $conn = $this->connect();
