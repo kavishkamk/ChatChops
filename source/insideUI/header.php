@@ -28,6 +28,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="../css/header.css">
         <link rel="stylesheet" type="text/css" href="../css/body.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>        
@@ -53,7 +54,7 @@
                     <img src="../profile-pic/unknownPerson.jpg" alt="Cinque Terre" width="200" height="200" class="img-circle pro-img" id="userprofile-dropdown">
                     <div class="desc"><p id="profileuser" style="color:white;">Name</p><p id="profileuname" style="color:white;">User Name</p></div>
                     <div class="dropdown-list">
-                        <a href="profile.php">Profile</a>
+                        <a href="../insideUI/profile.php">Profile</a>
                         <a href="#">Setting</a>
                         <a href="../include/logout.inc.php">Logout</a>
                     </div>
