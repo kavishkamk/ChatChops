@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "MyApp\\": "../chat"
+        }
+    },
+    "require": {
+        "cboden/ratchet": "^0.4"
+    }
+}
