@@ -1,0 +1,35 @@
+.chatContainer{
+    grid-auto-rows: fit-content(1em);
+    display:grid;
+    grid-template-columns: 0.7fr 2.25fr 0.7fr;
+    height: 91vh;
+}
+
+.topic{
+    color: white;
+    text-align: center;
+}
+
+#create-room-button{
+    position: right;
+}
+
+hr{
+    margin-top: 8px;
+}
+
+.myPopup {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #A8A8A8;
+    opacity: 0.4;
+    display: none;
+    z-index: 100;
+}
+
+#popup-frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
