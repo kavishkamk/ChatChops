@@ -328,7 +328,7 @@ h1 {
 .chat-message-list {
   position: relative;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   padding: 10px 20px 0 20px;
   overflow-y: scroll;
 }

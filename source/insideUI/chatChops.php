@@ -45,33 +45,14 @@
                     </div>
                     <div class="chat-body">
                         <div class="chat-message-list" id="pri-chat-message-list">
-                            <div class="message-row your-message">
-                                <div class="message-content">
-                                    <div class="message-text">Ok then</div>
-                                    <div class="message-time"></div>
-                                </div>
-                            </div>
-                            <div class="message-row other-message">
-                                <div class="message-content">
-                                    <img src="../profile-pic/unknownPerson.jpg"/>
-                                    <div class="message-text">Ok ok</div>
-                                    <div class="message-time"></div>
-                                </div>
-                            </div>
-                            <div class="message-row your-message">
-                                <div class="message-content">
-                                    <div class="message-text">Ok bro</div>
-                                    <div class="message-time"></div>
-                                </div>
-                            </div>
                         </div>
                         <div>
-                            <form class="chat-form">
+                            <form class="chat-form" onkeydown="return event.key != 'Enter';">
                                 <input type="hidden" id="senderId" name="senderId" value="1">
                                 <input type="hidden" id="reseverId" name="reseverId" value="2">
                                 <input type="hidden" id="msgType" name="msgType" value="pri">
                                 <input type="text" id="msg" name="msg" placeholder="type a message"/>
-                                <button type="submit" id="send-msg" name="send-msg" class="send-msg"><i class='fas fa-paper-plane'></i></button>
+                                <button type="button" id="send-msg" name="send-msg" class="send-msg"><i class='fas fa-paper-plane'></i></button>
                             </form>
                         </div>
                     </div>
@@ -112,6 +93,9 @@
                 msg: msg
             };
             conn.send(JSON.stringify(data));
+            document.getElementById('msg').value = '';
+            var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ msg +'</div><div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
         })
 
     })
