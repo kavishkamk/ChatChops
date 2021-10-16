@@ -1,6 +1,5 @@
 <?php
-
- require_once "DbConnection.class.php";
+require_once "DbConnection.class.php";
    
    class RegisterDbHandle extends DbConnection {
 

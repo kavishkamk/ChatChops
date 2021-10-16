@@ -22,21 +22,28 @@ class Chat implements MessageComponentInterface {
         echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
             , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
-        // foreach ($this->clients as $client) {
-        //     if ($from !== $client) {
-        //         // The sender is not the receiver, send to each client connected
-        //         $client->send($msg);
-        //     }
-        // }
+        $data = json_decode($msg, true);
+        $senddaga['msgType'] = $data['msgType'];
+        $senddaga['senderId'] = $data['senderId'];
+        $senddaga['reserverId'] = $data['reserverId'];
+        $senddaga['msg'] = $data['msg'];
+        foreach ($this->clients as $client) {
+          if ($from !== $client) {
+                // The sender is not the receiver, send to each client connected
+                $client->send(json_encode($senddaga));
+            }
+        }
+
+        $msgTypes = $data['msgType'];
 		
-		if($msgType == "pubg"){
-			
+		if($msgTypes == "pubg"){
+			echo "this is public group";
 		}
-		else if($msgType == "prig"){
-			
+		else if($msgTypes == "prig"){
+			echo "this is private group";
 		}
-		else if($msgType == "pri"){
-			
+		else if($msgTypes == "pri"){
+			echo "this is private msg";
 		}
     }
 
