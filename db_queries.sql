@@ -441,3 +441,9 @@ ADD onlineStatus BOOLEAN NOT NULL DEFAULT 0;
 
 ALTER TABLE friend_request
 ADD friendStatus BOOLEAN NOT NULL DEFAULT 0;
+
+-- public group column changed
+ALTER TABLE public_group DROP COLUMN group_icon;
+
+ALTER TABLE public_group
+ADD icon_link VARCHAR(60) NOT NULL;
