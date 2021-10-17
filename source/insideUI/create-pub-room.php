@@ -1,6 +1,4 @@
 <?php
-
-session_start();
 //window popup to create a new public chat room
 ?>
 
@@ -25,7 +23,11 @@ session_start();
         </style>
     </head>
     <body>
-        
+    
+    <script>
+        //disable right click handling inside this popup-window
+        window.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
 
     <div id= "box" style= "position: center;">
         <!-- public group creating form -->
@@ -84,6 +86,8 @@ session_start();
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
+
+                                <!-- crop preview-->
                                 <div class="modal-body">
                                     <div class="img-container">
                                         <div class="row">
@@ -119,18 +123,10 @@ session_start();
 
                     echo '<span class="error-bar" >'.$errmsg.'</span>';
                 ?>
-
                 <button type="submit" name="pub-room-submit" class="btn" >Create Room</button>
             </div>
         </form>
     </div>
-
-        <script>
-            //<button id="createPub" onClick= "closeWindow()">Create</button>
-            function closeWindow(){
-                window.close();
-            }
-        </script>
     </body>
 </html>
 
@@ -153,6 +149,7 @@ $(document).ready(function(){
 			$modal.modal('show');
 		};
 
+        //user has selected a photo
 		if(files && files.length > 0)
 		{
 			reader = new FileReader();
@@ -171,37 +168,41 @@ $(document).ready(function(){
 			preview:'.preview'
 		});
 	}).on('hidden.bs.modal', function(){
+        //cropper plugin will destroy when the modal is closed
 		cropper.destroy();
    		cropper = null;
 	});
 
+    //when the crop button is clicked
 	$('#crop').click(function(){
+
+        //getting selected image area
 		canvas = cropper.getCroppedCanvas({
+            //define image size
 			width:400,
 			height:400
 		});
 
+        //compress the image into better quality
 		canvas.toBlob(function(blob){
 			url = URL.createObjectURL(blob);
 			var reader = new FileReader();
 			reader.readAsDataURL(blob);
 			reader.onloadend = function(){
 
-                var prePhoto = document.getElementById("prouppic").value;
-                if(prePhoto == "groupchat-icon.png" || prePhoto == ""){
-                    prePhoto = "000";
-                }
+                //var prePhoto = document.getElementById("prouppic").value;
+                
 
 				var base64data = reader.result;
 				$.ajax({
 					url:'../profileUpload.php',
 					method:'POST',
-					data:{pubGIcon:base64data, pre:prePhoto},
+					data:{pubGIcon:base64data},
 					success:function(data)
 					{
 						$modal.modal('hide');
-						$('#uploaded_image').attr('src', data);
-                        document.getElementById("prouppic").value = data.substr(12);
+						$('#uploaded_image').attr('src', "../" + data);
+                        //document.getElementById("prouppic").value = data.substr(12);
 					}
 				});
 			};

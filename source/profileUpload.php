@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 //upload.php to upload poto after croping
 
 if(isset($_POST['image']))
@@ -31,13 +32,15 @@ if(isset($_POST['image']))
 if(isset($_POST['pubGIcon']))
 {
 	$data = $_POST['pubGIcon'];
+
+	/*
 	$prePic = $_POST['pre'];
 
 	if($prePic != "000"){
 		if(file_exists("group-icons/".$prePic)){
 			unlink("group-icons/".$prePic);
 		}
-	}
+	}*/
 
 	$image_array_1 = explode(";", $data);
 

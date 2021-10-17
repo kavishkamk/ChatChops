@@ -13,6 +13,7 @@
         </style>
 
         </head>
+    <body>
         <main>
             <div class = "chatContainer" id="chat">
                 <div class="chat" id="private-chat" style="grid-column:1 / 2; grid-row: 1 / 3">
@@ -34,31 +35,36 @@
                             </div>
                         </th>
                         <th>
-                            <button id= "create-room-button" onClick="fullwindowpopup()">
-                                Create Room
-                            </button>
-                            <div class='myPopup'>
-                                <iframe src='sample.php' id='popup-frame'>
-                                </iframe> <!-- /#popup-frame -->
-                            </div>
+                            <a href="create-pub-room.php">
+                            <button id= "create-room-button">Create Room</button>
+                            </a>
                         </th>
                     </table>
                     <hr>
                     
 
                     <div class= "pub rooms">
-                        <?php
-
-                        ?>
                     </div>
                 </div>
             </div>
         </main>
-    
-        <script>
+
+        <script>/*
             function fullwindowpopup(){
-                window.open("create-pub-room.php","bfs","fullscreen,scrollbars", 'resizable=0,height=600,width=800');
+                document.getElementById("form-popup").style.display = "block";
             }
+
+            function toggle(e) {
+                e.stopPropagation();
+                popup.classList.toggle("hide");
+            }
+
+            function closePopup() {
+                if (!popup.classList.contains("hide")) {
+                    popup.classList.toggle("hide");
+                }
+            }*/
+
         </script>
     </body>
 </html>
