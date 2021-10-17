@@ -9,48 +9,50 @@
                     <div class="search-bar"><p>Friends</p>
                     </div>
                     <?php
-                        $priObj = new PrivateChatHandle();
-                        $datas = $priObj->getFriendList($_SESSION['userid']);
+                        $priObj = new PrivateChatHandle(); // this for get privat chat detais
+                        $datas = $priObj->getFriendList($_SESSION['userid']); // get friend lisg
                         unset($priObj);
                     ?>
                     <div class="friend-accounts">
                         <?php
-                            // set users in the div with given details
-                            foreach($datas as $data){
-                                echo '<div class="friend-conversation1 active">
-                                        <img src="../profile-pic/'.$data["profilePicLink"].'"/>
+                            // set each users
+                            foreach($datas as $row){
+                                // set chat user details (separated by space) to use later
+                                $vall = $row['user_id']." ".$row["first_name"]." ".$row["last_name"]." ".$row["profilePicLink"];
+                                // set chat bar for given usr
+                                echo '<div onclick="setChatRoomDetails(\''.$vall.'\')" class="friend-conversation1 active" id="pchat'.$row["user_id"].'">
+                                        <img src="../profile-pic/'.$row["profilePicLink"].'"/>
                                         <div class="title-text">
-                                            '.$data["first_name"].' '.$data["last_name"].'
+                                            '.$row["first_name"].' '.$row["last_name"].'
                                         </div>
-                                        <div>
+                                        <div class="setTime">
                                         </div>
                                         <div class="new-Message">
                                             hdudfu ugfudf udgfy fy gfy f gyfgyd dgfyg gfy8f 7fcfdft fgydfh gfyftyft tfytfyt
                                         </div>
                                         <div class="status-dot"><i class="fas fa-circle"></i></div>
-                                        <div class="request-button">
-                                            <form method="post">
-                                                <input type="hidden" name="frindId" value="'.$data["user_id"].'">
-                                            </form>
-                                        </div>
                                     </div>';
                             }
                         ?>
                     </div>
                 </div>
+                <!-- this is chat gui -->
                 <div class="chat" id="chat-gui" style="grid-column:2 / 3; grid-row: 1 / 3">
                     <div class="chat-title">
-                        <span>Kavishka Madhushan</span>
-                        <i class="fas fa-ellipsis-v"></i>
+                        <span id="reserver-name"></span> <!-- to set reserver name -->
+                        <i class="fas fa-ellipsis-v"></i> <!-- list icon -->
                     </div>
                     <div class="chat-body">
+                        <!-- this is chat message list -->
                         <div class="chat-message-list" id="pri-chat-message-list">
                         </div>
                         <div>
+                            <!-- this for set details to send messages -->
                             <form class="chat-form" onkeydown="return event.key != 'Enter';">
-                                <input type="hidden" id="senderId" name="senderId" value="1">
-                                <input type="hidden" id="reseverId" name="reseverId" value="2">
-                                <input type="hidden" id="msgType" name="msgType" value="pri">
+                                <input type="hidden" id="senderId" name="senderId" value="<?php echo '.$_SESSION["userid"].';?>">
+                                <input type="hidden" id="reseverId" name="reseverId" value="">
+                                <input type="hidden" id="profilepiclink" name="profilepiclink" value="">
+                                <input type="hidden" id="msgType" name="msgType" value="">
                                 <input type="text" id="msg" name="msg" placeholder="type a message"/>
                                 <button type="button" id="send-msg" name="send-msg" class="send-msg"><i class='fas fa-paper-plane'></i></button>
                             </form>
@@ -74,10 +76,12 @@
             console.log("Connection established!");
         };
 
+        // set reserved messages
         conn.onmessage = function(e) {
             console.log(e.data);
             var data = JSON.parse(e.data);
-            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/unknownPerson.jpg"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+            var propic = document.getElementById("profilepiclink").value;
+            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
             $('#pri-chat-message-list').append(row);
         };
 
@@ -99,4 +103,13 @@
         })
 
     })
+
+    // this method used to set chat room paramiters
+    function setChatRoomDetails(val){
+        var details = val.split(" ");
+        document.getElementById("reseverId").value = details[0];
+        document.getElementById("profilepiclink").value = details[3];
+        document.getElementById("msgType").value = "pri";
+        document.getElementById("reserver-name").textContent= details[1].concat(" ",details[2]);
+    }
 </script>
