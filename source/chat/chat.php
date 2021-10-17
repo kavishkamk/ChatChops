@@ -28,8 +28,10 @@ class Chat implements MessageComponentInterface {
 
         // check established connection
         if(isset($data['cliendId'])){
+            $val1 = 1;
             $this->clientsWithId[$data['cliendId']] = $from; // add connection with client id
-            $this->clientIdWithresourceId[$from->resourceId] = $data['cliendId'];
+            $this->clientIdWithresourceId[$from->resourceId] = $data['cliendId']; // map connection id with user id
+            $this->broadcastOnlineStatus($val1, $data['cliendId']); // to broad cast user online status
         }
         if(isset($data['msgType'])){
             $msgTypes = $data['msgType']; // get message type
@@ -71,11 +73,31 @@ class Chat implements MessageComponentInterface {
         $senddata['reserverId'] = $details['reserverId'];
         $senddata['msg'] = $details['msg'];
 
-        $resConn = $this->clientsWithId[$senddata['reserverId']];
-        $resConn->send(json_encode($senddata));
+        if(array_key_exists($senddata['reserverId'], $this->clientsWithId)){
+            $resConn = $this->clientsWithId[$senddata['reserverId']];
+            $resConn->send(json_encode($senddata));
+        }
+        else{
+            echo "offline user";
+        }
     }
 
+    // send online or offliene status
     private function broadcastOnlineStatus($val, $newConnectionId){
 
+        require_once "../phpClasses/PrivateChatHandle.class.php";
+        $priChatObj = new FriendList();
+        $friendList = $priChatObj->getFriendListIdList($newConnectionId);
+        unset($priChatObj);
+
+        $senddata['msgType'] = "onoff";
+        $senddata['statval'] = $val; // online or offline status
+        
+        foreach ($friendList as $row) {
+            if (array_key_exists($row['user_id'], $this->clientsWithId)) {
+                $resConn = $this->clientsWithId[$row['user_id']];
+                $resConn->send(json_encode($senddata));
+            }
+        }
     }
 }

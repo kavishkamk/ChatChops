@@ -48,12 +48,13 @@
                         </div>
                         <div>
                             <!-- this for set details to send messages -->
-                            <form class="chat-form" onkeydown="return event.key != 'Enter';">
-                                <input type="hidden" id="senderId" name="senderId" value="<?php echo ''.$_SESSION["userid"].'';?>">
-                                <input type="hidden" id="reseverId" name="reseverId" value="">
-                                <input type="hidden" id="profilepiclink" name="profilepiclink" value="">
-                                <input type="hidden" id="msgType" name="msgType" value="">
-                                <input type="text" id="msg" name="msg" placeholder="type a message"/>
+                            <form class="chat-form" onkeydown="return event.key != 'Enter';"> <!-- to stop refresh when user ENTER button on text fileld-->
+                                <input type="hidden" id="senderId" name="senderId" value="<?php echo ''.$_SESSION["userid"].'';?>"> <!--sender id-->
+                                <input type="hidden" id="reseverId" name="reseverId" value=""> <!--reserver id-->
+                                <input type="hidden" id="profilepiclink" name="profilepiclink" value=""> <!--profie pic link-->
+                                <input type="hidden" id="msgType" name="msgType" value=""> <!-- set message type -->
+                                <input type="text" id="msg" name="msg" placeholder="type a message"/> <!-- get input message -->
+                                <!-- button for stop refresh page when send message -->
                                 <button type="button" id="send-msg" name="send-msg" class="send-msg"><i class='fas fa-paper-plane'></i></button>
                             </form>
                         </div>
@@ -74,35 +75,43 @@
         var conn = new WebSocket('ws://localhost:8080');
         conn.onopen = function(e) {
             console.log("Connection established!");
-            sendIntroduceData();
+            sendIntroduceData(); // send data to user introduce
         };
 
         // set reserved messages
         conn.onmessage = function(e) {
             console.log(e.data);
             var data = JSON.parse(e.data);
-            var propic = document.getElementById("profilepiclink").value;
-            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
+            if(data.msgType.localeCompare("pri") == 0){
+                setReservedPrivatChatData(data);
+            }
+            else if(data.msgType.localeCompare("onoff") == 0){
+                setOnlineOrOffline(data);
+            }
+            
+            
         };
 
         $("#send-msg").click(function(){
-            var senderId   = $("#senderId").val();
-            var reserverId = $("#reseverId").val();
-            var msg        = $("#msg").val();
-            var msgType    = $("#msgType").val();
+            var senderId   = $("#senderId").val(); // get sender id
+            var reserverId = $("#reseverId").val(); // get reserver id
+            var msg        = $("#msg").val();  // message
+            var msgType    = $("#msgType").val(); // message type
+            // structure
             var data = {
                 msgType: msgType,
                 senderId: senderId,
                 reserverId: reserverId,
                 msg: msg
             };
-            conn.send(JSON.stringify(data));
-            document.getElementById('msg').value = '';
+            conn.send(JSON.stringify(data)); // send data
+            document.getElementById('msg').value = ''; // set chat field to empty
+            // set sended chat message
             var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ msg +'</div><div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
+            $('#pri-chat-message-list').append(row); // add to chat interface
         })
 
+        // this method used to send userid to server to know about user
         function sendIntroduceData(){
             var introdata = {
                 cliendId: <?php echo ''.$_SESSION["userid"].'';?>
@@ -112,6 +121,14 @@
 
     })
 
+    // to set private chat reserved data
+    function setReservedPrivatChatData(data){
+            var propic = document.getElementById("profilepiclink").value;
+            // set reserved chat message
+            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
+        }
+
     // this method used to set chat room paramiters
     function setChatRoomDetails(val){
         var details = val.split(" ");
@@ -119,5 +136,10 @@
         document.getElementById("profilepiclink").value = details[3];
         document.getElementById("msgType").value = "pri";
         document.getElementById("reserver-name").textContent= details[1].concat(" ",details[2]);
+    }
+
+    // set private user onlie or offlien
+    function  setOnlineOrOffline(data){
+
     }
 </script>
