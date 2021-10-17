@@ -45,18 +45,6 @@
                 }
             ?>
             <div class="form-body" style= "position: center;">
-                <!-- for group name-->
-                <div>
-                    <label for="groupname" class="label-title" >Chat Room Name *</label><br>
-                    <?php 
-                        if(isset($_GET['groupname'])){
-                            echo '<input type="text" name="groupname" placeholder="enter chat room name" value="'.$_GET['groupname'].'" class="form-input" required>';
-                        }
-                        else{
-                            echo '<input type="text" name="groupname" placeholder="enter chat room name" class="form-input" required>';
-                        }
-                    ?>
-                </div>
 
                 <!-- this div is to handle group icons -->
                 <div>
@@ -108,6 +96,41 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- for group name-->
+                <div>
+                    <label for="groupname" class="label-title" >Chat Room Name *</label><br>
+                    <?php 
+                        if(isset($_GET['groupname'])){
+                            echo '<input type="text" 
+                            name="groupname" 
+                            placeholder="enter chat room name" 
+                            value="'.$_GET['groupname'].'" 
+                            class="form-input" 
+                            required>';
+                        }
+                        else{
+                            echo '<input type="text" 
+                            name="groupname" 
+                            placeholder="enter chat room name" 
+                            class="form-input" 
+                            required>';
+                        }
+                    ?>
+                </div>
+
+                <!-- for group bio-->
+                <div>
+                    <label for="groupbio" class="label-title" >Description *</label><br>
+                    <?php 
+                        if(isset($_GET['groupbio'])){
+                            echo '<textarea id="groupbio" placeholder="enter a description about your chat room" maxlength= "50" value="'.$_GET['groupbio'].'" required></textarea>';
+                        }
+                        else{
+                            echo '<textarea id="groupbio" placeholder="enter a description about your chat room" maxlength= "50" required></textarea>';
+                        }
+                    ?>
+                </div>
             </div>
             
             <!-- form footer -->
@@ -130,7 +153,7 @@
     </body>
 </html>
 
-<!-- script for profile photo -->
+<!-- script for inserting group icon -->
 <script>
 
 $(document).ready(function(){
@@ -168,6 +191,7 @@ $(document).ready(function(){
 			preview:'.preview'
 		});
 	}).on('hidden.bs.modal', function(){
+
         //cropper plugin will destroy when the modal is closed
 		cropper.destroy();
    		cropper = null;
@@ -188,11 +212,8 @@ $(document).ready(function(){
 			url = URL.createObjectURL(blob);
 			var reader = new FileReader();
 			reader.readAsDataURL(blob);
+
 			reader.onloadend = function(){
-
-                //var prePhoto = document.getElementById("prouppic").value;
-                
-
 				var base64data = reader.result;
 				$.ajax({
 					url:'../profileUpload.php',
@@ -202,7 +223,6 @@ $(document).ready(function(){
 					{
 						$modal.modal('hide');
 						$('#uploaded_image').attr('src', "../" + data);
-                        //document.getElementById("prouppic").value = data.substr(12);
 					}
 				});
 			};

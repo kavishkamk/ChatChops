@@ -35,7 +35,7 @@
                             </div>
                         </th>
                         <th>
-                            <a href="create-pub-room.php">
+                            <a href="../public-rooms/create-pub-room.php">
                             <button id= "create-room-button">Create Room</button>
                             </a>
                         </th>
@@ -48,23 +48,5 @@
                 </div>
             </div>
         </main>
-
-        <script>/*
-            function fullwindowpopup(){
-                document.getElementById("form-popup").style.display = "block";
-            }
-
-            function toggle(e) {
-                e.stopPropagation();
-                popup.classList.toggle("hide");
-            }
-
-            function closePopup() {
-                if (!popup.classList.contains("hide")) {
-                    popup.classList.toggle("hide");
-                }
-            }*/
-
-        </script>
     </body>
 </html>

@@ -9,10 +9,15 @@ body{
 .pub-room-form {
     font-family: "Roboto", sans-serif;
     width: 500px;
+    height: 575px;
     margin:20px auto;
     background:linear-gradient(to right, #ffffff 0%, #fafafa 50%, #ffffff 99%);
     border-radius: 10px;
     position: relative; top: 75px;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .container {
@@ -99,6 +104,10 @@ input[type="file"] {
     grid-template-columns : 20% 60% 20%;
 }
 
+.form-footer{
+    margin-top: 20px;
+}
+
 .status {
     margin-top: 10px;
     color:#999;  
@@ -161,8 +170,10 @@ input[type="file"] {
 
 .image_area {
     position: relative;
-    width: 300px;
-    left: 50px;
+    width: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 
 img {
@@ -201,7 +212,7 @@ img {
 
 .text {
     color: #333;
-    font-size: 20px;
+    font-size: 17px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -210,3 +221,16 @@ img {
     transform: translate(-50%, -50%);
     text-align: center;
 } 
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f8f8f8;
+    font-size: 15px;
+    resize: none;
+    
+}
