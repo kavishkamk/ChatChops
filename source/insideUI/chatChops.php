@@ -45,6 +45,20 @@
                     <div class="chat-body">
                         <!-- this is chat message list -->
                         <div class="chat-message-list" id="pri-chat-message-list">
+                            <!-- <div class="message-row your-message">
+                                <div class="message-content">
+                                    <div class="message-text">kkjfkg  fghh  ghfogi</div>
+                                    <div class="message-time"></div>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="message-row other-message">
+                                <div class="message-content"> 
+                                    <img src="../profile-pic/....."/>
+                                    <div class="message-text">htht gtht ghth ggg</div>
+                                    <div class="message-time"></div>
+                                </div>
+                            </div> -->
                         </div>
                         <div>
                             <!-- this for set details to send messages -->
