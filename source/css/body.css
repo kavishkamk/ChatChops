@@ -480,13 +480,3 @@ h1 {
 .send-msg {
   height: 40px;
 }
-
-.chat-button {
-  background: none;
-  border: none;
-  display: none;
-}
-
-.chat-button:focus {
-  outline: none;
-}

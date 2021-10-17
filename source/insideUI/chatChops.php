@@ -49,7 +49,7 @@
                         <div>
                             <!-- this for set details to send messages -->
                             <form class="chat-form" onkeydown="return event.key != 'Enter';">
-                                <input type="hidden" id="senderId" name="senderId" value="<?php echo '.$_SESSION["userid"].';?>">
+                                <input type="hidden" id="senderId" name="senderId" value="<?php echo ''.$_SESSION["userid"].'';?>">
                                 <input type="hidden" id="reseverId" name="reseverId" value="">
                                 <input type="hidden" id="profilepiclink" name="profilepiclink" value="">
                                 <input type="hidden" id="msgType" name="msgType" value="">
@@ -74,6 +74,7 @@
         var conn = new WebSocket('ws://localhost:8080');
         conn.onopen = function(e) {
             console.log("Connection established!");
+            sendIntroduceData();
         };
 
         // set reserved messages
@@ -101,6 +102,13 @@
             var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ msg +'</div><div class="message-time"></div></div></div>';
             $('#pri-chat-message-list').append(row);
         })
+
+        function sendIntroduceData(){
+            var introdata = {
+                cliendId: <?php echo ''.$_SESSION["userid"].'';?>
+            };
+            conn.send(JSON.stringify(introdata));
+        }
 
     })
 
