@@ -36,7 +36,7 @@
                 <h1>Create a Public Chat Room</h1>
             </div>
             <?php 
-                // set profile picture paramiters
+                // set group icon
                 if(isset($_GET['picn'])){
                     echo '<input type="hidden" name="foo" value="'.$_GET['picn'].'" id="prouppic">';
                 }
