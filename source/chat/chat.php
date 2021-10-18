@@ -4,6 +4,7 @@ use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
 require dirname(__DIR__) . "/phpClasses/PrivateChatHandle.class.php";
+require dirname(__DIR__) . "/phpClasses/OnlineOffline.class.php";
 
 class Chat implements MessageComponentInterface {
     protected $clients;
@@ -33,8 +34,10 @@ class Chat implements MessageComponentInterface {
             $val1 = 1;
             $this->clientsWithId[$data['cliendId']] = $from; // add connection with client id
             $this->clientIdWithresourceId[$from->resourceId] = $data['cliendId']; // map connection id with user id
+            $this->updateDBuserOnline($data['cliendId']);
             $this->broadcastOnlineStatus($val1, $data['cliendId']); // to broad cast user online status
         }
+
         if(isset($data['msgType'])){
             $msgTypes = $data['msgType']; // get message type
 
@@ -59,6 +62,7 @@ class Chat implements MessageComponentInterface {
         $onCloseUserId = $this->clientIdWithresourceId[$conn->resourceId]; // get user id of disconnected user
         unset($this->clientIdWithresourceId[$conn->resourceId]); // remove disconnected user resources ID
         unset($this->clientsWithId[$onCloseUserId]); // remove connction from privat connection list
+        $this->updateDBuserOffline($onCloseUserId);
         $this->broadcastOnlineStatus($val0, $onCloseUserId); // to broad cast user offline status
         echo "Connection {$conn->resourceId} has disconnected\n";
     }
@@ -102,5 +106,18 @@ class Chat implements MessageComponentInterface {
                $resConn->send(json_encode($senddata));
             }
         }
+    }
+
+    // update DB as user online
+    private function updateDBuserOnline($userId){
+        $onoffObj = new \OnlineOffline();
+        $onoffObj->setUserOnline($userId);
+        unset($onoffObj);
+    }
+
+    private function updateDBuserOffline($userId){
+        $onoffObj = new \OnlineOffline();
+        $onoffObj->setOfflineStatusInDB($userId);
+        unset($onoffObj);
     }
 }
