@@ -3,6 +3,8 @@ namespace MyApp;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
+require dirname(__DIR__) . "/phpClasses/PrivateChatHandle.class.php";
+
 class Chat implements MessageComponentInterface {
     protected $clients;
     protected $clientsWithId; // store connection with user id
@@ -53,10 +55,11 @@ class Chat implements MessageComponentInterface {
         // The connection is closed, remove it, as we can no longer send it messages
         $this->clients->detach($conn);
 
+        $val0 = 0;
         $onCloseUserId = $this->clientIdWithresourceId[$conn->resourceId]; // get user id of disconnected user
         unset($this->clientIdWithresourceId[$conn->resourceId]); // remove disconnected user resources ID
         unset($this->clientsWithId[$onCloseUserId]); // remove connction from privat connection list
-
+        $this->broadcastOnlineStatus($val0, $onCloseUserId); // to broad cast user offline status
         echo "Connection {$conn->resourceId} has disconnected\n";
     }
 
@@ -84,19 +87,19 @@ class Chat implements MessageComponentInterface {
 
     // send online or offliene status
     private function broadcastOnlineStatus($val, $newConnectionId){
-
-        require_once "../phpClasses/PrivateChatHandle.class.php";
-        $priChatObj = new FriendList();
-        $friendList = $priChatObj->getFriendListIdList($newConnectionId);
+        $priChatObj = new \PrivateChatHandle();
+        
+        $friendList = $priChatObj->getFriendListIdList($newConnectionId); // get friend list
         unset($priChatObj);
 
         $senddata['msgType'] = "onoff";
         $senddata['statval'] = $val; // online or offline status
-        
+        $senddata['friendid'] = $newConnectionId;
+        // send to online users
         foreach ($friendList as $row) {
-            if (array_key_exists($row['user_id'], $this->clientsWithId)) {
-                $resConn = $this->clientsWithId[$row['user_id']];
-                $resConn->send(json_encode($senddata));
+          if (array_key_exists($row['user_id'], $this->clientsWithId)) {
+              $resConn = $this->clientsWithId[$row['user_id']];
+               $resConn->send(json_encode($senddata));
             }
         }
     }

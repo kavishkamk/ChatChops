@@ -444,9 +444,9 @@ h1 {
   font-size: 2rem;
 }
 
-.fas.fa-circle, .pl-list__item--complete .fas {
+/* .fas.fa-circle, .pl-list__item--complete .fas {
   color: #00d324;
-}
+} */
 
 .message-content {
   display: grid;

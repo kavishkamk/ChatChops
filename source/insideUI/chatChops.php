@@ -20,6 +20,10 @@
                                 // set chat user details (separated by space) to use later
                                 $vall = $row['user_id']." ".$row["first_name"]." ".$row["last_name"]." ".$row["profilePicLink"];
                                 // set chat bar for given usr
+                                $onlineicon = '<i class="fas fa-circle text-danger"></i>';
+                                if($row['onlineStatus'] == 1){
+                                    $onlineicon = '<i class="fas fa-circle text-success"></i>';
+                                }
                                 echo '<div onclick="setChatRoomDetails(\''.$vall.'\')" class="friend-conversation1 active" id="pchat'.$row["user_id"].'">
                                         <img src="../profile-pic/'.$row["profilePicLink"].'"/>
                                         <div class="title-text">
@@ -30,7 +34,7 @@
                                         <div class="new-Message">
                                             hdudfu ugfudf udgfy fy gfy f gyfgyd dgfyg gfy8f 7fcfdft fgydfh gfyftyft tfytfyt
                                         </div>
-                                        <div class="status-dot"><i class="fas fa-circle"></i></div>
+                                        <div class="status-dot" id="onoff-'.$row["user_id"].'">'.$onlineicon.'</div>
                                     </div>';
                             }
                         ?>
@@ -96,10 +100,10 @@
         conn.onmessage = function(e) {
             console.log(e.data);
             var data = JSON.parse(e.data);
-            if(data.msgType.localeCompare("pri") == 0){
+            if((data.msgType).localeCompare("pri") == 0){
                 setReservedPrivatChatData(data);
             }
-            else if(data.msgType.localeCompare("onoff") == 0){
+            else if((data.msgType).localeCompare("onoff") == 0){
                 setOnlineOrOffline(data);
             }
             
@@ -154,6 +158,17 @@
 
     // set private user onlie or offlien
     function  setOnlineOrOffline(data){
-
+        var Status = '';
+        if(data.statval == 1){
+            Status = '<i class="fas fa-circle text-success"></i>';
+        }
+        else{
+            Status = '<i class="fas fa-circle text-danger"></i>';
+        }
+        var id = '#onoff-'.concat(data.friendid);
+        var divid = 'onoff-'.concat(data.friendid);
+        document.getElementById(divid).innerHTML = "";
+        $(id).append(Status);
+        // document.getElementById() = ;
     }
 </script>
