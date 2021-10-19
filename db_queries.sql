@@ -441,3 +441,11 @@ ADD onlineStatus BOOLEAN NOT NULL DEFAULT 0;
 
 ALTER TABLE friend_request
 ADD friendStatus BOOLEAN NOT NULL DEFAULT 0;
+
+-- added column to find private message reserver and add forieng key with users table
+
+ALTER TABLE private_message
+ADD reserveId INT NOT NULL;
+
+ALTER TABLE private_message
+ADD FOREIGN KEY (reserveId) REFERENCES users(user_id);
