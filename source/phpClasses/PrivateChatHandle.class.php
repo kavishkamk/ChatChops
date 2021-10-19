@@ -115,6 +115,66 @@ require_once "DbConnection.class.php";
             }
         }
 
+        // this function is used to get unreaded messages for given user from given friend
+        // $uid = reserver , $fid = sender
+        public function getUnreadPrivatMessage($uid, $fid){
+            $sqlQ = "SELECT private_message.p_id, private_message.message FROM private_message
+            WHERE private_message.p_id IN (SELECT p_msg_friend_map.p_id FROM (p_msg_friend_map INNER JOIN
+            friends ON p_msg_friend_map.friend_id = friends.friend_id AND 
+            ((friends.from_user_id = ? AND friends.to_user_id = ? ) OR 
+            (friends.to_user_id = ? AND friends.from_user_id = ? ))))
+            AND private_message.reserveId = ? AND private_message.msg_status = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                $datas = array(); $maxval = 0;
+                $val0 = 0;
+                mysqli_stmt_bind_param($stmt, "iiiiii", $fid, $uid, $fid, $uid, $uid, $val0);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                while($row = mysqli_fetch_assoc($result)){
+                    $datas[] = $row['message'];
+                    $maxval = max($maxval, $row['p_id']);
+                }
+                $this->updatePrivatMsgAsRead($uid, $fid, $maxval);
+                $this->connclose($stmt, $conn);
+                return $datas;
+            }
+        }
+
+        // set messages as readed msg before some message ID (p_id) in private_message table
+        // $uid = reserver id, $fid = sender id, $lrow = p_id (this query update messages bellow this)
+        private function updatePrivatMsgAsRead($uid, $fid, $lrow){
+            $sqlQ = "UPDATE private_message SET private_message.msg_status = ?
+            WHERE private_message.p_id IN (SELECT p_msg_friend_map.p_id
+            FROM (p_msg_friend_map INNER JOIN friends ON p_msg_friend_map.friend_id = friends.friend_id AND 
+            ((friends.from_user_id = ? AND friends.to_user_id = ? ) OR
+            (friends.to_user_id = ? AND friends.from_user_id = ? )))) AND
+            private_message.reserveId = ? AND private_message.msg_status = ? AND private_message.p_id <= ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "0"; // sql error
+                exit();
+            }
+            else{
+                $val1 = 1; $val0 = 0;
+                mysqli_stmt_bind_param($stmt, "iiiiiiii", $val1, $fid, $uid, $fid, $uid, $uid, $val0, $lrow);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+                return "1"; // success
+                exit();
+            }
+        }
+
         // set p_msg_friend_map table
         private function setPMsgFriendMap($fid, $recid){
             $sqlQ = "INSERT INTO p_msg_friend_map(p_id, friend_id) VALUES(?,?);";

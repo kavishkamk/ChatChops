@@ -110,9 +110,11 @@
             
         };
 
+        // this used to send message when click send button of the chat area
         $("#send-msg").click(function(){
             var senderId   = $("#senderId").val(); // get sender id
             var reserverId = $("#reseverId").val(); // get reserver id
+            if(reserverId != ""){
             var msg        = $("#msg").val();  // message
             var msgType    = $("#msgType").val(); // message type
             // structure
@@ -127,6 +129,7 @@
             // set sended chat message
             var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ msg +'</div><div class="message-time"></div></div></div>';
             $('#pri-chat-message-list').append(row); // add to chat interface
+            }
         })
 
         // this method used to send userid to server to know about user
@@ -147,6 +150,7 @@
                 var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
                 $('#pri-chat-message-list').append(row);
 
+                // this for set message as readed when this user load this message to chat window
                 $.ajax({
                     method: "POST",
                     url: "../include/setPriMsgASRead.php",
@@ -158,6 +162,9 @@
     // this method used to set chat room paramiters
     function setChatRoomDetails(val){
         var details = val.split(" ");
+
+        var senderId   = $("#senderId").val(); // get sender id
+        document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area before start other chat
         document.getElementById("reseverId").value = details[0];
         document.getElementById("profilepiclink").value = details[3];
         document.getElementById("msgType").value = "pri";
@@ -166,6 +173,20 @@
         // remove last reserved message from user list
         var divid = 'lst-msg-'.concat(details[0]);
         document.getElementById(divid).innerHTML = "";
+
+        // call to get privious messages from given users
+        $.ajax({
+            method: "POST",
+            url: "../include/PrivatePreviousChat.php",
+            data: { premsreq: "ok",
+            reserver: details[0],
+            sender: senderId 
+            },
+            success:function(result){
+                var obj = JSON.parse(result);
+                setPreviousMessages(obj);
+            }
+        });
     }
 
     // set private user onlie or offlien
@@ -189,6 +210,15 @@
         if(document.getElementById("reseverId").value != data.senderId){
             var divid = 'lst-msg-'.concat(data.senderId);
             document.getElementById(divid).innerHTML = data.msg;
+        }
+    }
+
+    // set previous messages in chat windows
+    function setPreviousMessages(data){
+        var propic = document.getElementById("profilepiclink").value;
+        for (var i=0; i<data.length; i++) {
+            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i] +'</div> <div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
         }
     }
 </script>
