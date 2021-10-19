@@ -146,6 +146,12 @@
             if(document.getElementById("reseverId").value == data.senderId){
                 var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
                 $('#pri-chat-message-list').append(row);
+
+                $.ajax({
+                    method: "POST",
+                    url: "../include/setPriMsgASRead.php",
+                    data: { msgid:data.msgDbId }
+                });
             }
         }
 

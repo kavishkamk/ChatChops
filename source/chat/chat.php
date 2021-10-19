@@ -8,8 +8,8 @@ require dirname(__DIR__) . "/phpClasses/OnlineOffline.class.php";
 
 class Chat implements MessageComponentInterface {
     protected $clients;
-    protected $clientsWithId; // store connection with user id
-    protected $clientIdWithresourceId; // store resourceId with user Id
+    protected $clientsWithId; // store connection with user id [userid => connection]
+    protected $clientIdWithresourceId; // store resourceId with user Id [resourcesid => clientid]
 
     public function __construct() {
         $this->clients = new \SplObjectStorage;
@@ -80,6 +80,14 @@ class Chat implements MessageComponentInterface {
         $senddata['reserverId'] = $details['reserverId'];
         $senddata['msg'] = $details['msg'];
 
+        // store chat message in DB as notread
+        $priChatObj = new \PrivateChatHandle();
+        $lastInId = $priChatObj->privatChatStoreDB($details['senderId'], $details['reserverId'], $details['msg']);
+        unset($priChatObj);
+
+        $senddata['msgDbId'] = $lastInId; // get db stored id
+        echo $senddata['msgDbId'];
+        // send message if user online
         if(array_key_exists($senddata['reserverId'], $this->clientsWithId)){
             $resConn = $this->clientsWithId[$senddata['reserverId']];
             $resConn->send(json_encode($senddata));
