@@ -142,9 +142,11 @@
     // to set private chat reserved data
     function setReservedPrivatChatData(data){
             var propic = document.getElementById("profilepiclink").value;
-            // set reserved chat message
-            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
+            // set reserved chat message it tha chat was opend
+            if(document.getElementById("reseverId").value == data.senderId){
+                var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+                $('#pri-chat-message-list').append(row);
+            }
         }
 
     // this method used to set chat room paramiters
@@ -154,6 +156,10 @@
         document.getElementById("profilepiclink").value = details[3];
         document.getElementById("msgType").value = "pri";
         document.getElementById("reserver-name").textContent= details[1].concat(" ",details[2]);
+
+        // remove last reserved message from user list
+        var divid = 'lst-msg-'.concat(details[0]);
+        document.getElementById(divid).innerHTML = "";
     }
 
     // set private user onlie or offlien
@@ -172,8 +178,11 @@
         
     }
 
+    // display last reserved message if that chat was not opend
     function displayLastMsgOfuser(data){
-        var divid = 'lst-msg-'.concat(data.senderId);
-        document.getElementById(divid).innerHTML = data.msg;
+        if(document.getElementById("reseverId").value != data.senderId){
+            var divid = 'lst-msg-'.concat(data.senderId);
+            document.getElementById(divid).innerHTML = data.msg;
+        }
     }
 </script>
