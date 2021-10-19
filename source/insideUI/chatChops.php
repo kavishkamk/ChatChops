@@ -31,8 +31,7 @@
                                         </div>
                                         <div class="setTime">
                                         </div>
-                                        <div class="new-Message">
-                                            hdudfu ugfudf udgfy fy gfy f gyfgyd dgfyg gfy8f 7fcfdft fgydfh gfyftyft tfytfyt
+                                        <div class="new-Message" id="lst-msg-'.$row["user_id"].'">
                                         </div>
                                         <div class="status-dot" id="onoff-'.$row["user_id"].'">'.$onlineicon.'</div>
                                     </div>';
@@ -102,6 +101,7 @@
             var data = JSON.parse(e.data);
             if((data.msgType).localeCompare("pri") == 0){
                 setReservedPrivatChatData(data);
+                displayLastMsgOfuser(data);
             }
             else if((data.msgType).localeCompare("onoff") == 0){
                 setOnlineOrOffline(data);
@@ -169,6 +169,11 @@
         var divid = 'onoff-'.concat(data.friendid);
         document.getElementById(divid).innerHTML = "";
         $(id).append(Status);
-        // document.getElementById() = ;
+        
+    }
+
+    function displayLastMsgOfuser(data){
+        var divid = 'lst-msg-'.concat(data.senderId);
+        document.getElementById(divid).innerHTML = data.msg;
     }
 </script>
