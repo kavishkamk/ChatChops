@@ -23,6 +23,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Document</title>
     <link
     rel="stylesheet"
@@ -53,50 +54,64 @@
       </nav>
 
       <!-- setting the main -->
-      <main>
+      <main class="report-main">
         <!-- Main -->
-        <form>
-
-            <form>
-                <br />
-                <button class="button button1">Get Today Report</button>
-                <br>
-                <br>
-                <button class="button button1">Get Last Week Report</button>
-                <br />
-                <br />
-                <button class="button button1">Get Last Month Report</button>
-
-              </form>
-
-    <!-- for drop down & calender -->
-
-
-          <p>Select a date</p>
+          <div class = "report-type">
+            <div class="report-lable">First Report</div>
+            <div class="report-input">
+              <input type="button" value="Today" id="t1">
+              <input type="button" value="Month" class="report-time" id="t2">
+              <input type="button" value="Week" class="report-time" id="t3">
+              <input type="button" value="Date" class="report-time" id="t4">
+            </div>
+          </div>
+          <div class = "report-type">
+            <div class="report-lable">First Report</div>
+            <div class="report-input">
+              <input type="button" value="Today" id="t5">
+              <input type="button" value="Month" class="report-time" id="t6">
+              <input type="button" value="Week" class="report-time" id="t7">
+              <input type="button" value="Date" class="report-time" id="t8">
+            </div>
+          </div>
+          <div class = "report-type">
+            <div class="report-lable">First Report</div>
+            <div class="report-input">
+              <input type="button" value="Today" id="t9">
+              <input type="button" value="Month" class="report-time" id="t10">
+              <input type="button" value="Week" class="report-time" id="t11">
+              <input type="button" value="Date" class="report-time" id="t12">
+            </div>
+          </div>
+          <div class = "report-type">
+            <div class="report-lable">First Report</div>
+            <div class="report-input">
+              <input type="button" value="Today" id="t13">
+              <input type="button" value="Month" class="report-time" id="t14">
+              <input type="button" value="Week" class="report-time" id="t15">
+              <input type="button" value="Date" class="report-time" id="t16">
+            </div>
+          </div>
+        <div class = "report-disply">
           <form>
-            <label for="Choose a date">Date:</label>
-            <input type="date" id="day" name="day" />
-            <!-- <input type="submit" /> -->
+            <div id="chooes-report"  class="goption">Report Type : </div>
+            <input type="hidden" id="reType" value="">
+            <div id="settime"  class="goption">
+              <label for="timeforreport">Set Time :</label>
+              <input type="hidden" id="reporttime" name="timeforreport">
+            </div>
+            <div class="goption">
+              <label for="Type">Choose a Type to display the Report:</label>
+              <select name="Type" id="Type">
+                <option value="Table">Table</option>
+                <option value="Graph">Graph</option>
+              </select>
+            </div>
+            <div>
+              <button type="submit" class="button1">Genarate</button>
+            </div>
           </form>
-          <br>
-          <br>
-          <form>
-            <label for="Type">Choose a Type to display the Report:</label>
-            <select name="Type" id="Type">
-              <option value="Table">Table</option>
-              <option value="Graph">Graph</option>
-
-            </select>
-            <br />
-            <form >
-                <button class="button button1">Confirm</button>
-                <br>
-            </form>
-            <form>
-              <button class="button button3"><a href='chatdashboardnew.html' alt='Broken Link'>Back</a></button>
-
-            </form>
-          </form>
+        </div>
 
 
       </main>
@@ -140,3 +155,71 @@
     </div>
   </body>
 </html>
+
+<script>
+  $("#t1").click(function(){ 
+    document.getElementById('chooes-report').innerHTML = "Report Type : 1"; 
+    document.getElementById('reporttime').type = "time";
+  });
+  $("#t2").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 2"; 
+    document.getElementById('reporttime').type = "month";
+  });
+  $("#t3").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 3";
+    document.getElementById('reporttime').type = "week";
+  });
+  $("#t4").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 4"; 
+    document.getElementById('reporttime').type = "date";
+  });
+  $("#t5").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 5";
+    document.getElementById('reporttime').type = "time";
+  });
+  $("#t6").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 6"; 
+    document.getElementById('reporttime').type = "month";
+  });
+  $("#t7").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 7";
+    document.getElementById('reporttime').type = "week";
+  });
+  $("#t8").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 8";
+    document.getElementById('reporttime').type = "date";
+  });
+  $("#t9").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 9"
+    document.getElementById('reporttime').type = "time";
+  });
+  $("#t10").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 10"; 
+    document.getElementById('reporttime').type = "month";
+  });
+  $("#t11").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 11";
+    document.getElementById('reporttime').type = "week";
+  });
+  $("#t12").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 12";
+    document.getElementById('reporttime').type = "date";
+  });
+  $("#t13").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 13";
+    document.getElementById('reporttime').type = "time";
+  });
+  $("#t14").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 14";
+    document.getElementById('reporttime').type = "month";
+  });
+  $("#t15").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 15";
+    document.getElementById('reporttime').type = "week";
+  });
+  $("#t16").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : 16";
+    document.getElementById('reporttime').type = "date";
+  });
+  
+</script>

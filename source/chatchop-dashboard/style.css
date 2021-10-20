@@ -34,6 +34,10 @@ main {
   text-align: center;
 }
 
+.report-main{
+  text-align: left;
+}
+
 #sidebar {
   background-color: rgb(25, 129, 155);
   grid-area: sidebar;
@@ -56,6 +60,30 @@ p.a {
 }
 img {
   border-radius: 50%;
+}
+
+.report-type {
+  display: grid;
+  grid-template-columns: 40% 5% 55%;
+  padding: 5px 20px;
+}
+
+.report-lable {
+  background-color: white;
+  grid-column: 1 / 2;
+  color: black;
+  font-weight: bold;
+  padding: 4px;
+  border-radius: 5px;
+  border-right: 20px;
+}
+
+.report-input {
+  grid-column: 3 / 4;
+}
+
+.report-time {
+  float: right;
 }
 
 .button {
@@ -99,4 +127,27 @@ img {
 .button3:hover {
   background-color: #f8e90f;
   color: white;
+}
+
+.report-input > input{
+  background-color: blue;
+  margin: 0 5px;
+}
+
+.report-disply {
+  margin: 20px 20px;
+}
+
+.goption {
+  color: black;
+  margin: 10px 10px 10px 0;
+}
+
+#Type {
+  width: 100px;
+}
+
+#chooes-report {
+  color:black;
+  margin : 10px 10px 10px 0;
 }
