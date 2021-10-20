@@ -14,7 +14,9 @@
 		<script src="https://unpkg.com/dropzone"></script>
 		<script src="https://unpkg.com/cropperjs"></script>
 
-        <link rel="stylesheet" href="../css/create-pub-room.css">
+        <base href="http://localhost/chatchops/source/"/>
+        <link rel="stylesheet" href="css/create-pub-room.css">
+        
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
         <style>
         body {
@@ -23,21 +25,16 @@
         </style>
     </head>
     <body>
-    
-    <script>
-        //disable right click handling inside this popup-window
-        window.addEventListener('contextmenu', event => event.preventDefault());
-    </script>
-
     <div id= "box" style= "position: center;">
         <!-- public group creating form -->
-        <form class= "pub-room-form" action="include/create-pub-room.inc.php" method="post" enctype="multipart/form-data">
+        <form class= "pub-room-form" id="pubrm" action="public-rooms/create-pub-room.inc.php" method="post" enctype="multipart/form-data">
             <div class="form-header">
                 <h1>Create a Public Chat Room</h1>
             </div>
             <?php 
                 // set group icon
                 if(isset($_GET['picn'])){
+                    //echo '<script>alert ("'.$_GET['picn'].'")</script>';
                     echo '<input type="hidden" name="foo" value="'.$_GET['picn'].'" id="prouppic">';
                 }
                 else{
@@ -52,10 +49,11 @@
                         <label for="upload_image">
                         <?php
                         if(isset($_GET['picn'])){
-                            echo '<img src="../group-icons/'.$_GET['picn'].'" id="uploaded_image" class="img-responsive img-circle" />';
+                            //echo '<script>alert ("'.$_GET['picn'].'")</script>';
+                            echo '<img src="group-icons/'.$_GET['picn'].'" id="uploaded_image" class="img-responsive img-circle" />';
                         }
                         else {
-                            echo '<img src="../group-icons/groupchat-icon.png" id="uploaded_image" class="img-responsive img-circle" />';
+                            echo '<img src="group-icons/groupchat-icon.png" id="uploaded_image" class="img-responsive img-circle" />';
                         }
                         ?>
                         <div class="overlay">
@@ -121,37 +119,72 @@
 
                 <!-- for group bio-->
                 <div>
-                    <label for="groupbio" class="label-title" >Description *</label><br>
+                    <label for="groupbio" class="label-title">Description *</label><br>
                     <?php 
                         if(isset($_GET['groupbio'])){
-                            echo '<textarea id="groupbio" placeholder="enter a description about your chat room" maxlength= "50" value="'.$_GET['groupbio'].'" required></textarea>';
+                            $groupbio = $_GET['groupbio'];
+                            echo '<textarea name="groupbio" form="pubrm" placeholder="enter a description about your chat room" required>'.$groupbio.'</textarea>';
                         }
                         else{
-                            echo '<textarea id="groupbio" placeholder="enter a description about your chat room" maxlength= "50" required></textarea>';
+                            echo '<textarea name="groupbio" form="pubrm" placeholder="enter a description about your chat room" required></textarea>';
                         }
                     ?>
                 </div>
             </div>
-            
+
+            <?php
+                    $errmsg = "";
+                    if(isset($_GET['error'])){
+                        $errmsg = setErrMessage();
+                    }
+                    echo '<span class="error-bar" >'.$errmsg.'</span>';
+            ?>
+
             <!-- form footer -->
             <div class="form-footer">
                 <span class= "status" >* required</span>
-
-                <?php
-                    $errmsg = "";
-
-                    if(isset($_GET['signerror'])){
-                        $errmsg = setErrMessage();
-                    }
-
-                    echo '<span class="error-bar" >'.$errmsg.'</span>';
-                ?>
                 <button type="submit" name="pub-room-submit" class="btn" >Create Room</button>
             </div>
         </form>
     </div>
     </body>
 </html>
+
+<?php
+// set error message on the screen
+
+function setErrMessage()
+{
+    if(isset($_GET['error'])){
+        if($_GET['error'] == "emptyfields"){
+            return "Fill all the fields";
+        }
+        else if($_GET['error'] == "wrongname"){
+            return "Use ONLY letters and numbers for the room name";
+        }
+        else if($_GET['error'] == "namemax"){
+            return "Maximum 30 characters are allowed for the room name";
+        }
+        else if($_GET['error'] == "biomax"){
+            return "Maximum 100 characters are allowed for the description";
+        }
+        else if($_GET['error'] == "notavailable"){
+            return "The requested room name is already available";
+        }
+    }
+}
+?>
+
+
+<?php
+    /*** debugging ***/
+    //echo '<script>alert ("'.$_GET['picn'].'")</script>';
+    //print_r($_GET);
+/*
+    echo "<pre>";
+    print_r($_GET);
+    echo "</pre>";*/
+?>
 
 <!-- script for inserting group icon -->
 <script>
@@ -214,15 +247,22 @@ $(document).ready(function(){
 			reader.readAsDataURL(blob);
 
 			reader.onloadend = function(){
+
+                var prePhoto = document.getElementById("prouppic").value;
+                if(prePhoto == "groupchat-icon.png" || prePhoto == ""){
+                    prePhoto = "000";
+                }
+
 				var base64data = reader.result;
 				$.ajax({
-					url:'../profileUpload.php',
+					url:'profileUpload.php',
 					method:'POST',
-					data:{pubGIcon:base64data},
+					data:{pubGIcon:base64data, pre:prePhoto},
 					success:function(data)
 					{
 						$modal.modal('hide');
-						$('#uploaded_image').attr('src', "../" + data);
+						$('#uploaded_image').attr('src', data);
+                        document.getElementById("prouppic").value = data.substr(12);
 					}
 				});
 			};

@@ -52,7 +52,7 @@ CREATE TABLE pub_Grp_Mem_Status (
 
 -- public group member
 CREATE TABLE pub_Grp_Member (
-	member_id int NOT NULL,
+	member_id int AUTO_INCREMENT,
     group_id int NOT NULL,
     user_id int NOT NULL,
     CONSTRAINT Pk_pubGrpMember PRIMARY KEY(member_id, group_id, user_id)

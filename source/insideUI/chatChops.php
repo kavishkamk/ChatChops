@@ -1,25 +1,28 @@
-<?php
-    require "header.php";
-?>
-        <!-- This is a chat interface -->
-        <head>
-        <link rel="stylesheet" type="text/css" href="../css/chatUI.css">
 
-        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-        <style>
-        body {
-            font-family: 'Roboto';
-        }
-        </style>
+    <!-- This is a chat interface -->
+    <head>
+    <link rel="stylesheet" type="text/css" href="../css/chatUI.css">
 
-        </head>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <style>
+    body {
+        font-family: 'Roboto';
+    }
+    </style>
+
+    
+    </head>
     <body>
         <main>
+            <?php
+                require "header.php";
+            ?>
+
             <div class = "chatContainer" id="chat">
                 <div class="chat" id="private-chat" style="grid-column:1 / 2; grid-row: 1 / 3">
                 </div>
                 <div class="chat" id="chat-gui" style="grid-column:2 / 3; grid-row: 1 / 3">
-                    
+                
                 </div>
                 <div class="chat" id="private-group" style="grid-column:3 / 4; grid-row: 1 / 2">
                     <div class= "topic">
@@ -49,4 +52,25 @@
             </div>
         </main>
     </body>
+
+    <?php
+        $msg = "";
+        if(isset($_GET['status'])){
+            $msg = setMessage();
+            echo '<script>alert ("'.$msg.'")</script>';
+        }
+        
+        function setMessage()
+        {
+            if(isset($_GET['status'])){
+                if($_GET['status'] == 'ok'){
+                    return "You have successfully created a new chat room";
+                }
+                else if($_GET['status'] == 'wrong'){
+                    return "Something went wrong";
+                }
+            }
+        }
+    ?>
+
 </html>
