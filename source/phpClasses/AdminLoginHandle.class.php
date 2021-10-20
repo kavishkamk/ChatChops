@@ -39,7 +39,7 @@
 
                         $onlineObj = new AdminOnlineOffline();
                         $onlineRes = $onlineObj->setAdminOnlie($this->adminId);
-
+                        
                         if($onlineRes == "1"){
                             session_unset();
                             session_destroy();
@@ -55,7 +55,7 @@
                                 $_SESSION['adminid'] = $this->adminId; // set user id of the user table
                                 $_SESSION['sessionId'] = $sessionVal; // set with record id to set offline time
                                 $_SESSION['fname'] = $this->fname;
-                                $_SESSION['lname'] = $this->lname;
+                                $_SESSION['lname'] = $this->lname; 
                                 return "1"; // login success
                             }
                             else{

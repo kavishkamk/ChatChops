@@ -1,3 +1,22 @@
+<?php 
+    session_start();
+
+    if(!isset($_SESSION['adminid'])){
+         header("Location:../chatchop-org/adminlogin.php?adminlogstat=logoutok"); // no session
+         exit();
+    }
+    else{
+        require_once "../phpClasses/AdminSessionHandle.class.php";
+        $sessObj = new AdminSessionHandle();
+        $sessRes = $sessObj->checkSession($_SESSION['sessionId'], $_SESSION['adminid']); // invalid session
+        unset($sessObj);
+        if($sessRes != "1"){
+            header("Location:../chatchop-org/adminlogin.php?adminlogstat=logoutok"); // no session
+            exit();
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -41,10 +60,10 @@
         <!-- Main -->
         <form>
    
-          <button class="button button1">Log In</button>
+          <button class="button button1" formaction="../include/AdminLogout.inc.php">Log out</button>
           <br>
           <br />
-          <button class="button button1">Add a New Admin</button>
+            <button type="submit" formaction="../chatchop-org/adminRegistration.php" class="button button1">Add a New Admin</button>
           <br />
           
           <br>
@@ -52,7 +71,7 @@
           <br>
           <br>
         
-          <button class="button button3"><a href='chatdashboardnew.html' alt='Broken Link'>Back</a></button>
+          <button class="button button3"><a href='chatdashboardnew.php' alt='Broken Link'>Back</a></button>
         </form>
       </main>
       <div id="sidebar">
@@ -65,7 +84,7 @@
         <ul>
           <li>
     
-            <a href="chatadmin.html"
+            <a href="chatreport.php"
               ><span class="las-la-reports"></span> <span>Report</span></a
             >
             <img src="https://img.icons8.com/external-sbts2018-mixed-sbts2018/30/000000/external-productivity-business-and-finance-sbts2018-mixed-sbts2018.png"/>
@@ -75,7 +94,7 @@
           <br>
 
           <li>
-            <a href="chatadmin.html"
+            <a href="chatadmin.php"
               ><span class="las-la-admin"></span> <span>Admin</span></a
             >
             <img src="https://img.icons8.com/ios-glyphs/30/000000/admin-settings-male.png"/>

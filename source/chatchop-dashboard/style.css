@@ -2,6 +2,7 @@
   --main-radius: 1px;
   --main-padding: 5px;
 }
+
 .container {
   display: grid;
   height: 100vh;

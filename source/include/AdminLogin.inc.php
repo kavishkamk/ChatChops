@@ -27,7 +27,7 @@
                 exit();
             }
             else if($logresult == "1"){
-                header("Location:");
+                header("Location:../chatchop-dashboard/chatdashboardnew.php");
                 unset($logObj);
                 exit();
             }
