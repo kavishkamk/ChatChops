@@ -12,7 +12,7 @@
   />
   </link>
 <link rel="stylesheet" href="style.css">
-  
+
 
 
   </head>
@@ -30,7 +30,7 @@
           />
           <!-- <p class="a">Vishvi De Silva</p> -->
         </div>
-        
+
       </nav>
 
       <!-- setting the main -->
@@ -47,12 +47,12 @@
                 <br />
                 <br />
                 <button class="button button1">Get Last Month Report</button>
-    
+
               </form>
 
     <!-- for drop down & calender -->
-         
-  
+
+
           <p>Select a date</p>
           <form>
             <label for="Choose a date">Date:</label>
@@ -62,11 +62,11 @@
           <br>
           <br>
           <form>
-            <label for="Type">Choose a Type to desplay the Report:</label>
+            <label for="Type">Choose a Type to display the Report:</label>
             <select name="Type" id="Type">
               <option value="Table">Table</option>
               <option value="Graph">Graph</option>
-            
+
             </select>
             <br />
             <form >
@@ -75,7 +75,7 @@
             </form>
             <form>
               <button class="button button3"><a href='chatdashboardnew.html' alt='Broken Link'>Back</a></button>
-            
+
             </form>
           </form>
 
@@ -92,12 +92,12 @@
         Dashboard</h1>
         <ul>
           <li>
-    
+
             <a href="chatreport.html"
               ><span class="las-la-reports"></span> <span>Report</span></a
             >
             <img src="https://img.icons8.com/external-sbts2018-mixed-sbts2018/30/000000/external-productivity-business-and-finance-sbts2018-mixed-sbts2018.png"/>
-           
+
 
           </li>
           <br>
@@ -111,7 +111,7 @@
           </li>
           <br>
         </ul>
-        
+
       </div>
       <!-- setting the footer -->
 
