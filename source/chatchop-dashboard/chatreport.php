@@ -59,14 +59,14 @@
         <div>
           <div class="goption" style="margin-left: 20px;">
             <?php
-              require_once '../phpClasses/GetDataToReport.class.php';
+              require_once '../reportPrivatePhpClass/GetDataToReport.class.php';
               $dateObj = new GetDataToReport();
               $number = $dateObj->getNumberOfusers(1);
               echo '<div> Totol Number of active accounts : '.$number.' <br></div>';
             ?>
           </div>
           <div class = "report-type">
-            <div class="report-lable">User Accouts Records</div>
+            <div class="report-lable">Usege Summary</div>
             <div class="report-input">
               <input type="button" value="All" id="t17">
             </div>
@@ -108,32 +108,32 @@
             </div>
           </div>
         </div>
-        <!-- this is used to get details for given report type -->
+        <!-- this is used to get details for given report type and submit form details -->
         <div class="report-details-area">
           <div class = "report-disply">
-            <form>
+            <form id="report-form" action="" method="get" target="_blank">
               <div id="chooes-report"  class="goption">Report Type : </div>
-              <input type="hidden" id="reType" value="">
+              <input type="hidden" id="reType" name ="reType" value="">
               <div id="settime"  class="goption">
                 <label for="timeforreport" id="timelable">Set Time :</label>
                 <input type="hidden" id="reporttime" name="timeforreport">
               </div>
               <div class="goption">
-                <label for="Type">Choose a Type to display the Report:</label>
+                <label for="Type">Report Display Type : </label>
                 <select name="Type" id="Type">
                   <option value="Table">Table</option>
                   <option value="Graph">Graph</option>
                 </select>
               </div>
               <div>
-                <button type="submit" class="button1">Genarate</button>
+                <button type="submit" name="report-req-submit" class="button1">Genarate</button>
               </div>
             </form>
           </div>
 
           <div class="report-explane">
-            <div id="report-head">a</div>
-            <div id="report-discription">this is for ....</div>
+            <div id="report-head"></div>
+            <div id="report-discription"></div>
           </div>
         </div>
 </main>
@@ -244,14 +244,18 @@
     document.getElementById('reporttime').type = "date";
   });
   $("#t17").click(function(){
-    document.getElementById('chooes-report').innerHTML = "Report Type : Analize uses";
+    document.getElementById('chooes-report').innerHTML = "Report Type : Usege Summary";
     document.getElementById('reporttime').type = "hidden";
+    document.getElementById('report-form').action = "../reports/userAccReports.php";
     document.getElementById('reType').value = 17;
     document.getElementById('timelable').innerHTML = "Set Time : Overrall";
-    document.getElementById('report-head').innerHTML = "Analize uses";
-    document.getElementById('report-discription').innerHTML = "This report for analize user account details.<br><ul><li>number of all users</li><li>number of online users</li></ul>";
+    document.getElementById('report-head').innerHTML = "Usege Summary";
+    document.getElementById('report-discription').innerHTML = "This for get user activity summary.<br><ul><li>Persional Account Summary</li><li>Private Group Summary</li><li>Public Group Summary</li></ul>";
   });
   
 </script>
 
-<!-- 17 = this is used to anlize overrall user accouts data ->
+<!-- 
+  17 = this is used to anlize overrall user accouts data 
+       - get total number of users
+->
