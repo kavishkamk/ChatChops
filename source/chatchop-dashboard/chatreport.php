@@ -56,6 +56,14 @@
       <!-- setting the main -->
       <main class="report-main">
         <!-- Main -->
+          <div class="goption" style="margin-left: 20px;">
+            <?php
+              require_once '../phpClasses/GetDataToReport.class.php';
+              $dateObj = new GetDataToReport();
+              $number = $dateObj->getNumberOfusers(1);
+              echo '<div> Totol Number of active accounts : '.$number.' <br></div>';
+            ?>
+          </div>
           <div class = "report-type">
             <div class="report-lable">First Report</div>
             <div class="report-input">
