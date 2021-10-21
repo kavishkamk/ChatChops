@@ -56,6 +56,7 @@
       <!-- setting the main -->
       <main class="report-main">
         <!-- Main -->
+        <div>
           <div class="goption" style="margin-left: 20px;">
             <?php
               require_once '../phpClasses/GetDataToReport.class.php';
@@ -65,7 +66,13 @@
             ?>
           </div>
           <div class = "report-type">
-            <div class="report-lable">First Report</div>
+            <div class="report-lable">User Accouts Records</div>
+            <div class="report-input">
+              <input type="button" value="All" id="t17">
+            </div>
+          </div>
+          <div class = "report-type">
+            <div class="report-lable">Fisrst Report</div>
             <div class="report-input">
               <input type="button" value="Today" id="t1">
               <input type="button" value="Month" class="report-time" id="t2">
@@ -100,29 +107,36 @@
               <input type="button" value="Date" class="report-time" id="t16">
             </div>
           </div>
-        <div class = "report-disply">
-          <form>
-            <div id="chooes-report"  class="goption">Report Type : </div>
-            <input type="hidden" id="reType" value="">
-            <div id="settime"  class="goption">
-              <label for="timeforreport">Set Time :</label>
-              <input type="hidden" id="reporttime" name="timeforreport">
-            </div>
-            <div class="goption">
-              <label for="Type">Choose a Type to display the Report:</label>
-              <select name="Type" id="Type">
-                <option value="Table">Table</option>
-                <option value="Graph">Graph</option>
-              </select>
-            </div>
-            <div>
-              <button type="submit" class="button1">Genarate</button>
-            </div>
-          </form>
         </div>
+        <!-- this is used to get details for given report type -->
+        <div class="report-details-area">
+          <div class = "report-disply">
+            <form>
+              <div id="chooes-report"  class="goption">Report Type : </div>
+              <input type="hidden" id="reType" value="">
+              <div id="settime"  class="goption">
+                <label for="timeforreport" id="timelable">Set Time :</label>
+                <input type="hidden" id="reporttime" name="timeforreport">
+              </div>
+              <div class="goption">
+                <label for="Type">Choose a Type to display the Report:</label>
+                <select name="Type" id="Type">
+                  <option value="Table">Table</option>
+                  <option value="Graph">Graph</option>
+                </select>
+              </div>
+              <div>
+                <button type="submit" class="button1">Genarate</button>
+              </div>
+            </form>
+          </div>
 
-
-      </main>
+          <div class="report-explane">
+            <div id="report-head">a</div>
+            <div id="report-discription">this is for ....</div>
+          </div>
+        </div>
+</main>
 
       <!-- sidebar -->
       <div id="sidebar">
@@ -229,5 +243,15 @@
     document.getElementById('chooes-report').innerHTML = "Report Type : 16";
     document.getElementById('reporttime').type = "date";
   });
+  $("#t17").click(function(){
+    document.getElementById('chooes-report').innerHTML = "Report Type : Analize uses";
+    document.getElementById('reporttime').type = "hidden";
+    document.getElementById('reType').value = 17;
+    document.getElementById('timelable').innerHTML = "Set Time : Overrall";
+    document.getElementById('report-head').innerHTML = "Analize uses";
+    document.getElementById('report-discription').innerHTML = "This report for analize user account details.<br><ul><li>number of all users</li><li>number of online users</li></ul>";
+  });
   
 </script>
+
+<!-- 17 = this is used to anlize overrall user accouts data ->

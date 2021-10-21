@@ -3,6 +3,10 @@
   --main-padding: 5px;
 }
 
+li {
+  list-style: none;
+}
+
 .container {
   display: grid;
   height: 100vh;
@@ -150,4 +154,21 @@ img {
 #chooes-report {
   color:black;
   margin : 10px 10px 10px 0;
+}
+
+.report-details-area  {
+  display: grid;
+  grid-template-columns: 50% 48%;
+}
+
+.report-explane {
+  background-color: white;
+  color: black;
+  text-align: center;
+  margin: 20px 20px;
+}
+
+#report-discription {
+  text-align: left;
+  font-weight: normal;
 }
