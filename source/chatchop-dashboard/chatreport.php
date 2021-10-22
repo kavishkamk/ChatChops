@@ -57,13 +57,26 @@
       <main class="report-main">
         <!-- Main -->
         <div>
-          <div class="goption" style="margin-left: 20px;">
-            <?php
-              require_once '../reportPrivatePhpClass/GetDataToReport.class.php';
-              $dateObj = new GetDataToReport();
-              $number = $dateObj->getNumberOfusers(1);
-              echo '<div> Totol Number of active accounts : '.$number.' <br></div>';
-            ?>
+          <div class="goption system-analize" style="margin-left: 20px;">
+            <div>
+              <?php
+                require_once '../reportPrivatePhpClass/GetDataToReport.class.php';
+                $dateObj = new GetDataToReport();
+                $number = $dateObj->getNumberOfusers(1);
+                unset($dateObj);
+                echo '<div> Totol Number of active accounts : '.$number.' <br></div>';
+              ?>
+            </div>
+            <div class="analize-btn">
+              <?php
+                require_once "../reportClasses/report.class.php";
+                $repObj = new RepoerDetails();
+                $ltime = $repObj->getLastAnalizeTime();
+                unset($repObj);
+                echo '<span id="lantime">Last Analize Time : '.$ltime.'</span>';
+              ?>
+              <input type="button" value="AnalizeRecords" id="t18">
+            </div>
           </div>
           <div class = "report-type">
             <div class="report-lable">Usege Summary</div>
@@ -252,10 +265,33 @@
     document.getElementById('report-head').innerHTML = "Usege Summary";
     document.getElementById('report-discription').innerHTML = "This for get user activity summary.<br><ul><li>Persional Account Summary</li><li>Private Group Summary</li><li>Public Group Summary</li></ul>";
   });
-  
+  $("#t18").click(function(){
+    setLastAnalizeTime();
+});
+
+// set last analize time
+function setLastAnalizeTime(){
+  $.ajax({
+      method: "POST",
+      url: "../reports/setLastReportAnalizeTime.php",
+      data: { premsreq: "ok"},
+    success:function(result){
+      var obj = JSON.parse(result);
+      setLastAnalize(obj);
+    }
+  });
+}
+
+// set last analize time
+function setLastAnalize(obj){
+  document.getElementById('lantime').innerHTML = "Last Analize Time : " + obj;
+}
 </script>
 
 <!-- 
   17 = this is used to anlize overrall user accouts data 
        - get total number of users
+
+  18 = This is used to analize system records
+      - set last analize date
 ->

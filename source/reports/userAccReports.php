@@ -66,7 +66,7 @@
                                 </tr>';
                             echo '<tr>
                                     <td>3</td>
-                                    <td>Number of Online Users</td>
+                                    <td>Number of Offline Users</td>
                                     <td>'.$activeAcc - $onlineusers.'</td>
                                 </tr>';
                             $allAcc = $dataObj->numOfAccount();
