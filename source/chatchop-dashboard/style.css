@@ -190,3 +190,15 @@ img {
   margin: 0 30px;
   text-align: right;
 }
+
+.loding-analize{
+  color: red;
+  float: right;
+  margin-right: 100px;
+}
+
+.success-analize{
+  color: green;
+  float:right;
+  margin-right: 100px;
+}

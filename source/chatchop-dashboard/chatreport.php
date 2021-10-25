@@ -82,6 +82,8 @@
             <div class="report-lable">Usege Summary</div>
             <div class="report-input">
               <input type="button" value="All" id="t17">
+              <span></span>
+              <span class="" id="analize-status"></span>
             </div>
           </div>
           <div class = "report-type">
@@ -271,6 +273,8 @@
 
 // set last analize time
 function setLastAnalizeTime(){
+  setLastAnalize("");
+  setAnalizeStartStatus();
   $.ajax({
       method: "POST",
       url: "../reports/setLastReportAnalizeTime.php",
@@ -278,13 +282,26 @@ function setLastAnalizeTime(){
     success:function(result){
       var obj = JSON.parse(result);
       setLastAnalize(obj);
+      setAnalizeEndStatus();
     }
   });
 }
 
-// set last analize time
+// set last analize time in interface label
 function setLastAnalize(obj){
   document.getElementById('lantime').innerHTML = "Last Analize Time : " + obj;
+}
+
+// set analize lable in interface
+function setAnalizeStartStatus(){
+  document.getElementById('analize-status').className = "loding-analize";
+  document.getElementById('analize-status').innerHTML = "Analizing..........";
+}
+
+// set analize complited interface
+function setAnalizeEndStatus(){
+  document.getElementById('analize-status').className = "success-analize";
+  document.getElementById('analize-status').innerHTML = "Process Compleated.";
 }
 </script>
 

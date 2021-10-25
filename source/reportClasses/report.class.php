@@ -52,6 +52,83 @@
             }
         }
 
+        // get last analize date
+        public function getLastAnalizeDate(){
+            $sqlQ = "SELECT DATE(lastData) AS lday FROM analizereords WHERE (SELECT MAX(dataId) FROM analizereords);";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                if($row = mysqli_fetch_assoc($result)){
+                    $this->connclose($stmt, $conn);
+                    return $row['lday'];
+                    exit();
+                }
+                else{
+                    $this->connclose($stmt, $conn);
+                    return "noRec";
+                    exit();
+                }
+            }
+        }
+
+        public function analizeSystemData(){
+            $ldate = $this->getLastAnalizeDate(); // get last updated date and time
+            
+            if($ldate == "sqlerror" || $ldate == "noRec"){
+                $ldate = $this->getFirstOnlineDate();
+            }
+
+            if($ldate == "sqlerror" || $ldate == "noRec"){
+                return "Empty";
+                exit();
+            }
+            else{
+                require_once "../reportPrivatePhpClass/AnalizePriOnlineData.class.php";
+                $anzPriOn = new AnalizePriOnlineData();
+                $anzPriOn->analizePrivateMemberDetails($ldate);
+                unset($anzPriOn);
+                return "susses";
+                exit();
+            }
+        }
+
+        // get first record date
+        public function getFirstOnlineDate(){
+            $sqlQ = "SELECT DATE(online_date_and_time) as fdate FROM user_active_time LIMIT ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                $val1 = 1;
+                mysqli_stmt_bind_param($stmt, "i", $val1);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                if($row = mysqli_fetch_assoc($result)){
+                    $this->connclose($stmt, $conn);
+                    return $row['fdate'];
+                    exit();
+                }
+                else{
+                    $this->connclose($stmt, $conn);
+                    return 0;
+                    exit();
+                }
+            }
+        }
+
         private function connclose($stmt, $conn){
             mysqli_stmt_close($stmt);
             mysqli_close($conn);
