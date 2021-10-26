@@ -8,19 +8,43 @@ require_once "../phpClasses/DbConnection.class.php";
         }
 
         private function calOnlineInHours($ldate){
-            $this->UpdateOnlineRecInHourInGivenDate($ldate); // update last update record
+            $this->UpdateOnlineRecInHourInGivenDate($ldate); // update last update record (in previous analize)
+            $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
         }
 
-        // this method use to analize user online recordes accourding to hour and set date in report table
-        private function setOnlineRecInHourInGivenDate($ldate){
-            $date=date_create("$ldate 00:00:00");          
-            $dayTime = date_format($date,"Y-n-d H:i:s");
-            for ($x = 0; $x <= 24; $x++) {
-	            $dayTime =  date('Y-n-d H:i:s', strtotime($dayTime)+3600);
+        // this method used to analize user online records accourding to the hours
+        // this analize start from day after of given date
+        // until today this analize happen and records are store in analizeonlineeachdateh table
+        private function analizeOnlineRecFromAfterLastAnalizeDate($ldate){
+	        $dayTime =  date('Y-n-d', strtotime($ldate)+86400); // get next day
+           // get dates until today 
+            while(true){
+                $this->setOnlineRecInHourInGivenDate($dayTime);
+                if($dayTime == date('Y-n-d')){
+                	break;
+                }
+            	$dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
             }
         }
 
+        // this method use to analize user online recordes accourding to hour and insert in report table (analizeonlineeachdateh)
+        // this analize that online user data in each hour in given date and then update the table using given date
+        // this is for insert new analize data
+        private function setOnlineRecInHourInGivenDate($ldate){
+            $date=date_create("$ldate 00:00:00");          
+            $dayTime = date_format($date,"Y-n-d H:i:s");
+            for ($x = 0; $x < 24; $x++) {
+                $dayEndTime =  date('Y-n-d H:i:s', strtotime($dayTime)+3600);
+                $numOnline = $this->getOnlineUsersInGivenH($dayTime, $dayEndTime);
+                $onlineCounts[$x + 1] = $numOnline;
+                $dayTime = $dayEndTime;
+            }
+            $this->insertOnlineRecords($onlineCounts, $ldate);
+        }
+
         // this method use to analize user online recordes accourding to hour and update in report table (analizeonlineeachdateh)
+        // this analize that online user data in each hour in given date and then update the table using given date
+        // this is for update previous inserted row accorging to the given date
         private function UpdateOnlineRecInHourInGivenDate($ldate){
 
             $date=date_create("$ldate 00:00:00");          
@@ -32,6 +56,29 @@ require_once "../phpClasses/DbConnection.class.php";
                 $dayTime = $dayEndTime;
             }
             $this->updateLastAddedRecord($onlineCounts, $ldate);
+        }
+
+        // this method is used to insert records for analizeonlineeachdateh table
+        private function insertOnlineRecords($rec, $day){
+            $sqlQ = "INSERT INTO analizeonlineeachdateh(recDate, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,
+            h13, h14, h15, h16, h17, h18, h19, h20, h21, h22, h23, h24)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($stmt, "siiiiiiiiiiiiiiiiiiiiiiii", $day, $rec[1], $rec[2], $rec[3], $rec[4], $rec[5], $rec[6], $rec[7], $rec[8], $rec[9], $rec[10], $rec[11], $rec[12], $rec[13], $rec[14], $rec[15], $rec[16], $rec[17], $rec[18], $rec[19], $rec[20], $rec[21], $rec[22], $rec[23], $rec[24]);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+                return "Success";
+                exit();
+            }
+
         }
 
         // this method used to update records that are used in report table (analizeonlineeachdateh)
@@ -55,7 +102,7 @@ require_once "../phpClasses/DbConnection.class.php";
             }
         }
 
-        // this method is used to get online users in given hours
+        // this method is used to get number of online users in given hour in given date
         private function getOnlineUsersInGivenH($sdate, $edate){
             $sqlQ = "SELECT COUNT(users.user_id) AS ucount FROM users WHERE users.user_id IN
             (SELECT DISTINCT user_user_act_id_map.user_id FROM
