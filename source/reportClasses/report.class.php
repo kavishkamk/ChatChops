@@ -27,7 +27,7 @@
 
         // get last analize date and time
         public function getLastAnalizeTime(){
-            $sqlQ = "SELECT lastData FROM analizereords WHERE (SELECT MAX(dataId) FROM analizereords);";
+            $sqlQ = "SELECT lastData FROM analizereords WHERE dataId IN (SELECT MAX(dataId) FROM analizereords);";
             $conn = $this->connect();
             $stmt = mysqli_stmt_init($conn);
 
