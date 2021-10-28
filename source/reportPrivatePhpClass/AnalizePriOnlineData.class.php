@@ -133,21 +133,23 @@ require_once "../phpClasses/DbConnection.class.php";
             $date=date_create("$ye-$mon-1");          
             $resDate = date_format($date,"Y-n-d");
 
-            while(true){
-                $this->setOnlineRecInDayInGivenMonth($resDate, $d, $ye, $mon);
-                if($ye == date('Y') && $mon == date('n')){
-                    break;
+            if($ye != date('Y') && $mon != date('n')){
+                while(true){
+                    $this->setOnlineRecInDayInGivenMonth($resDate, $d, $ye, $mon);
+                    if($ye == date('Y') && $mon == date('n')){
+                        break;
+                    }
+                    if($mon == 12){
+                        $mon = 1;
+                        $ye++;
+                    }
+                    else{
+                        $mon++;
+                    }
+                    $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
+                    $date=date_create("$ye-$mon-1");          
+                    $resDate = date_format($date,"Y-n-d");
                 }
-                if($mon == 12){
-                    $mon = 1;
-                    $ye++;
-                }
-                else{
-                    $mon++;
-                }
-                $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
-                $date=date_create("$ye-$mon-1");          
-                $resDate = date_format($date,"Y-n-d");
             }
         }
 
@@ -211,6 +213,7 @@ require_once "../phpClasses/DbConnection.class.php";
             $this->updateLastAddedRecord($onlineCounts, $ldate);
         }
 
+        // this function used to insert data to analizeonlineeachmonthd table
         private function insertRecInto_analizeonlineeachmonthd($year, $mon, $rec){
             $sqlQ = "INSERT INTO analizeonlineeachmonthd(recYear, recMonth, d1, d2, d3, d4, d5, d6, d7,
             d8, d9, d10, d11, d12, d13, d14, d15, d16, d17, d18, d19, d20, d21, d22, d23, d24, d25, d26,

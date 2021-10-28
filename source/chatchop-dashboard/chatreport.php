@@ -87,7 +87,7 @@
             </div>
           </div>
           <div class = "report-type">
-            <div class="report-lable">Fisrst Report</div>
+            <div class="report-lable">User Online Records</div>
             <div class="report-input">
               <input type="button" value="Today" id="t1">
               <input type="button" value="Month" class="report-time" id="t2">
@@ -199,8 +199,13 @@
     document.getElementById('reporttime').type = "time";
   });
   $("#t2").click(function(){
-    document.getElementById('chooes-report').innerHTML = "Report Type : 2"; 
+    document.getElementById('chooes-report').innerHTML = "Report Type : User Online Data in given Month"; 
     document.getElementById('reporttime').type = "month";
+    document.getElementById('report-form').action = "../reportsDirections/userOnlineRecInMonth.php";
+    document.getElementById('reType').value = 2;
+    document.getElementById('timelable').innerHTML = "Set Time : ";
+    document.getElementById('report-head').innerHTML = "User Online data in given month";
+    document.getElementById('report-discription').innerHTML = "This is for genarate report to user online data in given month.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t3").click(function(){
     document.getElementById('chooes-report').innerHTML = "Report Type : 3";

@@ -79,6 +79,7 @@
             }
         }
 
+        // this method used to analize all system data and store that in relavant tables
         public function analizeSystemData(){
             $ldate = $this->getLastAnalizeDate(); // get last updated date and time
             

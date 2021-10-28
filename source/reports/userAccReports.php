@@ -1,4 +1,5 @@
 <?php 
+    // this is for show data sumary
     session_start();
 
     if(!isset($_SESSION['adminid'])){
