@@ -133,12 +133,8 @@
                 <label for="timeforreport" id="timelable">Set Time :</label>
                 <input type="hidden" id="reporttime" name="timeforreport">
               </div>
-              <div class="goption">
-                <label for="Type">Report Display Type : </label>
-                <select name="Type" id="Type">
-                  <option value="Table">Table</option>
-                  <option value="Graph">Graph</option>
-                </select>
+              <div class="goption" id="disp-type">
+                
               </div>
               <div>
                 <button type="submit" name="report-req-submit" class="button1">Genarate</button>
@@ -195,8 +191,14 @@
 
 <script>
   $("#t1").click(function(){ 
-    document.getElementById('chooes-report').innerHTML = "Report Type : 1"; 
-    document.getElementById('reporttime').type = "time";
+    document.getElementById('chooes-report').innerHTML = "Report Type : Today User Online"; 
+    document.getElementById('reporttime').type = "hidden";
+    document.getElementById('report-form').action = "../reportsDirections/userOnlineRecInDay.php";
+    document.getElementById('reType').value = 1;
+    document.getElementById('timelable').innerHTML = "Set Time : Today";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option><option value='Graph'>Graph</option></select>";
+    document.getElementById('report-head').innerHTML = "Number of online users in Today";
+    document.getElementById('report-discription').innerHTML = "This is for genarate report to user online data in Today.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t2").click(function(){
     document.getElementById('chooes-report').innerHTML = "Report Type : User Online Data in given Month"; 
@@ -204,12 +206,19 @@
     document.getElementById('report-form').action = "../reportsDirections/userOnlineRecInMonth.php";
     document.getElementById('reType').value = 2;
     document.getElementById('timelable').innerHTML = "Set Time : ";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option><option value='Graph'>Graph</option></select>";
     document.getElementById('report-head').innerHTML = "User Online data in given month";
     document.getElementById('report-discription').innerHTML = "This is for genarate report to user online data in given month.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t3").click(function(){
-    document.getElementById('chooes-report').innerHTML = "Report Type : 3";
+    document.getElementById('chooes-report').innerHTML = "Report Type : User Online data in given Week";
     document.getElementById('reporttime').type = "week";
+    document.getElementById('report-form').action = "../reportsDirections/userOnlineRecInWeek.php";
+    document.getElementById('reType').value = 3;
+    document.getElementById('timelable').innerHTML = "Set Time : ";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option><option value='Graph'>Graph</option></select>";
+    document.getElementById('report-head').innerHTML = "User Online data in given Week";
+    document.getElementById('report-discription').innerHTML = "This is for genarate report to user online data in given Week.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t4").click(function(){
     document.getElementById('chooes-report').innerHTML = "Report Type : Number of online users in given Date";
@@ -217,6 +226,7 @@
     document.getElementById('report-form').action = "../reportsDirections/userOnlineRecInDay.php";
     document.getElementById('reType').value = 4;
     document.getElementById('timelable').innerHTML = "Set Time : ";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option><option value='Graph'>Graph</option></select>";
     document.getElementById('report-head').innerHTML = "Number of online users in given Date";
     document.getElementById('report-discription').innerHTML = "This is for genarate report to user online data in given date.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
@@ -274,6 +284,7 @@
     document.getElementById('report-form').action = "../reports/userAccReports.php";
     document.getElementById('reType').value = 17;
     document.getElementById('timelable').innerHTML = "Set Time : Overrall";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option></select>";
     document.getElementById('report-head').innerHTML = "Usege Summary";
     document.getElementById('report-discription').innerHTML = "This for get user activity summary.<br><ul><li>Persional Account Summary</li><li>Private Group Summary</li><li>Public Group Summary</li></ul>";
   });

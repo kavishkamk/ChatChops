@@ -25,14 +25,11 @@
         echo "<script>window.close();</script>";
         exit();
     }
-    
+
     $reportType = $_GET['reType'];
     $grahtype = $_GET['Type'];
     $yeMonth = $_GET['timeforreport'];
     
-    $year = substr($yeMonth, 0, 4);
-    $month = substr($yeMonth, 5);
-
     if(empty($reportType) || empty($grahtype) || empty($yeMonth)){
         echo "<script>window.close();</script>"; // if empty inputs close tab
     }
@@ -40,12 +37,22 @@
         echo "<script>window.close();</script>";
     }
     else if($grahtype == "Graph"){
-        // genarate graph using R
-        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_privatChat\\R_MonthOnline.R ' . $year . ' ' . $month);
-        header("Location:../RPlots/userOnlineDataInGivenMonth.html"); // show plot
+
+        // get week and year from 
+        $year = substr($yeMonth, 0, 4);
+        $week_no = substr($yeMonth, 6);
+        $week_start = new DateTime();
+        $week_start->setISODate($year,$week_no);
+        $sd = $week_start->format('Y-n-d');
+        $ed =  date('Y-n-d', strtotime($sd)+(86400*6)); // get next day
+
+        //genarate graph using R
+        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_privatChat\\R_WeekOnline.R ' . $sd . ' ' . $ed);
+        header("Location:../RPlots/userOnlineDataInGivenWeek.html"); // show plot
         exit();
     }
     else{
         echo "<script>window.close();</script>";
     }
-?>
+
+    ?>

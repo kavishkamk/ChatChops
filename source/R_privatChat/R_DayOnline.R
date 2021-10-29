@@ -28,20 +28,20 @@ dbDisconnect(mydb)
 
 #set data
 data1 <- (1:24)
-data2 <- as.integer(timeData[1,])
+Number_of_users <- as.integer(timeData[1,])
 
-data <- data.frame(time=c(data1),data2)
+data <- data.frame(time=c(data1),Number_of_users)
 str(data)
 
 # drow dygraph
-p <- dygraph(data, main = paste("Number of online users in ",inputdate," "), xlab = 'Hours of the day', ylab = 'Number of users')  %>%
-  dyOptions(labelsUTC = TRUE, fillGraph=TRUE, fillAlpha=0.1, drawGrid = FALSE, colors="#D8AE5A") %>%
-  dySeries("data2", stepPlot = FALSE, color = "blue") %>%
+p <- dygraph(data, main = paste("Number of online users in ",inputdate," "), xlab = 'Hours of the day(24h)', ylab = 'Number of users')  %>%
+  dyOptions(labelsUTC = TRUE, fillGraph=TRUE, fillAlpha=0.1, drawGrid = TRUE, colors="#D8AE5A") %>%
+  dySeries("Number_of_users", stepPlot = FALSE, color = "blue") %>%
   dyRangeSelector() %>%
   dyCrosshair(direction = "vertical") %>%
   dyRoller(rollPeriod = 1) %>%
   dyHighlight(highlightCircleSize = 5, highlightSeriesBackgroundAlpha = 0.2, hideOnMouseOut = FALSE)  %>%
-  dyGroup(c("data2"), drawPoints = TRUE, color = c("blue"))
+  dyGroup(c("Number_of_users"), drawPoints = TRUE, color = c("blue"))
 #save the widget
 f<-"..\\RPlots\\userOnlineTimeInGivenDate.html"
 saveWidget(p,file.path(normalizePath(dirname(f)),basename(f)), selfcontained = FALSE)

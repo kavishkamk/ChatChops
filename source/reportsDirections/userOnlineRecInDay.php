@@ -28,9 +28,14 @@
     
     $reportType = $_GET['reType'];
     $grahtype = $_GET['Type'];
-    $day = $_GET['timeforreport'];
+    if($reportType == 1){
+        $day = date("Y-n-d");
+    }
+    else if($reportType == 4){
+        $day = $_GET['timeforreport'];
+    }
 
-    if(empty($reportType) || empty($grahtype) || empty($day)){
+    if(empty($reportType) || empty($grahtype)){
         echo "<script>window.close();</script>"; // if empty inputs close tab
     }
     else if($grahtype == "Table"){
