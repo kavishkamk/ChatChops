@@ -212,8 +212,13 @@
     document.getElementById('reporttime').type = "week";
   });
   $("#t4").click(function(){
-    document.getElementById('chooes-report').innerHTML = "Report Type : 4"; 
+    document.getElementById('chooes-report').innerHTML = "Report Type : Number of online users in given Date";
     document.getElementById('reporttime').type = "date";
+    document.getElementById('report-form').action = "../reportsDirections/userOnlineRecInDay.php";
+    document.getElementById('reType').value = 4;
+    document.getElementById('timelable').innerHTML = "Set Time : ";
+    document.getElementById('report-head').innerHTML = "Number of online users in given Date";
+    document.getElementById('report-discription').innerHTML = "This is for genarate report to user online data in given date.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t5").click(function(){
     document.getElementById('chooes-report').innerHTML = "Report Type : 5";
