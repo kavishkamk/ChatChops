@@ -9,7 +9,7 @@ li {
 
 .container {
   display: grid;
-  height: 100vh;
+  height: 95vh;
   grid-template-columns: 1.5fr 6fr;
   grid-template-rows: 0.2fr 4fr 0.2fr;
   grid-template-areas:

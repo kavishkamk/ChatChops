@@ -42,12 +42,6 @@
       <nav>
         <div>
           <!-- nav -->
-          <img
-            src="/chatchop_new/1.jpeg"
-            width="60px"
-            alt="hansana"
-            style="float: right"
-          />
           <!-- <p class="a">Vishvi De Silva</p> -->
         </div>
 

@@ -1,0 +1,65 @@
+:root {
+    --main-radius: 1px;
+    --main-padding: 5px;
+  }
+  
+  li {
+    list-style: none;
+  }
+  
+  .container {
+    display: grid;
+    height: 97vh;
+    grid-template-columns: 1.5fr 6fr;
+    grid-template-rows: 0.2fr 4fr;
+    grid-template-areas:
+      "nav nav"
+      "sidebar main"
+      "footer footer";
+    grid-gap: 0.2rcm;
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    /* text-transform: uppercase;*/
+    font-size: 16px;
+    color: #e6f3f3cc;
+    /*text-align: center;*/
+  }
+  nav {
+    background-color: rgb(14, 89, 112);
+    grid-area: nav;
+    border-radius: var(--main-radius);
+    padding-top: var(--main-padding);
+  }
+  main {
+    background-color: rgb(37, 183, 219);
+    grid-area: main;
+    border-radius: var(--main-radius);
+    padding-top: var(--main-padding);
+    text-align: center;
+  }
+  
+  .report-main{
+    text-align: left;
+  }
+  
+  #sidebar {
+    background-color: rgb(25, 129, 155);
+    grid-area: sidebar;
+    border-radius: var(--main-radius);
+    padding-top: var(--main-padding);
+    text-align: center;
+  }
+
+  .header-bar {
+      text-align: center;
+  }
+
+  .form-div {
+      padding-top: 5px;
+  }
+
+  .chart-dis{
+      margin: 20px 5px 5px 5px;
+      background-color: white;
+      color: black;
+  }
