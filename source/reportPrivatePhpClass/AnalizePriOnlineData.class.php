@@ -1,5 +1,6 @@
 <?php
 require_once "../phpClasses/DbConnection.class.php";
+
     class AnalizePriOnlineData extends DbConnection{
 
         // this method used to analize private user details
@@ -24,17 +25,18 @@ require_once "../phpClasses/DbConnection.class.php";
         // this function used to analize user online data accourding to monts
         private function calOnlineInDay($ldate){
             $recval = $this->check_analizeonlineeachmonthd_Empty();
+            
             if($recval != 0){
                 $this->updateOnlineRecEachDayGivenMonth($ldate); // update last update record (in previous analize)
-                $this->analizeOnlineRecAfterLastAnalizeDateInMonth($ldate);
+               $this->analizeOnlineRecAfterLastAnalizeDateInMonth($ldate);
             }
             else{
-                $ldate = strtotime($ldate);
-                $mon = date('n', $ldate) - 1;
-                $ye = date('Y', $ldate);
-                $day = date('d', $ldate);
+                $arr = explode("-",$ldate);
+                $mon = $arr[1] - 1;
+                $ye = $arr[0];
+                $day = $arr[2];
                 $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
-                $date=date_create("$ye-$mon-$day");          
+                $date=date_create("$ye-$mon-$day");       
                 $resDate = date_format($date,"Y-n-d");
                 $resDate =  date('Y-n-d', strtotime($resDate)-86400); // get next day
                 $this->analizeOnlineRecAfterLastAnalizeDateInMonth($resDate);
@@ -46,11 +48,11 @@ require_once "../phpClasses/DbConnection.class.php";
         // that month take from given date
         // analize data are updated in data base related to that month
         private function updateOnlineRecEachDayGivenMonth($day){
-            $ldate = strtotime($day);
-            $mon = date('n', $ldate);
-            $ye = date('Y', $ldate);
+            $arr3 = explode("-",$day);
+            $mon = $arr3[1];
+            $ye = $arr3[0];
             $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
-            $date=date_create("$ye-$mon-1");          
+            $date=date_create("$ye-$mon-1");     
             $dayTime = date_format($date,"Y-n-d");
             $i = 1;
             for(; $i <= $d; $i++){
@@ -125,15 +127,26 @@ require_once "../phpClasses/DbConnection.class.php";
         // until today this analize happen and recourds are store in analizeonlineeachmonthd table
         private function analizeOnlineRecAfterLastAnalizeDateInMonth($day){
             $dayTime =  date('Y-n-d', strtotime($day)+86400); // get next day
+           
             // get dates until today 
-            $ldate = strtotime($dayTime);
-            $mon = date('n', $ldate) + 1;
-            $ye = date('Y', $ldate);
+            $arr2 = explode("-",$dayTime);
+            $mon = $arr2[1] + 1;
+            $ye = $arr2[0];
             $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
-            $date=date_create("$ye-$mon-1");          
+            $date=date_create("$ye-$mon-1");      
             $resDate = date_format($date,"Y-n-d");
+            $thisMonth = date('n');
+            $thisYear = date('Y');
+            if($thisMonth == 12){
+                $nextYear =  $thisYear + 1;
+                $nextMonth = 1;
+            }
+            else{
+                $nextYear =  $thisYear;
+                $nextMonth = $thisMonth + 1;
+            }
 
-            if($ye != date('Y') && $mon != date('n')){
+            if(($nextMonth != 1 && $ye == $nextYear && $mon < $nextMonth) || ($nextMonth == 1 && $ye <= $nextYear)){
                 while(true){
                     $this->setOnlineRecInDayInGivenMonth($resDate, $d, $ye, $mon);
                     if($ye == date('Y') && $mon == date('n')){
