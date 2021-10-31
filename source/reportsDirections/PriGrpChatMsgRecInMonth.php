@@ -38,8 +38,8 @@
     }
     else if($grahtype == "Table"){
         // genarate table
-        //header("Location:../reportTables/priChatMsgRecTableMonth.php?reporttime=".$yeMonth."");
-        echo "<script>window.close();</script>"; // if empty inputs close tab
+        header("Location:../reportTables/priGrpChatMsgRecTableMonth.php?reporttime=".$yeMonth."");
+       
         exit();
     }
     else if($grahtype == "Graph"){

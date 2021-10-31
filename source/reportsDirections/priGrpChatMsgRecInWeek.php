@@ -35,8 +35,7 @@
     }
     else if($grahtype == "Table"){
         // genarate table
-        //header("Location:../reportTables/priChatMsgRecTableWeek.php?reporttime=".$yeMonth."");
-        echo "<script>window.close();</script>"; // if empty inputs close tab
+        header("Location:../reportTables/priGrpChatMsgRecTableWeek.php?reporttime=".$yeMonth."");
         exit();
     }
     else if($grahtype == "Graph"){
