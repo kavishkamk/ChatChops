@@ -61,7 +61,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
    	        }
             for(; $i<=31; $i++){
-                $onlineCounts[$i] = -1;
+                $onlineCounts[$i] = 0;
             }
             $this->updateUserOnlineRecInEachDayInGivenMonth($onlineCounts, $ye, $mon);
         }
@@ -190,7 +190,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $day = date('Y-n-d', strtotime($day)+86400); // get next day
             }
             for(; $i<=31; $i++){
-                $onlineCounts[$i] = -1;
+                $onlineCounts[$i] = 0;
             }
             $this->insertRecInto_analizeonlineeachmonthd($year, $mon, $onlineCounts);
         }

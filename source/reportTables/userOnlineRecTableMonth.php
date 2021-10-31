@@ -36,18 +36,86 @@
                 </h1>
             </nav>
             <main class="report-main">
+                <div class="re-table1">
+                <?php
+                    if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
+                        require_once "../reportPrivatePhpClass/GetPriTableData.class.php";
+                        $priobj = new GetPriTableData();
+                        $arr = explode("-",$_GET['reporttime']);
+                        $datas = $priobj->getMonthOnlineUsers($arr[1], $arr[0]);
+                        unset($priobj);
+                        $d=cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
+                    }
+                ?>
+                <table class="d-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Number of Users</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
+                                $val = "d";
+                                if($datas != NULL){
+                                    for($i= 1; $i <= 16; $i++){
+                                        echo '<tr>
+                                                <td>'.$i.'</td>
+                                                <td>'.$datas[$val.$i].'</td>
+                                            </tr>';
+                                    }
+                                }
+                            }
+                        ?>
+                    </tbody>
+                </table>
+                </div>
+                <div class="re-table2">
+                    <table class="d-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Number of Users</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
+                                    $val = "d";
+                                    if($datas != NULL){
+                                        for($i= 17; $i <= $d; $i++){
+                                            echo '<tr>
+                                                    <td>'.$i.'</td>
+                                                    <td>'.$datas[$val.$i].'</td>
+                                                </tr>';
+                                        }
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
             </main>
             <div id="sidebar">
                 <div class="form-div">
-                    <form>
-                        <label for="gmonth">Select Month</label><br><br>
-                        <input type="month" name="gmonth"><br><br>
+                    <form action="userOnlineRecTableMonth.php" method="get">
+                        <label for="reporttime">Select Month</label><br><br>
+                        <input type="month" name="reporttime"><br><br>
                         <button type="submit" name="month-submit" >Genarate</button>
                     </form>
                 </div>
                 <div class="chart-dis">
                     <span>
-                        This is a discription
+                    <?php
+                        if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
+                            echo '<p class="t-head">Number of online users in </p>';
+                            echo '<p class="t-head">'.$arr[0].' - '.$arr[1].'</p>';
+                        }
+                        else{
+                            echo '<p class="t-head">No record</p>';
+                        }
+                        ?>
                     </span>
                 </div>
             </div>
