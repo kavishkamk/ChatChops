@@ -35,10 +35,17 @@
         <title>Report</title>
     </head>
     <body>
-        <header class="report-header">
-            <h1>ChatChops User Summary</h1>
-        </header>
-        <main>
+        <main class="container">
+            <div style="grid-column:1 / 4; grid-row: 1 / 2">
+                <nav class = "header-bar">
+                    <h1>
+                        <label for="">
+                            <span class="las la-bars"></span>
+                        </label>
+                        ChatChops User Summary
+                    </h1>
+                </nav>
+            </div>
             <div class="user-div">
                 <table>
                     <thead>
