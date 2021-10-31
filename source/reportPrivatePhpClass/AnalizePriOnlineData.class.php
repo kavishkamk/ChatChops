@@ -30,7 +30,7 @@ require_once "../phpClasses/DbConnection.class.php";
             
             if($recval != 0){
                 $this->updateOnlineRecEachDayGivenMonth($ldate); // update last update record (in previous analize)
-               $this->analizeOnlineRecAfterLastAnalizeDateInMonth($ldate);
+                $this->analizeOnlineRecAfterLastAnalizeDateInMonth($ldate);
             }
             else{
                 $arr = explode("-",$ldate);
@@ -50,7 +50,8 @@ require_once "../phpClasses/DbConnection.class.php";
             $recval = $this->check_analizePriMsgEachmonthd_Empty();
 
             if($recval != 0){
-
+                $this->updatePriChatRecEachDayGivenMonth($ldate); // update last update record (in previous analize)
+                $this->analizePriMsgRecAfterLastAnalizeDateInMonth($ldate);
             }
             else{
                 $arr = explode("-",$ldate);
@@ -79,6 +80,28 @@ require_once "../phpClasses/DbConnection.class.php";
             }
         }
 
+        // this function used to analize each day number of private chat messages in month
+        // that month take from given date
+        // analize data are updated in data base related to that month
+        private function updatePriChatRecEachDayGivenMonth($day){
+            $arr3 = explode("-",$day);
+            $mon = $arr3[1];
+            $ye = $arr3[0];
+            $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
+            $date=date_create("$ye-$mon-1");     
+            $dayTime = date_format($date,"Y-n-d");
+            $i = 1;
+            for(; $i <= $d; $i++){
+                $numOnline = $this->getNumOfPriMsgInGivenDate($dayTime);
+                $onlineCounts[$i] = $numOnline;
+                $dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
+   	        }
+            for(; $i<=31; $i++){
+                $onlineCounts[$i] = 0;
+            }
+            $this->updatePriChatRecInEachDayInGivenMonth($onlineCounts, $ye, $mon);
+        }
+
         // this function used to analize each day number of online users in month
         // that month take from given date
         // analize data are updated in data base related to that month
@@ -99,6 +122,29 @@ require_once "../phpClasses/DbConnection.class.php";
                 $onlineCounts[$i] = 0;
             }
             $this->updateUserOnlineRecInEachDayInGivenMonth($onlineCounts, $ye, $mon);
+        }
+
+        // update analizeprimsgeachmonthd table
+        private function updatePriChatRecInEachDayInGivenMonth($rec, $yea, $mon){
+            $sqlQ = "UPDATE analizeprimsgeachmonthd SET d1 = ?, d2 = ?, d3 = ?, d4 = ?, d5 = ?, d6 = ?, d7 = ?,
+            d8 = ?, d9 = ?, d10 = ?, d11 = ?, d12 = ?, d13 = ?, d14 = ?, d15 = ?, d16 = ?, d17 = ?, d18 = ?, d19 = ?,
+            d20 = ?, d21 = ?, d22 = ?, d23 = ?, d24 = ?, d25 = ?, d26 = ?, d27 = ?, d28 = ?, d29 = ?, d30 = ?, d31 = ?
+            WHERE recYear = ? AND recMonth = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+ 
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($stmt, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiss", $rec[1], $rec[2], $rec[3], $rec[4], $rec[5], $rec[6], $rec[7], $rec[8], $rec[9], $rec[10], $rec[11], $rec[12], $rec[13], $rec[14], $rec[15], $rec[16], $rec[17], $rec[18], $rec[19], $rec[20], $rec[21], $rec[22], $rec[23], $rec[24], $rec[25], $rec[26], $rec[27], $rec[28], $rec[29], $rec[30], $rec[31], $yea, $mon);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+                return "Success";
+                exit();
+            }
         }
 
         // update analizeonlineeachmonthd table
@@ -701,6 +747,3 @@ require_once "../phpClasses/DbConnection.class.php";
             mysqli_close($conn);
         }
     }
-
-    $obj = new AnalizePriOnlineData();
-    $obj->analizePrivateMemberDetails('2021-10-19');
