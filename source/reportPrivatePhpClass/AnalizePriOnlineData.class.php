@@ -7,6 +7,7 @@ require_once "../phpClasses/DbConnection.class.php";
         public function analizePrivateMemberDetails($ldate){
             $this->calOnlineInHours($ldate);
             $this->calOnlineInDay($ldate);
+            $this->calPriMsgInHours($ldate);
         }
 
         // this function used to analize user online data accourding to hours in day
@@ -22,7 +23,7 @@ require_once "../phpClasses/DbConnection.class.php";
             } 
         }
 
-        // this function used to analize user online data accourding to monts
+        // this function used to analize user online data accourding to months
         private function calOnlineInDay($ldate){
             $recval = $this->check_analizeonlineeachmonthd_Empty();
             
@@ -42,6 +43,19 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizeOnlineRecAfterLastAnalizeDateInMonth($resDate);
             }
             
+        }
+
+        // this function used to analize private chat data accourding to hours in day
+        private function calPriMsgInHours($ldate){
+            $recval = $this->check_analizePriMsgEachdateh_Empty();
+
+            if($recval != 0){
+
+            }
+            else{
+                $ldate =  date('Y-n-d', strtotime($ldate)-86400); // get next day
+                $this->analizePriMsgRecFromAfterLastAnalizeDate($ldate); // analize not analized records
+            }
         }
 
         // this function used to analize each day number of online users in month
@@ -166,6 +180,21 @@ require_once "../phpClasses/DbConnection.class.php";
             }
         }
 
+        // this method used to analize private messages records accpirding to the hour
+        // this analize start from day after of given date
+        // until today this analize happen and records are store in analizeprimsgeachdateh table
+        private function analizePriMsgRecFromAfterLastAnalizeDate($ldate){
+            $dayTime =  date('Y-n-d', strtotime($ldate)+86400); // get next day
+            // get dates until today 
+            while(true){
+                $this->setPriMsgRecInHourInGivenDate($dayTime);
+                if($dayTime == date('Y-n-d')){
+                	break;
+                }
+            	$dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
+            }
+        }
+
         // this method used to analize user online records accourding to the hours
         // this analize start from day after of given date
         // until today this analize happen and records are store in analizeonlineeachdateh table
@@ -193,6 +222,21 @@ require_once "../phpClasses/DbConnection.class.php";
                 $onlineCounts[$i] = 0;
             }
             $this->insertRecInto_analizeonlineeachmonthd($year, $mon, $onlineCounts);
+        }
+
+        // this method use to analize private online records accourding to hour and insert in report table (analizeprimsgeachdateh)
+        // this analize that private msg data in each hour in given date and then update the table using given date
+        // this is for insert new analize data
+        private function setPriMsgRecInHourInGivenDate($ldate){
+            $date=date_create("$ldate 00:00:00");          
+            $dayTime = date_format($date,"Y-n-d H:i:s");
+            for ($x = 0; $x < 24; $x++) {
+                $dayEndTime =  date('Y-n-d H:i:s', strtotime($dayTime)+3600);
+                $numOnline = $this->getNumOfPriChatInGivenH($dayTime, $dayEndTime);
+                $onlineCounts[$x + 1] = $numOnline;
+                $dayTime = $dayEndTime;
+            }
+            $this->insertPriMsgRecords($onlineCounts, $ldate);
         }
 
         // this method use to analize user online recordes accourding to hour and insert in report table (analizeonlineeachdateh)
@@ -249,6 +293,28 @@ require_once "../phpClasses/DbConnection.class.php";
             }
         }
 
+        // this method is used to insert records for nalizeprimsgeachdateh table (about privat chat msg analize)
+        private function insertPriMsgRecords($rec, $day){
+            $sqlQ = "INSERT INTO analizeprimsgeachdateh(recDate, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,
+            h13, h14, h15, h16, h17, h18, h19, h20, h21, h22, h23, h24)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($stmt, "siiiiiiiiiiiiiiiiiiiiiiii", $day, $rec[1], $rec[2], $rec[3], $rec[4], $rec[5], $rec[6], $rec[7], $rec[8], $rec[9], $rec[10], $rec[11], $rec[12], $rec[13], $rec[14], $rec[15], $rec[16], $rec[17], $rec[18], $rec[19], $rec[20], $rec[21], $rec[22], $rec[23], $rec[24]);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+                return "Success";
+                exit();
+            }
+        }
+
         // this method is used to insert records for analizeonlineeachdateh table
         private function insertOnlineRecords($rec, $day){
             $sqlQ = "INSERT INTO analizeonlineeachdateh(recDate, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12,
@@ -293,6 +359,34 @@ require_once "../phpClasses/DbConnection.class.php";
             }
         }
 
+        // this method is used to get number of privat chat messages in given hour in given date
+        private function getNumOfPriChatInGivenH($sdate, $edate){
+            $sqlQ = "SELECT COUNT(p_id) AS ucount FROM private_message WHERE send_time BETWEEN ? AND ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($stmt, "ss", $sdate, $edate);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                if($row = mysqli_fetch_assoc($result)){
+                    $this->connclose($stmt, $conn);
+                    return $row['ucount'];
+                    exit();
+                }
+                else{
+                    $this->connclose($stmt, $conn);
+                    return 0;
+                    exit();
+                }
+            }
+        }
+
         // this method is used to get number of online users in given hour in given date
         private function getOnlineUsersInGivenH($sdate, $edate){
             $sqlQ = "SELECT COUNT(users.user_id) AS ucount FROM users WHERE users.user_id IN
@@ -316,6 +410,33 @@ require_once "../phpClasses/DbConnection.class.php";
                 if($row = mysqli_fetch_assoc($result)){
                     $this->connclose($stmt, $conn);
                     return $row['ucount'];
+                    exit();
+                }
+                else{
+                    $this->connclose($stmt, $conn);
+                    return 0;
+                    exit();
+                }
+            }
+        }
+
+        // this is for check this table has previous rec or not (analizeprimsgeachdateh)
+        private function check_analizePriMsgEachdateh_Empty(){
+            $sqlQ = "SELECT COUNT(recId) AS rcount FROM analizeprimsgeachdateh;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                if($row = mysqli_fetch_assoc($result)){
+                    $this->connclose($stmt, $conn);
+                    return $row['rcount'];
                     exit();
                 }
                 else{
@@ -385,3 +506,6 @@ require_once "../phpClasses/DbConnection.class.php";
             mysqli_close($conn);
         }
     }
+
+    //$obj = new AnalizePriOnlineData();
+    //$obj->analizePrivateMemberDetails('2021-10-19');
