@@ -50,7 +50,8 @@ require_once "../phpClasses/DbConnection.class.php";
             $recval = $this->check_analizePriMsgEachdateh_Empty();
 
             if($recval != 0){
-
+                $this->UpdatePriMsgRecInHourInGivenDate($ldate); // update last update record (in previous analize)
+                $this->analizePriMsgRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             }
             else{
                 $ldate =  date('Y-n-d', strtotime($ldate)-86400); // get next day
@@ -254,6 +255,21 @@ require_once "../phpClasses/DbConnection.class.php";
             $this->insertOnlineRecords($onlineCounts, $ldate);
         }
 
+        // this method use to analize private msg recordes accourding to hour and update in report table (analizeprimsgeachdateh)
+        // this analize that private messages data in each hour in given date and then update the table using given date
+        // this is for update previous inserted row accorging to the given date
+        private function UpdatePriMsgRecInHourInGivenDate($ldate){
+            $date=date_create("$ldate 00:00:00");          
+            $dayTime = date_format($date,"Y-n-d H:i:s");
+            for ($x = 0; $x < 24; $x++) {
+                $dayEndTime =  date('Y-n-d H:i:s', strtotime($dayTime)+3600);
+                $numOnline = $this->getNumOfPriChatInGivenH($dayTime, $dayEndTime);
+                $onlineCounts[$x + 1] = $numOnline;
+                $dayTime = $dayEndTime;
+            }
+            $this->updateLastAddedPriMsgRecord($onlineCounts, $ldate);
+        }
+
         // this method use to analize user online recordes accourding to hour and update in report table (analizeonlineeachdateh)
         // this analize that online user data in each hour in given date and then update the table using given date
         // this is for update previous inserted row accorging to the given date
@@ -336,6 +352,27 @@ require_once "../phpClasses/DbConnection.class.php";
                 exit();
             }
 
+        }
+
+        // this method used to update records that are used in report table (analizeprimsgeachdateh)
+        private function updateLastAddedPriMsgRecord($rec, $day){
+            $sqlQ = "UPDATE analizeprimsgeachdateh SET h1=?, h2=?, h3=?, h4=?, h5=?, h6=?, h7=?, h8=?, h9=?, h10=?,
+            h11=?, h12=?, h13=?, h14=?, h15=?, h16=?, h17=?, h18=?, h19=?, h20=?, h21=?, h22=?, h23=?, h24=? WHERE recDate=?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                mysqli_stmt_bind_param($stmt, "iiiiiiiiiiiiiiiiiiiiiiiis", $rec[1], $rec[2], $rec[3], $rec[4], $rec[5], $rec[6], $rec[7], $rec[8], $rec[9], $rec[10], $rec[11], $rec[12], $rec[13], $rec[14], $rec[15], $rec[16], $rec[17], $rec[18], $rec[19], $rec[20], $rec[21], $rec[22], $rec[23], $rec[24], $day);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+                return "success";
+                exit();
+            }
         }
 
         // this method used to update records that are used in report table (analizeonlineeachdateh)
