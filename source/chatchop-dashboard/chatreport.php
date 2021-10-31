@@ -99,7 +99,7 @@
             </div>
           </div>
           <div class = "report-type">
-            <div class="report-lable">First Report</div>
+            <div class="report-lable">Private Group Chat Messages</div>
             <div class="report-input">
               <input type="button" value="Today" id="t9">
               <input type="button" value="Month" class="report-time" id="t10">
@@ -265,20 +265,44 @@
     document.getElementById('report-discription').innerHTML = "This is for genarate report to private chat messages data in given Day.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t9").click(function(){
-    document.getElementById('chooes-report').innerHTML = "Report Type : 9"
-    document.getElementById('reporttime').type = "time";
+    document.getElementById('chooes-report').innerHTML = "Report Type : Today Number of Private Group chat messages";
+    document.getElementById('reporttime').type = "hidden";
+    document.getElementById('report-form').action = "../reportsDirections/priGrpChatMsgRecInDay.php";
+    document.getElementById('reType').value = 9;
+    document.getElementById('timelable').innerHTML = "Set Time : Today";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option><option value='Graph'>Graph</option></select>";
+    document.getElementById('report-head').innerHTML = "Number of private Group chat messages in Today";
+    document.getElementById('report-discription').innerHTML = "This is for genarate report to private Group chat messages data in Today.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t10").click(function(){
-    document.getElementById('chooes-report').innerHTML = "Report Type : 10"; 
+    document.getElementById('chooes-report').innerHTML = "Report Type : Number of Private Group Chat Messages in Given Month"; 
     document.getElementById('reporttime').type = "month";
+    document.getElementById('report-form').action = "../reportsDirections/priGrpChatMsgRecInMonth.php";
+    document.getElementById('reType').value = 10;
+    document.getElementById('timelable').innerHTML = "Set Time : ";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option><option value='Graph'>Graph</option></select>";
+    document.getElementById('report-head').innerHTML = "Number of private group chat messages in given Month";
+    document.getElementById('report-discription').innerHTML = "This is for genarate report to private group chat messages data in given Month.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t11").click(function(){
-    document.getElementById('chooes-report').innerHTML = "Report Type : 11";
+    document.getElementById('chooes-report').innerHTML = "Report Type : Number of Private Group Chat Messages in Given Week";
     document.getElementById('reporttime').type = "week";
+    document.getElementById('report-form').action = "../reportsDirections/priGrpChatMsgRecInWeek.php";
+    document.getElementById('reType').value = 11;
+    document.getElementById('timelable').innerHTML = "Set Time : ";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option><option value='Graph'>Graph</option></select>";
+    document.getElementById('report-head').innerHTML = "Number of private group chat messages in given Week";
+    document.getElementById('report-discription').innerHTML = "This is for genarate report to private group chat messages data in given Week.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t12").click(function(){
-    document.getElementById('chooes-report').innerHTML = "Report Type : 12";
+    document.getElementById('chooes-report').innerHTML = "Report Type : Number of Private Group Chat Message in Given Day";
     document.getElementById('reporttime').type = "date";
+    document.getElementById('report-form').action = "../reportsDirections/priGrpChatMsgRecInDay.php";
+    document.getElementById('reType').value = 12;
+    document.getElementById('timelable').innerHTML = "Set Time : ";
+    document.getElementById('disp-type').innerHTML = "<label for='Type'>Report Display Type : </label><select name='Type' id='Type'><option value='Table'>Table</option><option value='Graph'>Graph</option></select>";
+    document.getElementById('report-head').innerHTML = "Number of private group chat messages in given Day";
+    document.getElementById('report-discription').innerHTML = "This is for genarate report to private group chat messages data in given Day.<br><ul><li>1. Graph</li><li>2. Table</li></ul>";
   });
   $("#t13").click(function(){
     document.getElementById('chooes-report').innerHTML = "Report Type : 13";
@@ -361,9 +385,16 @@ function setAnalizeEndStatus(){
        - number of private chat messages in week in each day
   08 = this is used to get report of given day private chat messages
        - number of private chat messages in day in each hour
+  09 = this is used to get report of today private group chat messages
+       - number of private group chat messages in today in each hour
+  10 = this is used to get report of given month private group chat messages
+       - number of private group chat messages in month in each day
+  11 = this is used to get report of given week private group chat messages
+       - number of private group chat messages in week in each day
+  12 = this is used to get report of given day private group chat messages
+       - number of private gropu chat messages in day in each hour
   17 = this is used to anlize overrall user accouts data 
        - get total number of users
-
   18 = This is used to analize system records
       - set last analize date
 ->
