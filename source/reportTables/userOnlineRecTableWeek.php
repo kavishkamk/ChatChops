@@ -84,7 +84,7 @@
             <div id="sidebar">
                 <div class="form-div">
                     <form action="userOnlineRecTableWeek.php" method="get">
-                        <label for="reporttime">Select Month</label><br><br>
+                        <label for="reporttime">Select Week</label><br><br>
                         <input type="week" name="reporttime"><br><br>
                         <button type="submit" name="month-submit" >Genarate</button>
                     </form>

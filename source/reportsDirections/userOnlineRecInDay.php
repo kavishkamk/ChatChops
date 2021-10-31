@@ -39,7 +39,9 @@
         echo "<script>window.close();</script>"; // if empty inputs close tab
     }
     else if($grahtype == "Table"){
-        echo "<script>window.close();</script>";
+        // genarate table
+        header("Location:../reportTables/userOnlineRecTableDay.php?reporttime=".$day."");
+        exit();
     }
     else if($grahtype == "Graph"){
         // genarate graph using R
