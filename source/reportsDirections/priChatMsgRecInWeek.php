@@ -35,8 +35,7 @@
     }
     else if($grahtype == "Table"){
         // genarate table
-        //header("Location:../reportTables/userOnlineRecTableWeek.php?reporttime=".$yeMonth."");
-        echo "<script>window.close();</script>";
+        header("Location:../reportTables/priChatMsgRecTableWeek.php?reporttime=".$yeMonth."");
         exit();
     }
     else if($grahtype == "Graph"){

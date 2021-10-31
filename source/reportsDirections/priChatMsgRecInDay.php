@@ -40,8 +40,7 @@
     }
     else if($grahtype == "Table"){
         // genarate table
-        //header("Location:../reportTables/userOnlineRecTableDay.php?reporttime=".$day."");
-        echo "<script>window.close();</script>";
+        header("Location:../reportTables/priChatMsgRecTableDay.php?reporttime=".$day."");
         exit();
     }
     else if($grahtype == "Graph"){
