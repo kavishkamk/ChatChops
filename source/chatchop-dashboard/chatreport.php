@@ -321,6 +321,14 @@ function setAnalizeEndStatus(){
 </script>
 
 <!-- 
+  01 = this is used to get report of today online users
+       - number of online users in today in each hour
+  02 = this is used to get report of given month online users
+       - number of online users in given month in each day
+  03 = this is used to get report of given week online users
+       - number of online users in given week in each day
+  04 = this is used to get report of given day online users
+       - number of online users in given day in each hour
   17 = this is used to anlize overrall user accouts data 
        - get total number of users
 
