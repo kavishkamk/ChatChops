@@ -92,10 +92,15 @@
                 exit();
             }
             else{
+                // analize private chat data
                 require_once "../reportPrivatePhpClass/AnalizePriOnlineData.class.php";
                 $anzPriOn = new AnalizePriOnlineData();
                 $anzPriOn->analizePrivateMemberDetails($ldate);
                 unset($anzPriOn);
+                require_once"../reportPriGroupPhpClass/AnalizePriGrpData.class.php";
+                $anzPriGrp = new AnalizePriGrpData();
+                $anzPriGrp->analizePriGrpDetails($ldate);
+                unset($anzPriGrp);
                 return "susses";
                 exit();
             }

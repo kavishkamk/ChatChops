@@ -1,6 +1,7 @@
 <?php
 require_once "../phpClasses/DbConnection.class.php";
 
+    // this class is used to analize private chat data
     class AnalizePriOnlineData extends DbConnection{
 
         // this method used to analize private user details
