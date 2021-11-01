@@ -38,13 +38,14 @@
     }
     else if($grahtype == "Table"){
         // genarate table
-        header("Location:../reportTables/priGrpChatMsgRecTableMonth.php?reporttime=".$yeMonth."");
+        //header("Location:../reportTables/priGrpChatMsgRecTableMonth.php?reporttime=".$yeMonth."");
+        echo "<script>window.close();</script>"; // if empty inputs close tab
         exit();
     }
     else if($grahtype == "Graph"){
         // genarate graph using R
-        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_privatGroupChat\\R_MonthPriGrpChat.R ' . $year . ' ' . $month);
-        header("Location:../RPlots/privateGroupMessageDataInGivenMonth.html"); // show plot
+        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_publicGroupChat\\R_MonthPubGrpChat.R ' . $year . ' ' . $month);
+        header("Location:../RPlots/publicGroupMessageDataInGivenMonth.html"); // show plot
         exit();
     }
     else{

@@ -25,26 +25,29 @@
         echo "<script>window.close();</script>";
         exit();
     }
-
+    
     $reportType = $_GET['reType'];
     $grahtype = $_GET['Type'];
-    $yeMonth = $_GET['timeforreport'];
-    
-    $year = substr($yeMonth, 0, 4);
-    $month = substr($yeMonth, 5);
+    if($reportType == 13){
+        $day = date("Y-n-d");
+    }
+    else if($reportType == 16){
+        $day = $_GET['timeforreport'];
+    }
 
-    if(empty($reportType) || empty($grahtype) || empty($yeMonth)){
+    if(empty($reportType) || empty($grahtype)){
         echo "<script>window.close();</script>"; // if empty inputs close tab
     }
     else if($grahtype == "Table"){
         // genarate table
-        header("Location:../reportTables/priGrpChatMsgRecTableMonth.php?reporttime=".$yeMonth."");
+        //header("Location:../reportTables/priGrpChatMsgRecTableDay.php?reporttime=".$day."");
+        echo "<script>window.close();</script>"; // if empty inputs close tab
         exit();
     }
     else if($grahtype == "Graph"){
         // genarate graph using R
-        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_privatGroupChat\\R_MonthPriGrpChat.R ' . $year . ' ' . $month);
-        header("Location:../RPlots/privateGroupMessageDataInGivenMonth.html"); // show plot
+        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_publicGroupChat\\R_DayPubGrpChat.R ' . $day);
+        header("Location:../RPlots/publicGroupChatMsgTimeInGivenDate.html"); // show plot
         exit();
     }
     else{

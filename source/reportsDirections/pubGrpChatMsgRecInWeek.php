@@ -29,22 +29,29 @@
     $reportType = $_GET['reType'];
     $grahtype = $_GET['Type'];
     $yeMonth = $_GET['timeforreport'];
-    
-    $year = substr($yeMonth, 0, 4);
-    $month = substr($yeMonth, 5);
 
     if(empty($reportType) || empty($grahtype) || empty($yeMonth)){
         echo "<script>window.close();</script>"; // if empty inputs close tab
     }
     else if($grahtype == "Table"){
         // genarate table
-        header("Location:../reportTables/priGrpChatMsgRecTableMonth.php?reporttime=".$yeMonth."");
+        //header("Location:../reportTables/priGrpChatMsgRecTableWeek.php?reporttime=".$yeMonth."");
+        echo "<script>window.close();</script>"; // if empty inputs close tab
         exit();
     }
     else if($grahtype == "Graph"){
-        // genarate graph using R
-        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_privatGroupChat\\R_MonthPriGrpChat.R ' . $year . ' ' . $month);
-        header("Location:../RPlots/privateGroupMessageDataInGivenMonth.html"); // show plot
+
+        // get week and year from 
+        $year = substr($yeMonth, 0, 4);
+        $week_no = substr($yeMonth, 6);
+        $week_start = new DateTime();
+        $week_start->setISODate($year,$week_no);
+        $sd = $week_start->format('Y-n-d');
+        $ed =  date('Y-n-d', strtotime($sd)+(86400*6)); // get next day
+
+        //genarate graph using R
+        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_publicGroupChat\\R_WeekPubGrpChat.R ' . $sd . ' ' . $ed);
+        header("Location:../RPlots/publicGrpChatMsgDataInGivenWeek.html"); // show plot
         exit();
     }
     else{
