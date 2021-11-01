@@ -748,6 +748,3 @@ require_once "../phpClasses/DbConnection.class.php";
             mysqli_close($conn);
         }
     }
-
-    $obj = new AnalizePriOnlineData();
-    $obj->analizePrivateMemberDetails('2021-11-01');

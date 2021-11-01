@@ -9,7 +9,7 @@ require_once "../phpClasses/DbConnection.class.php";
             $this->calPriGrpInDay($ldate);
         }
 
-        // this function used to analize user online data accourding to months
+        // this function used to analize user private group data accourding to months
         private function calPriGrpInDay($ldate){
             $recval = $this->check_analizePriGrpachmonthd_Empty();
             

@@ -97,10 +97,14 @@
                 $anzPriOn = new AnalizePriOnlineData();
                 $anzPriOn->analizePrivateMemberDetails($ldate);
                 unset($anzPriOn);
-                require_once"../reportPriGroupPhpClass/AnalizePriGrpData.class.php";
+                require_once "../reportPriGroupPhpClass/AnalizePriGrpData.class.php";
                 $anzPriGrp = new AnalizePriGrpData();
                 $anzPriGrp->analizePriGrpDetails($ldate);
                 unset($anzPriGrp);
+                require_once "../reportPubGroupPhpClass/AnalizePubGrpData.class.php";
+                $anzPubGrp = new AnalizePubGrpData();
+                $anzPubGrp->analizepubGrpDetails($ldate);
+                unset($anzPubGrp);
                 return "susses";
                 exit();
             }
