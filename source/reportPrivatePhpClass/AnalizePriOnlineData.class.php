@@ -20,7 +20,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             }
             else{
-                $ldate =  date('Y-n-d', strtotime($ldate)-86400); // get next day
+                $ldate = date('Y-n-d', strtotime($ldate . ' -1 day'));
                 $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             } 
         }
@@ -41,7 +41,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
                 $date=date_create("$ye-$mon-$day");       
                 $resDate = date_format($date,"Y-n-d");
-                $resDate =  date('Y-n-d', strtotime($resDate)-86400); // get next day
+                $resDate = date('Y-n-d', strtotime($resDate . ' -1 day'));
                 $this->analizeOnlineRecAfterLastAnalizeDateInMonth($resDate);
             }  
         }
@@ -62,7 +62,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
                 $date=date_create("$ye-$mon-$day");       
                 $resDate = date_format($date,"Y-n-d");
-                $resDate =  date('Y-n-d', strtotime($resDate)-86400); // get next day
+                $resDate = date('Y-n-d', strtotime($resDate . ' -1 day'));
                 $this->analizePriMsgRecAfterLastAnalizeDateInMonth($resDate);
             }
         }
@@ -76,7 +76,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizePriMsgRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             }
             else{
-                $ldate =  date('Y-n-d', strtotime($ldate)-86400); // get next day
+                $ldate = date('Y-n-d', strtotime($ldate . ' -1 day'));
                 $this->analizePriMsgRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             }
         }
@@ -95,7 +95,7 @@ require_once "../phpClasses/DbConnection.class.php";
             for(; $i <= $d; $i++){
                 $numOnline = $this->getNumOfPriMsgInGivenDate($dayTime);
                 $onlineCounts[$i] = $numOnline;
-                $dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
+                $dayTime = date('Y-n-d', strtotime($dayTime . ' +1 day'));
    	        }
             for(; $i<=31; $i++){
                 $onlineCounts[$i] = 0;
@@ -117,7 +117,7 @@ require_once "../phpClasses/DbConnection.class.php";
             for(; $i <= $d; $i++){
                 $numOnline = $this->getNumOfOnlineUsersInGivenDate($dayTime);
                 $onlineCounts[$i] = $numOnline;
-                $dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
+                $dayTime = date('Y-n-d', strtotime($dayTime . ' +1 day'));
    	        }
             for(; $i<=31; $i++){
                 $onlineCounts[$i] = 0;
@@ -236,8 +236,7 @@ require_once "../phpClasses/DbConnection.class.php";
         // this analize start after from day after of given date
         // until today this analize happen and recourds are store in analizeprimsgeachmonthd table
         private function analizePriMsgRecAfterLastAnalizeDateInMonth($day){
-            $dayTime =  date('Y-n-d', strtotime($day)+86400); // get next day
-           
+            $dayTime = date('Y-n-d', strtotime($day . ' +1 day'));
             // get dates until today 
             $arr2 = explode("-",$dayTime);
             $mon = $arr2[1] + 1;
@@ -280,7 +279,7 @@ require_once "../phpClasses/DbConnection.class.php";
         // this analize start after from day after of given date
         // until today this analize happen and recourds are store in analizeonlineeachmonthd table
         private function analizeOnlineRecAfterLastAnalizeDateInMonth($day){
-            $dayTime =  date('Y-n-d', strtotime($day)+86400); // get next day
+            $dayTime = date('Y-n-d', strtotime($day . ' +1 day'));
            
             // get dates until today 
             $arr2 = explode("-",$dayTime);
@@ -324,14 +323,14 @@ require_once "../phpClasses/DbConnection.class.php";
         // this analize start from day after of given date
         // until today this analize happen and records are store in analizeprimsgeachdateh table
         private function analizePriMsgRecFromAfterLastAnalizeDate($ldate){
-            $dayTime =  date('Y-n-d', strtotime($ldate)+86400); // get next day
+            $dayTime = date('Y-n-d', strtotime($ldate . ' +1 day'));
             // get dates until today 
             while(true){
                 $this->setPriMsgRecInHourInGivenDate($dayTime);
-                if($dayTime == date('Y-n-d')){
+                if($dayTime >= date('Y-n-d')){
                 	break;
                 }
-            	$dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
+                $dayTime = date('Y-n-d', strtotime($dayTime . ' +1 day'));
             }
         }
 
@@ -339,14 +338,16 @@ require_once "../phpClasses/DbConnection.class.php";
         // this analize start from day after of given date
         // until today this analize happen and records are store in analizeonlineeachdateh table
         private function analizeOnlineRecFromAfterLastAnalizeDate($ldate){
-	        $dayTime =  date('Y-n-d', strtotime($ldate)+86400); // get next day
+            
+	        $dayTime = date('Y-n-d', strtotime($ldate . ' +1 day'));
+            
            // get dates until today 
             while(true){
                 $this->setOnlineRecInHourInGivenDate($dayTime);
-                if($dayTime == date('Y-n-d')){
+                if($dayTime >= date('Y-n-d')){
                 	break;
                 }
-            	$dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
+            	$dayTime = date('Y-n-d', strtotime($dayTime . ' +1 day'));
             }
         }
 
@@ -357,7 +358,7 @@ require_once "../phpClasses/DbConnection.class.php";
             for(; $i <= $numOfDays; $i++){
                 $numOnline = $this->getNumOfPriMsgInGivenDate($day);
                 $onlineCounts[$i] = $numOnline;
-                $day = date('Y-n-d', strtotime($day)+86400); // get next day
+                $day = date('Y-n-d', strtotime($day . ' +1 day'));
             }
             for(; $i<=31; $i++){
                 $onlineCounts[$i] = 0;
@@ -372,7 +373,7 @@ require_once "../phpClasses/DbConnection.class.php";
             for(; $i <= $numOfDays; $i++){
                 $numOnline = $this->getNumOfOnlineUsersInGivenDate($day);
                 $onlineCounts[$i] = $numOnline;
-                $day = date('Y-n-d', strtotime($day)+86400); // get next day
+                $day = date('Y-n-d', strtotime($day . ' +1 day'));
             }
             for(; $i<=31; $i++){
                 $onlineCounts[$i] = 0;
@@ -429,7 +430,6 @@ require_once "../phpClasses/DbConnection.class.php";
         // this analize that online user data in each hour in given date and then update the table using given date
         // this is for update previous inserted row accorging to the given date
         private function UpdateOnlineRecInHourInGivenDate($ldate){
-
             $date=date_create("$ldate 00:00:00");          
             $dayTime = date_format($date,"Y-n-d H:i:s");
             for ($x = 0; $x < 24; $x++) {
@@ -748,3 +748,6 @@ require_once "../phpClasses/DbConnection.class.php";
             mysqli_close($conn);
         }
     }
+
+    $obj = new AnalizePriOnlineData();
+    $obj->analizePrivateMemberDetails('2021-11-01');

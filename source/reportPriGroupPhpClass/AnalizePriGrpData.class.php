@@ -25,7 +25,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
                 $date=date_create("$ye-$mon-$day");       
                 $resDate = date_format($date,"Y-n-d");
-                $resDate =  date('Y-n-d', strtotime($resDate)-86400); // get next day
+                $resDate = date('Y-n-d', strtotime($resDate . ' -1 day'));
                 $this->analizePriGrpMsgRecAfterLastAnalizeDateInMonth($resDate);
             }  
         }
@@ -44,7 +44,7 @@ require_once "../phpClasses/DbConnection.class.php";
             for(; $i <= $d; $i++){
                 $numOnline = $this->getNumOfPriGrpMsgInGivenDate($dayTime);
                 $onlineCounts[$i] = $numOnline;
-                $dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
+                $dayTime = date('Y-n-d', strtotime($dayTime . ' +1 day'));
    	        }
             for(; $i<=31; $i++){
                 $onlineCounts[$i] = 0;
@@ -79,7 +79,7 @@ require_once "../phpClasses/DbConnection.class.php";
         // this analize start after from day after of given date
         // until today this analize happen and recourds are store in analizeprigrpmsgeachmonthd table
         private function analizePriGrpMsgRecAfterLastAnalizeDateInMonth($day){
-            $dayTime =  date('Y-n-d', strtotime($day)+86400); // get next day
+            $dayTime = date('Y-n-d', strtotime($day . ' +1 day'));
            
             // get dates until today 
             $arr2 = explode("-",$dayTime);
@@ -126,7 +126,7 @@ require_once "../phpClasses/DbConnection.class.php";
             for(; $i <= $numOfDays; $i++){
                 $numOnline = $this->getNumOfPriGrpMsgInGivenDate($day);
                 $onlineCounts[$i] = $numOnline;
-                $day = date('Y-n-d', strtotime($day)+86400); // get next day
+                $day = date('Y-n-d', strtotime($day . ' +1 day'));
             }
             for(; $i<=31; $i++){
                 $onlineCounts[$i] = 0;
@@ -193,7 +193,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizePriGrpMsgRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             }
             else{
-                $ldate =  date('Y-n-d', strtotime($ldate)-86400); // get next day
+                $ldate = date('Y-n-d', strtotime($ldate . ' -1 day'));
                 $this->analizePriGrpMsgRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             } 
         }
@@ -239,14 +239,14 @@ require_once "../phpClasses/DbConnection.class.php";
         // this analize start from day after of given date
         // until today this analize happen and records are store in analizeprigrpmsgeachdateh table
         private function analizePriGrpMsgRecFromAfterLastAnalizeDate($ldate){
-	        $dayTime =  date('Y-n-d', strtotime($ldate)+86400); // get next day
+            $dayTime = date('Y-n-d', strtotime($ldate . ' +1 day'));
            // get dates until today 
             while(true){
                 $this->setPriGrpMsgRecInHourInGivenDate($dayTime);
-                if($dayTime == date('Y-n-d')){
+                if($dayTime >= date('Y-n-d')){
                 	break;
                 }
-            	$dayTime =  date('Y-n-d', strtotime($dayTime)+86400);
+                $dayTime = date('Y-n-d', strtotime($dayTime . ' +1 day'));
             }
         }
 
