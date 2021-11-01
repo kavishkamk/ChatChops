@@ -28,7 +28,6 @@ nav {
   background-color: rgb(14, 89, 112);
   grid-area: nav;
   border-radius: var(--main-radius);
-  padding-top: var(--main-padding);
 }
 main {
   background-color: rgb(37, 183, 219);
@@ -68,7 +67,7 @@ img {
 
 .report-type {
   display: grid;
-  grid-template-columns: 40% 5% 55%;
+  grid-template-columns: 40% 5% 50% 25%;
   padding: 5px 20px;
 }
 
@@ -106,6 +105,7 @@ img {
   background-color: rgb(231, 240, 235);
   color: black;
   border: 2px solid #21c480;
+  padding: 5px 20px;
 }
 
 .button1:hover {
@@ -201,4 +201,11 @@ img {
   color: green;
   float:right;
   margin-right: 100px;
+}
+
+.log-out-btn {
+  background-color: white;
+  float: right;
+  padding: 10px 30px;
+  font-weight: bold;
 }

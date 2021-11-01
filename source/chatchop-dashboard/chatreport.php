@@ -41,6 +41,9 @@
     <div class="container">
       <nav>
         <div>
+          <form>
+            <button class="log-out-btn" formaction="../include/AdminLogout.inc.php">Log Out</button>
+          </form>
           <!-- nav -->
           <!-- <p class="a">Vishvi De Silva</p> -->
         </div>

@@ -66,3 +66,8 @@ caption {
 .user-div, .private-group-div, .public-group-div{
     padding: 0 5px;
 }
+
+.header-bar {
+  text-align: right;
+  padding: 6px 10px
+}

@@ -36,7 +36,7 @@
     </head>
     <body>
         <main class="container">
-            <div style="grid-column:1 / 4; grid-row: 1 / 2">
+            <div style="grid-column:1 / 4; grid-row: 1 / 2; text-align: right;">
                 <nav class = "header-bar">
                     <h1>
                         <label for="">
