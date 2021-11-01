@@ -1,0 +1,17 @@
+# installed R packages
+
+install.packages("RMySQL")
+install.packages("dygraphs")
+
+
+library(utils)
+library(base)
+library(methods)
+library(graphics)
+library(grDevices)
+library(stats)
+library(datasets)
+library(dygraphs)
+library(DBI)
+library(RMySQL)
+library(htmlwidgets)

@@ -39,13 +39,9 @@
       <nav>
         <div>
           <!-- nav -->
-          
-          <img
-            src="/chatchop_new/1.jpeg"
-            width="60px"
-            alt="hansana"
-            style= "float:right"
-          />
+          <form>
+            <button class="log-out-btn" formaction="../include/AdminLogout.inc.php">Log Out</button>
+          </form>
         </div>
         <br>
         <div>
@@ -67,11 +63,9 @@
           <br />
           
           <br>
-          <button class="button button1">Manage Admin Profile</button>
+          <button class="button button1" formaction="">Manage Admin Profile</button>
           <br>
           <br>
-        
-          <button class="button button3"><a href='chatdashboardnew.php' alt='Broken Link'>Back</a></button>
         </form>
       </main>
       <div id="sidebar">

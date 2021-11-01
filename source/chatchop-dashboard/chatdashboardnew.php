@@ -39,19 +39,10 @@
   <body>
     <div class="container">
       <nav>
-        <div>
-          <!-- nav -->
-          <img
-            src="/chatchop_new/1.jpeg"
-            width="60px"
-            alt="hansana"
-            style="float: right"
-          />
-        </div>
-        <div>
-          <!-- <p class="a">Vishvi De Silva</p> -->
-          
-        
+        <div class="top-bar">
+          <form>
+            <button class="log-out-btn" formaction="../include/AdminLogout.inc.php">Log Out</button>
+          </form>
         </div>
       </nav>
 

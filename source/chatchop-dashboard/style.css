@@ -9,7 +9,7 @@ li {
 
 .container {
   display: grid;
-  height: 100vh;
+  height: 95vh;
   grid-template-columns: 1.5fr 6fr;
   grid-template-rows: 0.2fr 4fr 0.2fr;
   grid-template-areas:
@@ -28,7 +28,6 @@ nav {
   background-color: rgb(14, 89, 112);
   grid-area: nav;
   border-radius: var(--main-radius);
-  padding-top: var(--main-padding);
 }
 main {
   background-color: rgb(37, 183, 219);
@@ -68,7 +67,7 @@ img {
 
 .report-type {
   display: grid;
-  grid-template-columns: 40% 5% 55%;
+  grid-template-columns: 40% 5% 50% 25%;
   padding: 5px 20px;
 }
 
@@ -106,6 +105,7 @@ img {
   background-color: rgb(231, 240, 235);
   color: black;
   border: 2px solid #21c480;
+  padding: 5px 20px;
 }
 
 .button1:hover {
@@ -171,4 +171,41 @@ img {
 #report-discription {
   text-align: left;
   font-weight: normal;
+}
+
+#report-head {
+  margin: 5px 0;
+}
+
+#report-discription {
+  margin: 5px 10px 5px 10px;
+}
+
+.system-analize {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.analize-btn{
+  margin: 0 30px;
+  text-align: right;
+}
+
+.loding-analize{
+  color: red;
+  float: right;
+  margin-right: 100px;
+}
+
+.success-analize{
+  color: green;
+  float:right;
+  margin-right: 100px;
+}
+
+.log-out-btn {
+  background-color: white;
+  float: right;
+  padding: 10px 30px;
+  font-weight: bold;
 }
