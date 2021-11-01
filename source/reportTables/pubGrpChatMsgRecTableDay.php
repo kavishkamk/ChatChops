@@ -32,41 +32,43 @@
                     <label for="">
                         <span class="las la-bars"></span>
                     </label>
-                    Report for number of private Group Chat Messages In given Month
+                    Report for number of public Group Chat Messages In given Day
                 </h1>
             </nav>
             <main class="report-main">
                 <div class="re-table1">
                 <?php
                     if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
-                        require_once "../reportPriGroupPhpClass/GetPriGroTableData.class.php";
-                        $priobj = new GetPriGrpTableData();
-                        $arr = explode("-",$_GET['reporttime']);
-                        $datas = $priobj->getMonthPriGrpMsg($arr[1], $arr[0]);
+                        require_once "../reportPubGroupPhpClass/GetPubGrpTableData.class.php";
+                        $priobj = new GetPubGrpTableData();
+                        $datas = $priobj->getDayPubGrpChatMsg($_GET['reporttime']);
                         unset($priobj);
-                        $d=cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
                     }
                 ?>
                 <table class="d-table">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Number of Messages</th>
+                            <th>Time</th>
+                            <th>Number of chat Messages</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                            if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
-                                $val = "d";
-                                if($datas != NULL){
-                                    for($i= 1; $i <= 16; $i++){
-                                        echo '<tr>
-                                                <td>'.$i.'</td>
-                                                <td>'.$datas[$val.$i].'</td>
-                                            </tr>';
+                            $days = array('00:00:00','01:00:00','02:00:00','03:00:00','04:00:00','05:00:00','06:00:00','07:00:00',
+                            '08:00:00','09:00:00','10:00:00','11:00:00','12:00:00','13:00:00','14:00:00','15:00:00','16:00:00',
+                            '17:00:00','18:00:00','19:00:00','20:00:00','21:00:00','22:00:00','23:00:00','24:00:00');
+                                if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
+                                    if($datas != NULL){
+                                        $val = "h";
+                                       for($i= 0; $i < 12; $i++){
+                                           $j = $i + 1;
+                                            echo '<tr>
+                                                   <td>'.$days[$i].' -'.$days[$i + 1].' </td>
+                                                   <td>'.$datas[$val.$j].'</td>
+                                              </tr>';
+                                        }
                                     }
                                 }
-                            }
                         ?>
                     </tbody>
                 </table>
@@ -75,19 +77,20 @@
                     <table class="d-table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Number of Messages</th>
+                                <th>Time</th>
+                                <th>Number of chat Messages</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                                 if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
-                                    $val = "d";
+                                    $val = "h";
                                     if($datas != NULL){
-                                        for($i= 17; $i <= $d; $i++){
+                                        for($i= 12; $i < 24; $i++){
+                                            $j = $i + 1;
                                             echo '<tr>
-                                                    <td>'.$i.'</td>
-                                                    <td>'.$datas[$val.$i].'</td>
+                                                <td>'.$days[$i].' -'.$days[$i + 1].' </td>
+                                                <td>'.$datas[$val.$j].'</td>
                                                 </tr>';
                                         }
                                     }
@@ -99,9 +102,9 @@
             </main>
             <div id="sidebar">
                 <div class="form-div">
-                    <form action="priGrpChatMsgRecTableMonth.php" method="get">
-                        <label for="reporttime">Select Month</label><br><br>
-                        <input type="month" name="reporttime"><br><br>
+                    <form action="pubGrpChatMsgRecTableDay.php" method="get">
+                        <label for="reporttime">Select Day</label><br><br>
+                        <input type="date" name="reporttime"><br><br>
                         <button type="submit" name="month-submit" >Genarate</button>
                     </form>
                 </div>
@@ -109,8 +112,8 @@
                     <span>
                     <?php
                         if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
-                            echo '<p class="t-head">Number of Private Group chat messages in </p>';
-                            echo '<p class="t-head">'.$arr[0].' - '.$arr[1].'</p>';
+                           echo '<p class="t-head">Number of public group chat messages in </p>';
+                            echo '<p class="t-head">'.$_GET['reporttime'].'</p>';
                         }
                         else{
                             echo '<p class="t-head">No record</p>';

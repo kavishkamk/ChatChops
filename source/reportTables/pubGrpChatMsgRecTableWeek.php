@@ -32,7 +32,7 @@
                     <label for="">
                         <span class="las la-bars"></span>
                     </label>
-                    Report for number of private Group chat messages In given Week
+                    Report for number of public Group chat messages In given Week
                 </h1>
             </nav>
             <main class="report-main">
@@ -48,10 +48,10 @@
                         $sd = $week_start->format('Y-n-d');
                         $ed = date('Y-n-d', strtotime($sd . ' +6 day'));
                         $arr = explode("-",$sd);
-                        require_once "../reportPriGroupPhpClass/GetPriGroTableData.class.php";
-                        $priobj = new GetPriGrpTableData();
+                        require_once "../reportPubGroupPhpClass/GetPubGrpTableData.class.php";
                         $d=cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
-                        $datas = $priobj->getWeekPriChatMsg($arr[0], $arr[1], $arr[2],$d);
+                        $priobj = new GetPubGrpTableData();
+                        $datas = $priobj->getWeekPubChatMsg($arr[0], $arr[1], $arr[2], $d);
                         unset($priobj);
                     }
                 ?>
@@ -82,7 +82,7 @@
             </main>
             <div id="sidebar">
                 <div class="form-div">
-                    <form action="priGrpChatMsgRecTableWeek.php" method="get">
+                    <form action="pubGrpChatMsgRecTableWeek.php" method="get">
                         <label for="reporttime">Select Week</label><br><br>
                         <input type="week" name="reporttime"><br><br>
                         <button type="submit" name="month-submit" >Genarate</button>
@@ -92,7 +92,7 @@
                     <span>
                     <?php
                         if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
-                            echo '<p class="t-head">Number of private Group chat messages in </p>';
+                            echo '<p class="t-head">Number of public Group chat messages in </p>';
                             echo '<p class="t-head">'.$sd.' - '.$ed.'</p>';
                         }
                         else{

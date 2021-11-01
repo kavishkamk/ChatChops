@@ -32,46 +32,38 @@
                     <label for="">
                         <span class="las la-bars"></span>
                     </label>
-                    Report for number of private Group chat messages In given Week
+                    Report for number of public Group Chat Messages In given Month
                 </h1>
             </nav>
             <main class="report-main">
                 <div class="re-table1">
                 <?php
                     if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
-                        // get week and year from
-                        $yeMonth = $_GET['reporttime'];
-                        $year = substr($yeMonth, 0, 4);
-                        $week_no = substr($yeMonth, 6);
-                        $week_start = new DateTime();
-                        $week_start->setISODate($year,$week_no);
-                        $sd = $week_start->format('Y-n-d');
-                        $ed = date('Y-n-d', strtotime($sd . ' +6 day'));
-                        $arr = explode("-",$sd);
-                        require_once "../reportPriGroupPhpClass/GetPriGroTableData.class.php";
-                        $priobj = new GetPriGrpTableData();
-                        $d=cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
-                        $datas = $priobj->getWeekPriChatMsg($arr[0], $arr[1], $arr[2],$d);
+                        require_once "../reportPubGroupPhpClass/GetPubGrpTableData.class.php";
+                        $priobj = new GetPubGrpTableData();
+                        $arr = explode("-",$_GET['reporttime']);
+                        $datas = $priobj->getMonthPubGrpMsg($arr[1], $arr[0]);
                         unset($priobj);
+                        $d=cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
                     }
                 ?>
                 <table class="d-table">
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Number of chat Messages</th>
+                            <th>Number of Messages</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $days = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
                             if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
+                                $val = "d";
                                 if($datas != NULL){
-                                    for($i= 0; $i < 7; $i++){
+                                    for($i= 1; $i <= 16; $i++){
                                         echo '<tr>
-                                               <td>'.$days[$i].'</td>
-                                               <td>'.$datas[$i].'</td>
-                                          </tr>';
+                                                <td>'.$i.'</td>
+                                                <td>'.$datas[$val.$i].'</td>
+                                            </tr>';
                                     }
                                 }
                             }
@@ -79,12 +71,37 @@
                     </tbody>
                 </table>
                 </div>
+                <div class="re-table2">
+                    <table class="d-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Number of Messages</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
+                                    $val = "d";
+                                    if($datas != NULL){
+                                        for($i= 17; $i <= $d; $i++){
+                                            echo '<tr>
+                                                    <td>'.$i.'</td>
+                                                    <td>'.$datas[$val.$i].'</td>
+                                                </tr>';
+                                        }
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
             </main>
             <div id="sidebar">
                 <div class="form-div">
-                    <form action="priGrpChatMsgRecTableWeek.php" method="get">
-                        <label for="reporttime">Select Week</label><br><br>
-                        <input type="week" name="reporttime"><br><br>
+                    <form action="pubGrpChatMsgRecTableMonth.php" method="get">
+                        <label for="reporttime">Select Month</label><br><br>
+                        <input type="month" name="reporttime"><br><br>
                         <button type="submit" name="month-submit" >Genarate</button>
                     </form>
                 </div>
@@ -92,8 +109,8 @@
                     <span>
                     <?php
                         if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
-                            echo '<p class="t-head">Number of private Group chat messages in </p>';
-                            echo '<p class="t-head">'.$sd.' - '.$ed.'</p>';
+                            echo '<p class="t-head">Number of Public Group chat messages in </p>';
+                            echo '<p class="t-head">'.$arr[0].' - '.$arr[1].'</p>';
                         }
                         else{
                             echo '<p class="t-head">No record</p>';

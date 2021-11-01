@@ -35,8 +35,7 @@
     }
     else if($grahtype == "Table"){
         // genarate table
-        //header("Location:../reportTables/priGrpChatMsgRecTableWeek.php?reporttime=".$yeMonth."");
-        echo "<script>window.close();</script>"; // if empty inputs close tab
+        header("Location:../reportTables/pubGrpChatMsgRecTableWeek.php?reporttime=".$yeMonth."");
         exit();
     }
     else if($grahtype == "Graph"){
@@ -47,7 +46,7 @@
         $week_start = new DateTime();
         $week_start->setISODate($year,$week_no);
         $sd = $week_start->format('Y-n-d');
-        $ed =  date('Y-n-d', strtotime($sd)+(86400*6)); // get next day
+        $ed = date('Y-n-d', strtotime($sd . ' +6 day'));
 
         //genarate graph using R
         exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_publicGroupChat\\R_WeekPubGrpChat.R ' . $sd . ' ' . $ed);

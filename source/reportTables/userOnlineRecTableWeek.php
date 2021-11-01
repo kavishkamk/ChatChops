@@ -46,11 +46,12 @@
                         $week_start = new DateTime();
                         $week_start->setISODate($year,$week_no);
                         $sd = $week_start->format('Y-n-d');
-                        $ed =  date('Y-n-d', strtotime($sd)+(86400*6)); // get next day
+                        $ed = date('Y-n-d', strtotime($sd . ' +6 day'));
                         $arr = explode("-",$sd);
+                        $d=cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
                         require_once "../reportPrivatePhpClass/GetPriTableData.class.php";
                         $priobj = new GetPriTableData();
-                        $datas = $priobj->getWeekOnlineUsers($arr[0], $arr[1], $arr[2]);
+                        $datas = $priobj->getWeekOnlineUsers($arr[0], $arr[1], $arr[2], $d);
                         unset($priobj);
                     }
                 ?>
@@ -66,12 +67,10 @@
                         $days = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
                             if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
                                 if($datas != NULL){
-                                    $val = "d";
                                    for($i= 0; $i < 7; $i++){
-                                       $j = $i + $arr[2];
                                         echo '<tr>
                                                <td>'.$days[$i].'</td>
-                                               <td>'.$datas[$val.$j].'</td>
+                                               <td>'.$datas[$i].'</td>
                                           </tr>';
                                     }
                                 }

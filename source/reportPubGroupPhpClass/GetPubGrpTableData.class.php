@@ -1,11 +1,11 @@
 <?php
 require_once "../phpClasses/DbConnection.class.php";
 
-    class GetPriGrpTableData extends DbConnection{
+    class GetPubGrpTableData extends DbConnection{
 
-        // this method used to each day number of private group chat messages in given month
-        public function getMonthPriGrpMsg($month, $year){
-            $sqlQ = "SELECT * FROM analizeprigrpmsgeachmonthd WHERE recYear = ? AND recMonth = ?;";
+        // this method used to each day number of public group chat messages in given month
+        public function getMonthPubGrpMsg($month, $year){
+            $sqlQ = "SELECT * FROM analizepubgrpmsgeachmonthd WHERE recYear = ? AND recMonth = ?;";
             $conn = $this->connect();
             $stmt = mysqli_stmt_init($conn);
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
@@ -24,8 +24,8 @@ require_once "../phpClasses/DbConnection.class.php";
             }
         }
 
-        // get analized records from analizeprigrpmsgeachmonthd for given week
-        public function getWeekPriChatMsg($year, $month, $sdate, $nd){
+        // get analized records from analizepubgrpmsgeachmonthd for given week
+        public function getWeekPubChatMsg($year, $month, $sdate, $nd){
             $arr = array();
             $resarr = array();
             $sdate = $sdate + 0;
@@ -33,7 +33,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 for($i = $sdate; $i < $sdate + 7; $i++){
                     $arr[] = "d".$i;
                 }
-                $sqlQ = "SELECT $arr[0], $arr[1], $arr[2], $arr[3], $arr[4], $arr[5], $arr[6] FROM analizeprigrpmsgeachmonthd WHERE recYear = ? AND recMonth = ?;";
+                $sqlQ = "SELECT $arr[0], $arr[1], $arr[2], $arr[3], $arr[4], $arr[5], $arr[6] FROM analizepubgrpmsgeachmonthd WHERE recYear = ? AND recMonth = ?;";
                 $conn = $this->connect();
                 $stmt = mysqli_stmt_init($conn);
                 if(!mysqli_stmt_prepare($stmt, $sqlQ)){
@@ -60,7 +60,7 @@ require_once "../phpClasses/DbConnection.class.php";
                 $count = 0;
                 for($i = $sdate; $i <= $nd; $i++){
                     $val = "d".$i;
-                    $resarr[] = $this->getPriGrpData($val, $year, $month);
+                    $resarr[] = $this->getPubGrpData($val, $year, $month);
                     $count++;
                 }
                 if($month == 12){
@@ -72,14 +72,14 @@ require_once "../phpClasses/DbConnection.class.php";
                 }
                 for($j = 1; $j <= (7 - $count); $j++){
                     $val = "d".$j;
-                    $resarr[] = $this->getPriGrpData($val, $year, $month);
+                    $resarr[] = $this->getPubGrpData($val, $year, $month);
                 }
                 return $resarr;
             }
         }
 
-        private function getPriGrpData($val, $year, $month){
-            $sqlQ = "SELECT $val FROM analizeprigrpmsgeachmonthd WHERE recYear = ? AND recMonth = ?;";
+        private function getPubGrpData($val, $year, $month){
+            $sqlQ = "SELECT $val FROM analizepubgrpmsgeachmonthd WHERE recYear = ? AND recMonth = ?;";
             $conn = $this->connect();
             $stmt = mysqli_stmt_init($conn);
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
@@ -105,9 +105,9 @@ require_once "../phpClasses/DbConnection.class.php";
             }
         }
 
-        // get analize record from analizeprigrpmsgeachdateh for given date
-        public function getDayPriGrpChatMsg($day){
-            $sqlQ = "SELECT * FROM analizeprigrpmsgeachdateh WHERE recDate = ?;";
+        // get analize record from analizepubgrpmsgeachdateh for given date
+        public function getDayPubGrpChatMsg($day){
+            $sqlQ = "SELECT * FROM analizepubgrpmsgeachdateh WHERE recDate = ?;";
             $conn = $this->connect();
             $stmt = mysqli_stmt_init($conn);
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
