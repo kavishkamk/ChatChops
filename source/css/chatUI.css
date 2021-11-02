@@ -10,7 +10,7 @@
     color: white;
 }
 
-#create-room-button{
+#rm{
     position: relative;
     color: black;
     bottom: 55px;
@@ -23,10 +23,62 @@
     background-color: #9acfe2;
 }
 
+#grp{
+    position: relative;
+    color: black;
+    bottom: 55px;
+    top: -40px;
+    float: right;
+    padding: 7px;
+    border-radius: 12px;
+    font-size:15px;
+    font-weight: bold;
+    background-color: #9acfe2;
+}
+
 .room{
     border: 1.5px solid #dedede;
     background-color: #12B0E8;
     border-radius: 5px;
     padding: 10px;
     margin: 0.5px 0;
+
+    text-decoration: none;
 }
+
+.pub-room-list{
+    font-weight: bold;
+    top: 350px;
+    overflow: auto;
+}
+
+.memcount{
+    font-weight: bold;
+    color: rgb(88, 88, 88);
+    font-size: 9px;
+    text-decoration: none;  
+}
+
+.img-circle{
+    text-decoration: none;
+}
+
+.groupChat-load{
+    text-decoration: none;
+}
+
+.chat-title{
+    display: grid;
+    grid-template-columns: 95% 5%;
+    align-content: center;
+    align-items: center;
+    color: #0048AA;
+    font-weight: bold;
+    font-size: 2.0rem;
+    border-radius: 0 10px 0 0;
+    box-shadow: 0 1px 3px -1px rgba(0,0,0,0.75);
+    padding: 0 20px;
+    height: 50px;
+    border-bottom: 3px solid rgba(0, 0, 0);
+    position:relative;
+  }
