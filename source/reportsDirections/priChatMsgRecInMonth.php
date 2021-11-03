@@ -43,7 +43,12 @@
     }
     else if($grahtype == "Graph"){
         // genarate graph using R
-        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_privatChat\\R_MonthPriChat.R ' . $year . ' ' . $month);
+        require_once "../R_execute/R_script_execute.class.php";
+        $robj = new R_ScriptExecute();
+        $scriptPath = 'R_privatChat\\R_MonthPriChat.R ' . $year . ' ' . $month;
+        echo $scriptPath;
+        $robj->rExecutive($scriptPath);
+        unset($robj);
         header("Location:../RPlots/privateMessageDataInGivenMonth.html"); // show plot
         exit();
     }

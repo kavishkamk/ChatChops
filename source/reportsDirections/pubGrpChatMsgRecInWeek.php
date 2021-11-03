@@ -49,7 +49,12 @@
         $ed = date('Y-n-d', strtotime($sd . ' +6 day'));
 
         //genarate graph using R
-        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_publicGroupChat\\R_WeekPubGrpChat.R ' . $sd . ' ' . $ed);
+        require_once "../R_execute/R_script_execute.class.php";
+        $robj = new R_ScriptExecute();
+        $scriptPath = 'R_publicGroupChat\\R_WeekPubGrpChat.R ' . $sd . ' ' . $ed;
+        echo $scriptPath;
+        $robj->rExecutive($scriptPath);
+        unset($robj);
         header("Location:../RPlots/publicGrpChatMsgDataInGivenWeek.html"); // show plot
         exit();
     }

@@ -45,7 +45,12 @@
     }
     else if($grahtype == "Graph"){
         // genarate graph using R
-        exec('C:\\"Program Files"\\R\\R-4.0.3\\bin\\Rscript.exe C:\\xampp\\htdocs\\chatchops\\R_publicGroupChat\\R_DayPubGrpChat.R ' . $day);
+        require_once "../R_execute/R_script_execute.class.php";
+        $robj = new R_ScriptExecute();
+        $scriptPath = 'R_publicGroupChat\\R_DayPubGrpChat.R ' . $day;
+        echo $scriptPath;
+        $robj->rExecutive($scriptPath);
+        unset($robj);
         header("Location:../RPlots/publicGroupChatMsgTimeInGivenDate.html"); // show plot
         exit();
     }
