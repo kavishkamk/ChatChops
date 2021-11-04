@@ -63,7 +63,7 @@
           <br />
           
           <br>
-          <button class="button button1" formaction="">Manage Admin Profile</button>
+          <button class="button button1" formaction="../chatchop-org/adminProfileChange.php">Manage Admin Profile</button>
           <br>
           <br>
         </form>

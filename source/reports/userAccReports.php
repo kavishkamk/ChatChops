@@ -38,7 +38,7 @@
         <main class="container">
             <div style="grid-column:1 / 4; grid-row: 1 / 2; text-align: right;">
                 <nav class = "header-bar">
-                    <h1>
+                    <h1 style="text-align: center">
                         <label for="">
                             <span class="las la-bars"></span>
                         </label>

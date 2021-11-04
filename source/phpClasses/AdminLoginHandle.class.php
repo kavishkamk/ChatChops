@@ -56,6 +56,7 @@
                                 $_SESSION['sessionId'] = $sessionVal; // set with record id to set offline time
                                 $_SESSION['fname'] = $this->fname;
                                 $_SESSION['lname'] = $this->lname; 
+                                $_SESSION['adminuname'] = $this->username;
                                 return "1"; // login success
                             }
                             else{
