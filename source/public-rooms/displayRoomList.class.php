@@ -37,7 +37,6 @@ class displayRoomList extends DbConnection{
             $count++;
         }
 
-        //fullRoomSetData($rooms_set);
         return $count;
         exit();
     }

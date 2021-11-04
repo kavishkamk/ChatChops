@@ -18,7 +18,7 @@
     float: right;
     padding: 7px;
     border-radius: 12px;
-    font-size:13px;
+    font-size:15px;
     font-weight: bold;
     background-color: #9acfe2;
 }
@@ -42,8 +42,6 @@
     border-radius: 5px;
     padding: 10px;
     margin: 0.5px 0;
-
-    text-decoration: none;
 }
 
 .pub-room-list{
@@ -54,7 +52,7 @@
 
 .memcount{
     font-weight: bold;
-    color: rgb(88, 88, 88);
+    color: rgb(43, 42, 42);
     font-size: 9px;
     text-decoration: none;  
 }
@@ -82,3 +80,9 @@
     border-bottom: 3px solid rgba(0, 0, 0);
     position:relative;
   }
+
+.room:hover,
+.room:active{
+    cursor: pointer;
+    background-color: rgba(58, 202, 228, 0.918)
+}
