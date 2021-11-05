@@ -86,3 +86,17 @@
     cursor: pointer;
     background-color: rgba(58, 202, 228, 0.918)
 }
+
+.join-room{
+    position: absolute;
+    top: 5px;
+    left: 375px;
+    color: black;
+    float: center;
+    padding: 7px;
+    border-radius: 12px;
+    font-size:15px;
+    font-weight: bold;
+    background-color: #9acfe2;
+    width: 100px;
+}

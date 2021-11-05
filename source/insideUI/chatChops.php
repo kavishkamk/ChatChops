@@ -1,5 +1,6 @@
 <?php
     require "header.php";
+    
 ?>
 
 <!-- This is a chat interface -->
@@ -12,19 +13,25 @@
             <!-- ------------------------------>
             <div class="chat-title">
                 <span id="reserver-name"></span> <!-- to set reserver name -->
+                
                 <i class="fas fa-ellipsis-v"></i> <!-- list icon -->
+
+                <!-- public room join button -->
+                <button type="button" onclick= 'pubRoom_join()' class="join-room" id="join-room-btn" style="visibility:hidden;">Join</button>
             </div>
 
             <div class="chat-message-list" id="pri-chat-message-list">
             </div>
 
-            <div class="chat-body">
-                <form class="chat-form" onkeydown="return event.key != 'Enter';">
+            <div class="chat-body" id="chat-form">
+                <form class="chat-form"  onkeydown="return event.key != 'Enter';">
                     <input type="hidden" id="senderId" name="senderId" value="<?php echo ''.$_SESSION["userid"].'';?>"> <!--sender id-->
                     <input type="hidden" id="msgType" name="msgType" value=""> <!-- set message type -->
-                    <input type="text" id="msg" name="msg" placeholder="type a message"/> <!-- get input message -->
-                    <!-- button for stop refresh page when send message -->
-                    <button type="button" id="send-msg" name="send-msg" class="send-msg"><i class='fas fa-paper-plane'></i></button>
+                    <input type="hidden" id="roomId" name="roomId" value=""> <!-- set room id -->
+
+                    <!--------------->
+                    <input type="text" id="msg" name="msg" placeholder="type a message"/>
+                    <button type="button" id="send-msg" name="send-msg" class="send-msg" style="visibility: visible;"><i class="fas fa-paper-plane"></i></button>  
                 </form>
             </div>
         
@@ -55,11 +62,8 @@
 
             <div class= "pub-room-list" style="min-width: 400px; max-height: 225px; overflow-x: visible; overflow-y: scroll;">
                 <?php
-                    
-                    // <a href> to each div to load room into chat ui in the middle
 
                 include_once "../public-rooms/displayRoomList.class.php";
-                
                 $roomObj = new displayRoomList();
                 $count = $roomObj->roomCount();
                 
@@ -73,12 +77,17 @@
                 }
                 else{
                     $arr = $roomObj-> fullRoomSetData();
+                    /*
+                    echo "<pre>";
+                    print_r($arr);
+                    echo "</pre>";*/
+
                     for($i=0; $i<$count; $i++){
                         $roomData = $arr[$i];
                         $roomname = $arr[$i]['name'];
                         $icon = $arr[$i]['icon'];
                         $memCount = $roomObj-> getMemberCount($roomname);
-
+                        $roomid = $arr[$i]['id'];
                         $roomDataJSON = json_encode($roomData);
 
                         echo "<div onclick= 'setPubRoomData($roomDataJSON)' class= 'room active' id = '.$roomname.'>
@@ -88,10 +97,9 @@
                         </div>";
                         
                     }
+                    unset($roomObj);
                 }
-                unset($roomObj);
-
-
+                
                 ?>
             </div>
         
@@ -141,7 +149,61 @@ $(document).ready(function(){
 function setPubRoomData(roomData)
 {
     document.getElementById("reserver-name").textContent = roomData.name;
+    document.getElementById("msgType").value = "pubg";
+    document.getElementById("roomId").value = roomData.id;
+    document.getElementById('pri-chat-message-list').innerHTML = "";
+
+    $.ajax({
+        method: "POST",
+        url: "../public-rooms/pubRoom_join_sendMsg_select.php",
+        data: { check_membership: "set",
+            roomData: roomData,
+            roomid: roomData.id,
+            userid: <?php echo ''.$_SESSION["userid"].'';?>
+        },
+        success: function(result){
+            var res = JSON.parse(result);
+            pubRoom_join_sendMsg_select(res);
+        }
+        
+    });
 }
+    
+function pubRoom_join_sendMsg_select(result)
+{
+    var sendButton = document.getElementById('send-msg');
+    var joinButton = document.getElementById('join-room-btn');
+
+    if(result == "0"){
+        sendButton.style.visibility = 'hidden';
+        joinButton.style.visibility = 'visible';
+        
+    }
+    else if(result == "sqlerror"){
+        alert("Something went wrong");
+        sendButton.style.visibility = 'visible';
+        joinButton.style.visibility = 'hidden';
+    }
+    else{
+        sendButton.style.visibility = 'visible';
+        joinButton.style.visibility = 'hidden';
+    }
+}
+
+function pubRoom_join()
+{
+    var sendButton = document.getElementById('send-msg');
+    var joinButton = document.getElementById('join-room-btn');
+
+    sendButton.style.visibility = 'visible';
+
+    //send button visible if join successful
+    //else show alert and set all to default
+    joinButton.style.visibility = 'hidden';
+
+
+}
+
 </script>
 
 

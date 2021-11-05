@@ -27,16 +27,16 @@ class publicRoomChat extends DbConnection {
         $active = 1;
         mysqli_stmt_bind_param($stmt, "iii", $active, $roomid, $userid);
         mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
 
-        mysqli_stmt_store_result($stmt);
-        $resultcheck = mysqli_stmt_num_rows($stmt);
-
-        if($resultcheck == 0){
-            return "0";
+        if($row = mysqli_fetch_assoc($res)){
+            $this-> connclose($stmt, $conn);
+            return $row['member_id'];
             exit();
         }else{
-            $row = mysqli_fetch_assoc($stmt);
-            return $row['member_id'];
+            $this-> connclose($stmt, $conn);
+            return "0";
+            exit();
         }
         
     }

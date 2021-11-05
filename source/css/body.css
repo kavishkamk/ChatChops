@@ -536,3 +536,8 @@ h1 {
 .send-msg {
   height: 40px;
 }
+
+.fas fa-ellipsis-v{
+  position: absolute;
+  float: right;
+}

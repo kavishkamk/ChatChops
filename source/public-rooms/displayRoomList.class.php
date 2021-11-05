@@ -36,7 +36,7 @@ class displayRoomList extends DbConnection{
             $this->rooms_set[$count] = array("id"=>$id, "name"=>$name, "time"=>$time, "bio"=>$bio, "icon"=>$icon);
             $count++;
         }
-
+        $this->connclose($stmt, $conn);
         return $count;
         exit();
     }
@@ -65,6 +65,7 @@ class displayRoomList extends DbConnection{
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $row = mysqli_fetch_assoc($result);
+        $this->connclose($stmt, $conn);
         return $row['group_id'];
     }
 
@@ -94,6 +95,7 @@ class displayRoomList extends DbConnection{
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
         $resultcheck = mysqli_stmt_num_rows($stmt);
+        $this->connclose($stmt, $conn);
         return $resultcheck;
 
     }

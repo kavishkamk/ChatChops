@@ -1,6 +1,6 @@
 <?php
 
-if(isset($_POST['check-membership']))
+if(isset($_POST['check_membership']))
 {
     require "publicRoomChat.class.php";
 
