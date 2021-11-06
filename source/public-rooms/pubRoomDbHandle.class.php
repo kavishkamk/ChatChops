@@ -45,6 +45,7 @@ class pubRoomDbHandle extends DbConnection{
         }
     }
 
+    //check whether the given name is free or already available
     public function checkUniqueName($name)
     {
         $sqlQ = "SELECT group_id FROM public_group WHERE group_name = ?;";

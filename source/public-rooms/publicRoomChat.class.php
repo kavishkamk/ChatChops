@@ -40,6 +40,90 @@ class publicRoomChat extends DbConnection {
         }
         
     }
+    
+    
+    //get the room id of the given room name
+    public function getRoomId($name)
+    {
+        $sqlQ = "SELECT group_id FROM public_group WHERE group_name = ?;";
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "s", $name);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        
+        if($row = mysqli_fetch_assoc($res)){
+            $this-> connclose($stmt, $conn);
+            return $row['group_id'];
+            exit();
+        }else{
+            $this-> connclose($stmt, $conn);
+            return "0";
+            exit();
+        }
+    }
+
+
+    //insert new member details into DB
+    public function newMemberJoin($userid, $roomname)
+    {
+        //pub grp member
+        //pub grp member status
+        //pub grp member- mem status map
+
+        $roomid = $this-> getRoomId($roomname);
+        $sqlQ = "INSERT INTO pub_grp_member(group_id, user_id) VALUES(?,?);";
+        
+        $joined = date("Y-n-d H:i:s");
+        $status = 1;
+        
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+        
+        if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ii", $roomid, $userid);
+        mysqli_stmt_execute($stmt);
+        
+        //get the member id
+        $memberId = mysqli_stmt_insert_id($stmt);
+        
+        $sqlQ1 = "INSERT INTO pub_grp_mem_status(DateAndTime, active) VALUES(?,?);";
+        if(!mysqli_stmt_prepare($stmt, $sqlQ1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "si", $joined, $status);
+        mysqli_stmt_execute($stmt);
+        
+        //get the status id
+        $statusId = mysqli_stmt_insert_id($stmt);
+        
+        $sqlQ2 = "INSERT INTO pub_group_mem_status_map(status_id, member_id) VALUES(?,?);";
+        if(!mysqli_stmt_prepare($stmt, $sqlQ2)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ii", $statusId, $memberId);
+        mysqli_stmt_execute($stmt);
+
+        $this->connclose($stmt, $conn);
+        return $memberId;
+        exit();
+    }
+
 
     //connection closing
     private function connclose($stmt, $conn)

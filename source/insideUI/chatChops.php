@@ -19,17 +19,25 @@
                 <!-- public room join button -->
                 <button type="button" onclick= 'pubRoom_join()' class="join-room" id="join-room-btn" style="visibility:hidden;">Join</button>
             </div>
-
+            
+            <div class= "alert-msg" id = "alert-msg" style="visibility:hidden;"></div>
             <div class="chat-message-list" id="pri-chat-message-list">
+                
             </div>
 
             <div class="chat-body" id="chat-form">
                 <form class="chat-form"  onkeydown="return event.key != 'Enter';">
                     <input type="hidden" id="senderId" name="senderId" value="<?php echo ''.$_SESSION["userid"].'';?>"> <!--sender id-->
                     <input type="hidden" id="msgType" name="msgType" value=""> <!-- set message type -->
-                    <input type="hidden" id="roomId" name="roomId" value=""> <!-- set room id -->
 
-                    <!--------------->
+                    <!-- when select a public chat room -->
+                    <input type="hidden" id="roomId" name="roomId" value=""> <!-- set room id -->
+                    <input type="hidden" id="roomMemberId" name="roomMemberId" value=""> <!-- set room member id -->
+
+
+                    <!-- when select a private group -->
+                    <!----------------------------------->
+
                     <input type="text" id="msg" name="msg" placeholder="type a message"/>
                     <button type="button" id="send-msg" name="send-msg" class="send-msg" style="visibility: visible;"><i class="fas fa-paper-plane"></i></button>  
                 </form>
@@ -155,8 +163,9 @@ function setPubRoomData(roomData)
 
     $.ajax({
         method: "POST",
-        url: "../public-rooms/pubRoom_join_sendMsg_select.php",
-        data: { check_membership: "set",
+        url: "../public-rooms/ajax-handle.php",
+        data: {
+            check_membership: "set",
             roomData: roomData,
             roomid: roomData.id,
             userid: <?php echo ''.$_SESSION["userid"].'';?>
@@ -173,36 +182,85 @@ function pubRoom_join_sendMsg_select(result)
 {
     var sendButton = document.getElementById('send-msg');
     var joinButton = document.getElementById('join-room-btn');
+    var roomMemberId = document.getElementById("roomMemberId");
 
     if(result == "0"){
         sendButton.style.visibility = 'hidden';
         joinButton.style.visibility = 'visible';
-        
+        roomMemberId.value = null;
     }
     else if(result == "sqlerror"){
         alert("Something went wrong");
         sendButton.style.visibility = 'visible';
         joinButton.style.visibility = 'hidden';
+        roomMemberId.value = null;
     }
     else{
         sendButton.style.visibility = 'visible';
         joinButton.style.visibility = 'hidden';
+        roomMemberId.value = result;
+        //alert("member id = " + result);
     }
 }
 
 function pubRoom_join()
 {
+    var room = document.getElementById("reserver-name").textContent;
     var sendButton = document.getElementById('send-msg');
     var joinButton = document.getElementById('join-room-btn');
 
-    sendButton.style.visibility = 'visible';
 
-    //send button visible if join successful
-    //else show alert and set all to default
-    joinButton.style.visibility = 'hidden';
+    $.ajax({
+        method: "POST",
+        url: "../public-rooms/ajax-handle.php",
+        data: {
+            new_member: "set",
+            roomname: room,
+            userid: <?php echo ''.$_SESSION["userid"].'';?>
+        },
+        success: function(result) {
+            var res = JSON.parse(result);
+
+            //if join successful send button visible, welcome message show
+            if(res != "sqlerror"){
+                var welcome ="Welcome to '" + room + "' chat room!";
+                displayMsg(welcome, 1);
+            }
+            //else show error msg and set all to default
+            else{
+                var msg = "Something went wrong! Try again later.";
+                displayMsg(msg, 0);
+            }
+            sendButton.style.visibility = 'visible';
+            joinButton.style.visibility = 'hidden';
+        }
+    });
+
 
 
 }
+
+//display the welcome to chat room message
+function displayMsg(msg, type)
+{
+    var alertmsg = document.getElementById('alert-msg');
+    alertmsg.innerHTML = msg;
+
+    if(type == 0){
+        alertmsg.style.backgroundColor = "red";
+    }
+    alertmsg.style.visibility = 'visible';
+    setTimeout(hideMsg, 3000, msg);
+}
+
+//hide the welcome to chat room message
+function hideMsg(msg)
+{
+    var alertmsg = document.getElementById('alert-msg');
+    alertmsg.innerHTML = msg;
+    alertmsg.style.visibility = 'hidden';
+}
+
 
 </script>
 

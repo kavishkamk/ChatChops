@@ -100,3 +100,18 @@
     background-color: #9acfe2;
     width: 100px;
 }
+
+.alert-msg{
+    position: absolute;
+    z-index: 1;
+    background-color: #21cc63;
+    padding: 7px;
+    border-radius: 12px;
+    font-size:15px;
+    font-weight: bold;
+    width: auto;
+    justify-content: center;
+    text-align: center;
+    top: 10px;
+    left: 500px;
+}
