@@ -63,9 +63,11 @@
 
                 if($row = mysqli_fetch_assoc($result)){
                     $this->emailStatus = $row['active_status'];
+					$this->connclose($stmt, $conn);
                     return $row['otpCode'];
                 }
                 else{
+					$this->connclose($stmt, $conn);
                     return "nouser";
                     exit();
                 }
@@ -79,6 +81,7 @@
             $stmt = mysqli_stmt_init($conn);
 
             if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+				$this->connclose($stmt, $conn);
                 return "sqlerror";
                 exit();
             }
@@ -86,6 +89,7 @@
                 $val = 1;
                 mysqli_stmt_bind_param($stmt, "is", $val, $this->username);
                 mysqli_stmt_execute($stmt);
+				$this->connclose($stmt, $conn);
                 return "success";
                 exit();
             }
