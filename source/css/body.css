@@ -444,6 +444,11 @@ h1 {
   font-size: 2rem;
 }
 
+/*
+.chat-message-list {
+  height: 80%;
+}*/
+
 .message-content {
   display: grid;
 }
@@ -475,4 +480,9 @@ h1 {
 
 .send-msg {
   height: 40px;
+}
+
+.fas fa-ellipsis-v{
+  position: absolute;
+  float: right;
 }

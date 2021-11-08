@@ -43,6 +43,7 @@ class Chat implements MessageComponentInterface {
 
             if($msgTypes == "pubg"){
                 echo "this is public group";
+                multicast($data);
             }
             else if($msgTypes == "prig"){
                echo "this is private group";
@@ -51,9 +52,12 @@ class Chat implements MessageComponentInterface {
                $this->privateMsgReserverConn($data);
             }
         }
-        
     }
-
+  
+    public function multicast($msg) {
+        foreach ($this->clients as $client) $client->send($msg);
+    }
+      
     public function onClose(ConnectionInterface $conn) {
         // The connection is closed, remove it, as we can no longer send it messages
         $this->clients->detach($conn);

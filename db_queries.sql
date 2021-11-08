@@ -52,7 +52,7 @@ CREATE TABLE pub_Grp_Mem_Status (
 
 -- public group member
 CREATE TABLE pub_Grp_Member (
-	member_id int NOT NULL,
+	member_id int AUTO_INCREMENT,
     group_id int NOT NULL,
     user_id int NOT NULL,
     CONSTRAINT Pk_pubGrpMember PRIMARY KEY(member_id, group_id, user_id)
@@ -441,6 +441,12 @@ ADD onlineStatus BOOLEAN NOT NULL DEFAULT 0;
 
 ALTER TABLE friend_request
 ADD friendStatus BOOLEAN NOT NULL DEFAULT 0;
+
+-- public group column changed
+ALTER TABLE public_group DROP COLUMN group_icon;
+
+ALTER TABLE public_group
+ADD icon_link VARCHAR(60) NOT NULL;
 
 -- added column to find private message reserver and add forieng key with users table
 
