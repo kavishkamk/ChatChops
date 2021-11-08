@@ -22,6 +22,7 @@ h1 {
   display: grid;
   grid-template-columns: 30% 40% 30%;
   grid-template-rows: 50% 50%;
+   position: relative;
 }
 
 .main-grid {
@@ -228,11 +229,13 @@ h1 {
 }
 
 #private-chat {
-  background-color: greenyellow;
+  background-color: white;
 }
 
 #chat-gui {
   background-color: white;
+  padding-bottom: 20px;
+  position: relative;
 }
 
 #private-group {
@@ -255,65 +258,6 @@ h1 {
   height: 50px;
   border-bottom: 3px solid rgba(0, 0, 0);
   position:relative;
-}
-
-.friend-conversation{
-  display:grid;
-  grid-template-columns: 40px 1fr max-content;
-  grid-gap: 10px;
-  color: #ddd;
-  font-size: 1.3rem;
-  border-bottom: 1px solid black;
-  padding: 5px 5px 5px 15px;
-  align-items: center;
-}
-
-.friend-conversation.active,
-.friend-conversation:hover {
-  background-color: #002c88;
-}
-
-.friend-conversation:hover {
-  cursor: pointer;
-}
-
-.friend-conversation > img {
-  height: 40px;
-  border-radius: 100%;
-}
-
-.title-text {
-  font-weight: bold;
-  color: #eee;
-  padding-left: 5px;
-  white-space: nowrap;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-}
-
-.friend-accounts {
-  position: relative;
-  align-items: center; /* left and right */
-  justify-content: center; /* up and down */
-}
-
-.request-btn {
-  height: 25px;
-  width: 100px;
-  color:black;
-  font-weight: bold;
-  margin-right: 30px;
-}
-
-#frinds, #friend-request {
-  overflow-y: scroll;
-}
-
-.search-bar {
-  text-align: center;
-  color: white;
-  font-weight: bold;
-  font-size: 2rem;
 }
 
 .friend-conversation{
@@ -387,7 +331,6 @@ h1 {
   flex-direction: column;
   padding: 10px 20px 0 20px;
   overflow-y: scroll;
-  height: 80%;
 }
 
 .message-row{
@@ -436,7 +379,7 @@ h1 {
   align-content: center;
   align-items: center;
   grid-gap: 15px;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 10px 0;
   border-top: 1px solid rgba(0,0,0,0.25);
   padding-left: 42px;
   padding-right: 22px;
@@ -501,9 +444,10 @@ h1 {
   font-size: 2rem;
 }
 
-/* .fas.fa-circle, .pl-list__item--complete .fas {
-  color: #00d324;
-} */
+/*
+.chat-message-list {
+  height: 80%;
+}*/
 
 .message-content {
   display: grid;
@@ -525,6 +469,7 @@ h1 {
 }
 
 .chat-body {
+  position: absolute;
   width: 100%;
   bottom: 0;
 }

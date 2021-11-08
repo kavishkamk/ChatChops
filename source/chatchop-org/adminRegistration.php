@@ -1,3 +1,22 @@
+<?php 
+    session_start();
+
+    if(!isset($_SESSION['adminid'])){
+         header("Location:../chatchop-org/adminlogin.php?adminlogstat=logoutok"); // no session
+         exit();
+    }
+    else{
+        require_once "../phpClasses/AdminSessionHandle.class.php";
+        $sessObj = new AdminSessionHandle();
+        $sessRes = $sessObj->checkSession($_SESSION['sessionId'], $_SESSION['adminid']); // invalid session
+        unset($sessObj);
+        if($sessRes != "1"){
+            header("Location:../chatchop-org/adminlogin.php?adminlogstat=logoutok"); // no session
+            exit();
+        }
+    }
+?>
+
 <!-- this is for admin registration -->
 <!DOCTYPE HTML>
 <html lang="en">
@@ -30,10 +49,10 @@
                         <label for="firstname" class="label-title" >First Name</label><br>
                         <?php 
                             if(isset($_GET['firstname'])){
-                                echo '<input type="text" name="firstname" placeholder="enter your first name" value="'.$_GET['firstname'].'" class="form-input" required>';
+                                echo '<input type="text" name="firstname" placeholder="enter your first name" value="'.$_GET['firstname'].'" class="form-input">';
                             }
                             else{
-                                echo '<input type="text" name="firstname" placeholder="enter your first name" class="form-input" required>';
+                                echo '<input type="text" name="firstname" placeholder="enter your first name" class="form-input">';
                             }
                         ?>
                     </div>
@@ -42,10 +61,10 @@
                         <label for="lastname" class="label-title">Last Name</label><br>
                         <?php
                         if(isset($_GET['lastname'])){
-                            echo '<input type="text" name="lastname" placeholder="enter your last name" value="'.$_GET['lastname'].'" class="form-input" required>';
+                            echo '<input type="text" name="lastname" placeholder="enter your last name" value="'.$_GET['lastname'].'" class="form-input">';
                         }
                         else{
-                            echo '<input type="text" name="lastname" placeholder="enter your last name" class="form-input" required>';
+                            echo '<input type="text" name="lastname" placeholder="enter your last name" class="form-input">';
                         }
                         ?>
                     </div>
@@ -85,9 +104,9 @@
                 </div>
                 <!-- form footer -->
                 <div class="form-footer">
-                <form method="post" action="">
-                    <button type="submit" name="back-submit" class="back-button">
-                        Back..
+                <form>
+                    <button  formaction="../chatchop-dashboard/chatadmin.php" class="back-button">
+                            Back..
                     </button>  
                 </form>
 

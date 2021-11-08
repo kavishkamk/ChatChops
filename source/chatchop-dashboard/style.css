@@ -1,0 +1,211 @@
+:root {
+  --main-radius: 1px;
+  --main-padding: 5px;
+}
+
+li {
+  list-style: none;
+}
+
+.container {
+  display: grid;
+  height: 95vh;
+  grid-template-columns: 1.5fr 6fr;
+  grid-template-rows: 0.2fr 4fr 0.2fr;
+  grid-template-areas:
+    "nav nav"
+    "sidebar main"
+    "footer footer";
+  grid-gap: 0.2rcm;
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  /* text-transform: uppercase;*/
+  font-size: 16px;
+  color: #e6f3f3cc;
+  /*text-align: center;*/
+}
+nav {
+  background-color: rgb(14, 89, 112);
+  grid-area: nav;
+  border-radius: var(--main-radius);
+}
+main {
+  background-color: rgb(37, 183, 219);
+  grid-area: main;
+  border-radius: var(--main-radius);
+  padding-top: var(--main-padding);
+  text-align: center;
+}
+
+.report-main{
+  text-align: left;
+}
+
+#sidebar {
+  background-color: rgb(25, 129, 155);
+  grid-area: sidebar;
+  border-radius: var(--main-radius);
+  padding-top: var(--main-padding);
+  text-align: center;
+}
+footer {
+  background-color: rgb(14, 89, 112);
+  grid-area: footer;
+  border-radius: var(--main-radius);
+  padding-top: var(--main-padding);
+  text-align: center;
+}
+p.b {
+  text-align: right;
+}
+p.a {
+  text-align: right;
+}
+img {
+  border-radius: 50%;
+}
+
+.report-type {
+  display: grid;
+  grid-template-columns: 40% 5% 50% 25%;
+  padding: 5px 20px;
+}
+
+.report-lable {
+  background-color: white;
+  grid-column: 1 / 2;
+  color: black;
+  font-weight: bold;
+  padding: 4px;
+  border-radius: 5px;
+  border-right: 20px;
+}
+
+.report-input {
+  grid-column: 3 / 4;
+}
+
+.report-time {
+  float: right;
+}
+
+.button {
+  border: none;
+  color: white;
+  padding: 12px 65px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 6px 1px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.button1 {
+  background-color: rgb(231, 240, 235);
+  color: black;
+  border: 2px solid #21c480;
+  padding: 5px 20px;
+}
+
+.button1:hover {
+  background-color: #21c480;
+  color: white;
+}
+.button2 {
+  background-color: white;
+  color: black;
+  border: 2px solid #d41740;
+}
+
+.button2:hover {
+  background-color: #d41740;
+  color: white;
+}
+.button3 {
+  background-color: white;
+  color: black;
+  border: 2px solid #f8e90f;
+}
+
+.button3:hover {
+  background-color: #f8e90f;
+  color: white;
+}
+
+.report-input > input{
+  background-color: blue;
+  margin: 0 5px;
+}
+
+.report-disply {
+  margin: 20px 20px;
+}
+
+.goption {
+  color: black;
+  margin: 10px 10px 10px 0;
+}
+
+#Type {
+  width: 100px;
+}
+
+#chooes-report {
+  color:black;
+  margin : 10px 10px 10px 0;
+}
+
+.report-details-area  {
+  display: grid;
+  grid-template-columns: 50% 48%;
+}
+
+.report-explane {
+  background-color: white;
+  color: black;
+  text-align: center;
+  margin: 20px 20px;
+}
+
+#report-discription {
+  text-align: left;
+  font-weight: normal;
+}
+
+#report-head {
+  margin: 5px 0;
+}
+
+#report-discription {
+  margin: 5px 10px 5px 10px;
+}
+
+.system-analize {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.analize-btn{
+  margin: 0 30px;
+  text-align: right;
+}
+
+.loding-analize{
+  color: red;
+  float: right;
+  margin-right: 100px;
+}
+
+.success-analize{
+  color: green;
+  float:right;
+  margin-right: 100px;
+}
+
+.log-out-btn {
+  background-color: white;
+  float: right;
+  padding: 10px 30px;
+  font-weight: bold;
+}

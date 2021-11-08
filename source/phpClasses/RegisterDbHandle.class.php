@@ -1,6 +1,5 @@
 <?php
-
- require_once "DbConnection.class.php";
+require_once "DbConnection.class.php";
    
    class RegisterDbHandle extends DbConnection {
 
@@ -130,6 +129,4 @@
             mysqli_stmt_close($stmt);
             mysqli_close($conn);
         }
-        
-
    }

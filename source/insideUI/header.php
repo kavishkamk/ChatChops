@@ -40,8 +40,6 @@
 		<script src="https://unpkg.com/cropperjs"></script>
         <script src="https://kit.fontawesome.com/4ad1efa998.js" crossorigin="anonymous"></script>
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-        
-        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
         <style>
         body {
             font-family: 'Roboto';

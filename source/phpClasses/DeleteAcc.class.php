@@ -54,4 +54,23 @@
             }
         }
 
+        // delete account
+        public function deleteAdminAcc($uid){
+            $sqlQ = "UPDATE admins SET actSTatus = ?, online_status = ? WHERE admin_id = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+    
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                return "sqlerror";
+                exit();
+            }
+            else{
+                $val = 1; $val1 = 0;
+                mysqli_stmt_bind_param($stmt, "iii", $val1, $val1, $uid);
+                mysqli_stmt_execute($stmt);
+                return "1"; // success
+                exit();
+            }
+        }
+
     }

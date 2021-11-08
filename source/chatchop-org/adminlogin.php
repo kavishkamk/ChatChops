@@ -36,6 +36,14 @@
                             echo '<p class="logerr">Unauthorized Access</p>';
                         }
                     }
+                    else if(isset($_GET['otpstatus'])){
+                        if($_GET['otpstatus'] == "deleteacc"){
+                            echo '<p class="logerr">Deleted Account</p>';
+                        }
+                        else{
+                            echo '<p class="logerr">Error</p>';
+                        }
+                    }
                     else{
                         echo '<p class="logok"> . </p>';
                     }
