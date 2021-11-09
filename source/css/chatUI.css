@@ -102,7 +102,7 @@
 }
 
 .alert-msg{
-    position: absolute;
+    /*position: absolute;*/
     z-index: 1;
     background-color: #21cc63;
     padding: 7px;
@@ -112,6 +112,5 @@
     width: auto;
     justify-content: center;
     text-align: center;
-    top: 10px;
-    left: 500px;
+    top:0;
 }

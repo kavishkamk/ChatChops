@@ -79,6 +79,13 @@ class publicRoomChat extends DbConnection {
         //pub grp member- mem status map
 
         $roomid = $this-> getRoomId($roomname);
+
+        $re = $this-> isMemberOfRoom($userid, $roomid);
+        if($re != "0" && $re != "sqlerror"){
+            return "sqlerror";
+            exit();
+        }
+
         $sqlQ = "INSERT INTO pub_grp_member(group_id, user_id) VALUES(?,?);";
         
         $joined = date("Y-n-d H:i:s");

@@ -56,7 +56,7 @@
             <div class= "alert-msg" id = "alert-msg" style="visibility:hidden;"></div>
           
             <div class="chat-body" id="chat-form">
-            <div class="chat-message-list" id="pri-chat-message-list">
+            <div class="chat-message-list" id="pri-chat-message-list" style="max-height: 500px; overflow-y: scroll;">
                 <!-- <div class="message-row your-message">
                                 <div class="message-content">
                                     <div class="message-text">kkjfkg  fghh  ghfogi</div>
@@ -118,7 +118,7 @@
                 </a>
             </div>
 
-            <div class= "pub-room-list" style="min-width: 400px; max-height: 225px; overflow-x: visible; overflow-y: scroll;">
+            <div class= "pub-room-list" style="min-width: 400px; max-height: 225px; overflow-y: scroll;">
                 <?php
 
                 include_once "../public-rooms/displayRoomList.class.php";
@@ -388,7 +388,11 @@ function pubRoom_join()
             userid: <?php echo ''.$_SESSION["userid"].'';?>
         },
         success: function(result) {
-            var res = JSON.parse(result);
+            try{
+                var res = JSON.parse(result);
+            }catch(error){
+                alert(result);
+            }
 
             //if join successful send button visible, welcome message show
             if(res != "sqlerror"){
