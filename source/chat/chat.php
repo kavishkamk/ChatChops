@@ -19,12 +19,14 @@ class Chat implements MessageComponentInterface {
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
 
-        echo "New connection! ({$conn->resourceId})\n";
+        $d = $this-> timeshow();
+        echo $d. "New connection! ({$conn->resourceId})\n";
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
         $numRecv = count($this->clients) - 1;
-        echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
+        $d = $this-> timeshow();
+        echo sprintf($d.'Connection %d sending message "%s" to %d other connection%s' . "\n"
             , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
         $data = json_decode($msg, true);
@@ -68,11 +70,14 @@ class Chat implements MessageComponentInterface {
         unset($this->clientsWithId[$onCloseUserId]); // remove connction from privat connection list
         $this->updateDBuserOffline($onCloseUserId);
         $this->broadcastOnlineStatus($val0, $onCloseUserId); // to broad cast user offline status
-        echo "Connection {$conn->resourceId} has disconnected\n";
+
+        $d = $this-> timeshow();
+        echo $d."Connection {$conn->resourceId} has disconnected\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {
-        echo "An error has occurred: {$e->getMessage()}\n";
+        $d = $this-> timeshow();
+        echo $d."An error has occurred: {$e->getMessage()}\n";
 
         $conn->close();
     }
@@ -97,7 +102,8 @@ class Chat implements MessageComponentInterface {
             $resConn->send(json_encode($senddata));
         }
         else{
-            echo "offline user";
+            $d = $this-> timeshow();
+            echo $d."offline user";
         }
     }
 
@@ -131,5 +137,11 @@ class Chat implements MessageComponentInterface {
         $onoffObj = new \OnlineOffline();
         $onoffObj->setOfflineStatusInDB($userId);
         unset($onoffObj);
+    }
+
+    private function timeshow()
+    {
+        $d = date("Y-n-d H:i:s");
+        return "$d - ";
     }
 }
