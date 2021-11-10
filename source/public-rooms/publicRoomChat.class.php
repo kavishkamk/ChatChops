@@ -1,6 +1,6 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'].'/chatchops/source/phpClasses/DbConnection.class.php';
+require_once '../phpClasses/DbConnection.class.php';
 
 class publicRoomChat extends DbConnection {
     
@@ -131,6 +131,15 @@ class publicRoomChat extends DbConnection {
         exit();
     }
 
+
+    //store the sending messages in the DB
+    public function storeMsgs($memId, $msg)
+    {
+        //public group chat
+        //public group chat- member map
+        /***************************** */
+        return 1;
+    }
 
     //connection closing
     private function connclose($stmt, $conn)

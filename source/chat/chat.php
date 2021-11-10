@@ -5,6 +5,7 @@ use Ratchet\ConnectionInterface;
 
 require dirname(__DIR__) . "/phpClasses/PrivateChatHandle.class.php";
 require dirname(__DIR__) . "/phpClasses/OnlineOffline.class.php";
+require dirname(__DIR__) . "/public-rooms/publicRoomChat.class.php";
 
 class Chat implements MessageComponentInterface {
     protected $clients;
@@ -44,11 +45,11 @@ class Chat implements MessageComponentInterface {
             $msgTypes = $data['msgType']; // get message type
 
             if($msgTypes == "pubg"){
-                echo "this is public group";
-                multicast($data);
+                //multicast($data);
+                $this-> send_pubg_msgs($data);
             }
             else if($msgTypes == "prig"){
-               echo "this is private group";
+               echo "this is private group <br>";
             }
             else if($msgTypes == "pri"){
                $this->privateMsgReserverConn($data);
@@ -57,7 +58,7 @@ class Chat implements MessageComponentInterface {
     }
   
     public function multicast($msg) {
-        foreach ($this->clients as $client) $client->send($msg);
+        foreach ($this->clientsWithId as $client) $client->send($msg);
     }
       
     public function onClose(ConnectionInterface $conn) {
@@ -103,9 +104,31 @@ class Chat implements MessageComponentInterface {
         }
         else{
             $d = $this-> timeshow();
-            echo $d."offline user";
+            echo $d."offline user <br>";
         }
     }
+
+    //send public chat room message to all the users
+    private function send_pubg_msgs($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['senderId'] = $details['senderId'];
+        $data['username'] = $details['username'];
+        $data['propic'] = $details['propic'];
+        $data['roomId'] = $details['roomId'];
+        $data['roomname'] = $details['roomname'];
+        $data['roomMemberId'] = $details['roomMemberId'];
+        $data['msg'] = $details['msg'];
+        
+        $pubObj = new \publicRoomChat();    //store messages in the DB
+        $res = $pubObj->storeMsgs($details['roomMemberId'], $details['msg']);
+
+        foreach ($this->clientsWithId as $client) {
+            $client->send(json_encode($data));
+        }
+
+    }
+
 
     // send online or offliene status
     private function broadcastOnlineStatus($val, $newConnectionId){

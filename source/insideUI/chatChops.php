@@ -77,13 +77,17 @@
                 <form class="chat-form"  onkeydown="return event.key != 'Enter';">
                     <input type="hidden" id="senderId" name="senderId" value="<?php echo ''.$_SESSION["userid"].'';?>"> <!--sender id-->
                     <input type="hidden" id="msgType" name="msgType" value=""> <!-- set message type -->
+                    <input type="hidden" id="username" name="username" value="<?php echo ''.$_SESSION["uname"].'';?>"> <!-- set username -->
+                    <input type="hidden" id="propic" name="propic" value="<?php echo ''.$_SESSION['profileLink'].'';?>"> <!-- set profile pic -->
 
                     <!-- when select a public chat room -->
                     <input type="hidden" id="roomId" name="roomId" value=""> <!-- set room id -->
                     <input type="hidden" id="roomMemberId" name="roomMemberId" value=""> <!-- set room member id -->
-
+                    <input type="hidden" id="roomname" name="roomname" value=""> <!-- set room name -->
 
                     <!-- when select a private group -->
+                    
+                    <!-- when select a friend -->
                     <input type="hidden" id="reseverId" name="reseverId" value=""> <!--reserver id-->
                     <input type="hidden" id="profilepiclink" name="profilepiclink" value=""> <!--profie pic link-->
                     <!----------------------------------->
@@ -207,30 +211,81 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("onoff") == 0){
                 setOnlineOrOffline(data);
             }
+
+            else if((data.msgType).localeCompare("pubg") == 0){
+                set_received_pubg_msgs(data);
+            }
             
             
         };
 
         // this used to send message when click send button of the chat area
         $("#send-msg").click(function(){
+            var msg     = $("#msg").val();  // message
+            var msgType = $("#msgType").val(); // message type
+
+            // selected name of a friend, pubRoom, or group
+            var titleName = document.getElementById("reserver-name").textContent; 
+            
+            if(msg == ""){ //ignore the empty msgs
+                return;
+            }
+            if(titleName == ""){ //ignore the msg when the title is not set
+                return;
+            }
+
+            //for public chat rooms
+            var roomMemberId = $("#roomMemberId").val(); // get room member id
+            var roomId = $("#roomId").val(); // get room id
+            var username = $("#username").val(); // get the username
+            var propic = $("#propic").val(); // get the profile picture
+            var roomname = $("#roomname").val(); // get the room name
+
+            //for private groups
+            //
+            //
+
+            //for private chat
             var senderId   = $("#senderId").val(); // get sender id
-            var reserverId = $("#reseverId").val(); // get reserver id
+            var reserverId = $("#reseverId").val(); // get reserver 
+
+            //for public chat rooms
+            if(roomId != null && roomMemberId != null){
+                var data = {
+                    msgType: msgType,
+                    senderId: senderId,
+                    username: username,
+                    propic: propic,
+                    roomId: roomId,
+                    roomname: roomname,
+                    roomMemberId: roomMemberId,
+                    msg: msg
+                };
+                reserverId = "";
+            }
+            //for private chat
             if(reserverId != ""){
-            var msg        = $("#msg").val();  // message
-            var msgType    = $("#msgType").val(); // message type
-            // structure
-            var data = {
-                msgType: msgType,
-                senderId: senderId,
-                reserverId: reserverId,
-                msg: msg
-            };
+                var data = {
+                    msgType: msgType,
+                    senderId: senderId,
+                    reserverId: reserverId,
+                    msg: msg
+                };
+                roomId = "";
+                roomMemberId = "";
+            }
+
+            console.log(data);
             conn.send(JSON.stringify(data)); // send data
             document.getElementById('msg').value = ''; // set chat field to empty
+            reserverId = "";
+            roomId = "";
+            roomMemberId = "";
+
             // set sended chat message
             var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ msg +'</div><div class="message-time"></div></div></div>';
             $('#pri-chat-message-list').append(row); // add to chat interface
-            }
+
         })
   
     // this method used to send userid to server to know about user
@@ -245,20 +300,36 @@ $(document).ready(function(){
 
     // to set private chat reserved data
     function setReservedPrivatChatData(data){
-            var propic = document.getElementById("profilepiclink").value;
-            // set reserved chat message it tha chat was opend
-            if(document.getElementById("reseverId").value == data.senderId){
-                var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
-                $('#pri-chat-message-list').append(row);
+        var propic = document.getElementById("profilepiclink").value;
+        var title = document.getElementById("reserver-name").value;
 
-                // this for set message as readed when this user load this message to chat window
-                $.ajax({
-                    method: "POST",
-                    url: "../include/setPriMsgASRead.php",
-                    data: { msgid:data.msgDbId }
-                });
-            }
+        // set reserved chat message it tha chat was opend
+        if(document.getElementById("reseverId").value == data.senderId){
+            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
+
+            // this for set message as readed when this user load this message to chat window
+            $.ajax({
+                method: "POST",
+                url: "../include/setPriMsgASRead.php",
+                data: { msgid:data.msgDbId }
+            });
         }
+    }
+
+    //to set received public chat room's msgs
+    function set_received_pubg_msgs(data)
+    {
+        var propic = document.getElementById("propic").value;
+        var roomId = document.getElementById("roomId").value;
+        var title = document.getElementById("reserver-name").textContent;
+
+        if(document.getElementById("senderId").value != data.senderId && title == data.roomname)
+        {
+            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
+        }
+    }
 
     // this method used to set chat room paramiters
     function setChatRoomDetails(val){
@@ -329,6 +400,11 @@ function setPubRoomData(roomData)
     document.getElementById("msgType").value = "pubg";
     document.getElementById("roomId").value = roomData.id;
     document.getElementById('pri-chat-message-list').innerHTML = "";
+    document.getElementById('roomname').value = roomData.name;
+    /*
+    //set private chat details null if a room selected
+    document.getElementById("reserverId").value = "";
+    document.getElementById("profilepiclink").value = "";*/
 
     $.ajax({
         method: "POST",
@@ -377,7 +453,7 @@ function pubRoom_join()
     var room = document.getElementById("reserver-name").textContent;
     var sendButton = document.getElementById('send-msg');
     var joinButton = document.getElementById('join-room-btn');
-
+    var roomId = document.getElementById('roomId');
 
     $.ajax({
         method: "POST",
@@ -398,6 +474,7 @@ function pubRoom_join()
             if(res != "sqlerror"){
                 var welcome ="Welcome to '" + room + "' chat room!";
                 displayMsg(welcome, 1);
+                document.getElementById("roomMemberId").value = res;
             }
             //else show error msg and set all to default
             else{

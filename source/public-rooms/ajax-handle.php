@@ -22,3 +22,14 @@ if(isset($_POST['new_member']))
     
     echo json_encode($result);
 }
+
+
+//set the public room member id after joining
+if(isset($_POST['set_memberId']))
+{
+    $obj = new publicRoomChat();
+    $result = $obj-> isMemberOfRoom($_POST['userid'], $_POST['roomid']);
+    unset($obj);
+    
+    echo json_encode($result);
+}
