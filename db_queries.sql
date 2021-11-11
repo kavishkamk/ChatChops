@@ -759,3 +759,9 @@ CREATE TABLE analizePubGrpMsgEachMonthD(
 	PRIMARY KEY(recId),
 	CONSTRAINT yearMonth UNIQUE (recYear,recMonth)
 );
+
+-- public chat room column changed
+ALTER TABLE pub_grp_chat DROP COLUMN message;
+
+ALTER TABLE pub_grp_chat
+ADD msg TEXT NOT NULL;
