@@ -759,3 +759,92 @@ CREATE TABLE analizePubGrpMsgEachMonthD(
 	PRIMARY KEY(recId),
 	CONSTRAINT yearMonth UNIQUE (recYear,recMonth)
 );
+
+-- unique key adding 
+
+ALTER TABLE acc_status_user_map
+ADD CONSTRAINT UC_sdumap UNIQUE (status_id,user_id);
+
+ALTER TABLE admins
+ADD UNIQUE (email);
+
+ALTER TABLE admins
+ADD UNIQUE (username);
+
+ALTER TABLE analizeonlineeachdateh
+ADD UNIQUE (recDate);
+
+ALTER TABLE analizeonlineeachmonthd
+ADD CONSTRAINT UC_anm UNIQUE (recYear,recMonth);
+
+ALTER TABLE analizeprigrpmsgeachdateh
+ADD UNIQUE (recDate);
+
+ALTER TABLE analizeprigrpmsgeachmonthd
+ADD CONSTRAINT UC_anm UNIQUE (recYear,recMonth);
+
+ALTER TABLE analizeprimsgeachdateh
+ADD UNIQUE (recDate);
+
+ALTER TABLE analizeprimsgeachmonthd
+ADD CONSTRAINT UC_anm UNIQUE (recYear,recMonth);
+
+ALTER TABLE analizepubgrpmsgeachdateh
+ADD UNIQUE (recDate);
+
+ALTER TABLE analizepubgrpmsgeachmonthd
+ADD CONSTRAINT UC_anm UNIQUE (recYear,recMonth);
+
+ALTER TABLE friends
+ADD CONSTRAINT UC_f UNIQUE (from_user_id,to_user_id);
+
+ALTER TABLE friend_req_friend_map
+ADD CONSTRAINT UC_frqmap UNIQUE (friend_id,req_id);
+
+ALTER TABLE pgroup_mem_map
+ADD CONSTRAINT UC_frqmap UNIQUE (msg_id,member_id);
+
+ALTER TABLE pgrp_admin
+ADD CONSTRAINT UC_frqmap UNIQUE (adminId,memberId);
+
+ALTER TABLE pub_group_leave_mem_map
+ADD CONSTRAINT UC_frqmap UNIQUE (leave_id,member_id);
+
+ALTER TABLE pub_group_mem_status_map
+ADD CONSTRAINT UC_frqmap UNIQUE (status_id,member_id);
+
+ALTER TABLE pub_grp_admin
+ADD CONSTRAINT UC_frqmap UNIQUE (grpAdmin_id,member_id);
+
+ALTER TABLE pub_grp_chat_mem_map
+ADD CONSTRAINT UC_frqmap UNIQUE (msg_id,member_id);
+
+ALTER TABLE pub_grp_member
+ADD CONSTRAINT UC_frqmap UNIQUE (group_id,user_id);
+
+ALTER TABLE pub_grp_user_map
+ADD CONSTRAINT UC_frqmap UNIQUE (created_user_id,group_id);
+
+ALTER TABLE p_group_leave_mem_map
+ADD CONSTRAINT UC_frqmap UNIQUE (leave_id,member_id);
+
+ALTER TABLE p_group_member
+ADD CONSTRAINT UC_frqmap UNIQUE (user_id,group_id);
+
+ALTER TABLE p_grp_mem_status_map
+ADD CONSTRAINT UC_frqmap UNIQUE (status_id,member_id);
+
+ALTER TABLE p_msg_friend_map
+ADD CONSTRAINT UC_frqmap UNIQUE (p_id,friend_id);
+
+ALTER TABLE users
+ADD UNIQUE (email);
+
+ALTER TABLE users
+ADD UNIQUE (username);
+
+ALTER TABLE user_pgroup_map
+ADD CONSTRAINT UC_frqmap UNIQUE (created_user_id,group_id);
+
+ALTER TABLE user_user_act_id_map
+ADD CONSTRAINT UC_frqmap UNIQUE (user_id,active_id);
