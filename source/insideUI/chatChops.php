@@ -280,6 +280,7 @@ $(document).ready(function(){
             var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ msg +'</div><div class="message-time"></div></div></div>';
             $('#pri-chat-message-list').append(row); // add to chat interface
 
+            autoScrollDown();
         })
   
     // this method used to send userid to server to know about user
@@ -357,6 +358,11 @@ $(document).ready(function(){
                 setPreviousMessages(obj);
             }
         });
+    }
+
+    //auto scroll down when send button is pressed
+    function autoScrollDown(){
+        $("#pri-chat-message-list").scrollTop($("#pri-chat-message-list").prop('scrollHeight'));
     }
 
     // set private user onlie or offlien
