@@ -27,9 +27,23 @@ if(isset($_POST['pub-room-submit'])){
             $create = $pubObj-> createPubRoom($groupname, $groupbio, $icon, $_SESSION['userid']);
 
             if($create == "ok"){
-                header("Location: http://localhost/chatchops/source/insideUI/chatChops.php?status=ok");
-            }else{
-                header("Location: http://localhost/chatchops/source/insideUI/chatChops.php?status=wrong");
+                echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
+                        <input type='hidden' name='status' value = 'ok' />   
+                        <input type='hidden' name='roomname' value = $groupname /> 
+                    </form>";
+                
+                echo '<script>
+                        document.formAlert.submit();
+                    </script>';
+            }
+            else{
+                echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
+                    <input type='hidden' name='status' value = 'wrong' />   
+                </form>";
+            
+                echo '<script>
+                        document.formAlert.submit();
+                    </script>';
             }
         }else{
             header("Location:create-pub-room.php?error=notavailable&groupname=$groupname&groupbio=$groupbio&picn=$icon");
@@ -51,7 +65,13 @@ if(isset($_POST['pub-room-submit'])){
         header("Location:create-pub-room.php?error=biomax&groupname=$groupname&groupbio=$groupbio&picn=$icon");
     }
     else{
-        header("Location:../insideUI/chatChops.php?status=wrong&groupname=$groupname&groupbio=$groupbio&picn=$icon");
+        echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
+                <input type='hidden' name='status' value = 'wrong' />   
+            </form>";
+    
+        echo '<script>
+                document.formAlert.submit();
+            </script>';
     }
 
     unset($roomObj);

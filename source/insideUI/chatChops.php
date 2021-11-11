@@ -508,5 +508,23 @@ function hideMsg(msg)
     alertmsg.style.visibility = 'hidden';
 }
 
-
 </script>
+
+<!--redirect from create new chat room-->
+<?php
+
+if(isset($_POST['status'])){
+    if($_POST['status'] == 'ok'){
+        $name = $_POST['roomname'];
+        echo "<script>
+            displayMsg('You have successfully created $name', 1);
+        </script>";
+    }
+    else if($_POST['status'] == 'wrong'){
+        echo "<script>
+            displayMsg('Something went wrong', 0);
+        </script>";
+    }
+    unset($_POST['status']);
+}
+?>
