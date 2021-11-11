@@ -223,6 +223,7 @@ $(document).ready(function(){
         $("#send-msg").click(function(){
             var msg     = $("#msg").val();  // message
             var msgType = $("#msgType").val(); // message type
+            var senderId   = $("#senderId").val(); // get sender id
 
             // selected name of a friend, pubRoom, or group
             var titleName = document.getElementById("reserver-name").textContent; 
@@ -234,53 +235,46 @@ $(document).ready(function(){
                 return;
             }
 
-            //for public chat rooms
-            var roomMemberId = $("#roomMemberId").val(); // get room member id
-            var roomId = $("#roomId").val(); // get room id
-            var username = $("#username").val(); // get the username
-            var propic = $("#propic").val(); // get the profile picture
-            var roomname = $("#roomname").val(); // get the room name
+            if(msgType == "pri"){
+                var reserverId = $("#reseverId").val(); // get reserver 
+
+                if(reserverId != ""){
+                    var data = {
+                        msgType: msgType,
+                        senderId: senderId,
+                        reserverId: reserverId,
+                        msg: msg
+                    };
+                }
+            }
+            if(msgType == "pubg"){
+                var roomMemberId = $("#roomMemberId").val(); // get room member id
+                var roomId = $("#roomId").val(); // get room id
+                var username = $("#username").val(); // get the username
+                var propic = $("#propic").val(); // get the profile picture
+                var roomname = $("#roomname").val(); // get the room name
+
+                if(roomId != null && roomMemberId != null){
+                    var data = {
+                        msgType: msgType,
+                        senderId: senderId,
+                        username: username,
+                        propic: propic,
+                        roomId: roomId,
+                        roomname: roomname,
+                        roomMemberId: roomMemberId,
+                        msg: msg
+                    };
+                }
+            }
 
             //for private groups
             //
             //
 
-            //for private chat
-            var senderId   = $("#senderId").val(); // get sender id
-            var reserverId = $("#reseverId").val(); // get reserver 
-
-            //for public chat rooms
-            if(roomId != null && roomMemberId != null){
-                var data = {
-                    msgType: msgType,
-                    senderId: senderId,
-                    username: username,
-                    propic: propic,
-                    roomId: roomId,
-                    roomname: roomname,
-                    roomMemberId: roomMemberId,
-                    msg: msg
-                };
-                reserverId = "";
-            }
-            //for private chat
-            if(reserverId != ""){
-                var data = {
-                    msgType: msgType,
-                    senderId: senderId,
-                    reserverId: reserverId,
-                    msg: msg
-                };
-                roomId = "";
-                roomMemberId = "";
-            }
-
             console.log(data);
             conn.send(JSON.stringify(data)); // send data
             document.getElementById('msg').value = ''; // set chat field to empty
-            reserverId = "";
-            roomId = "";
-            roomMemberId = "";
 
             // set sended chat message
             var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ msg +'</div><div class="message-time"></div></div></div>';
@@ -342,6 +336,10 @@ $(document).ready(function(){
         document.getElementById("msgType").value = "pri";
         document.getElementById("reserver-name").textContent= details[1].concat(" ",details[2]);
 
+        //set pubRoom data null
+        document.getElementById("roomId").value = null;
+        document.getElementById("roomMemberId").value = null;
+
         // remove last reserved message from user list
         var divid = 'lst-msg-'.concat(details[0]);
         document.getElementById(divid).innerHTML = "";
@@ -401,10 +399,10 @@ function setPubRoomData(roomData)
     document.getElementById("roomId").value = roomData.id;
     document.getElementById('pri-chat-message-list').innerHTML = "";
     document.getElementById('roomname').value = roomData.name;
-    /*
+    
     //set private chat details null if a room selected
-    document.getElementById("reserverId").value = "";
-    document.getElementById("profilepiclink").value = "";*/
+    document.getElementById("reseverId").value = "";
+    document.getElementById("profilepiclink").value = "";
 
     $.ajax({
         method: "POST",
@@ -444,7 +442,6 @@ function pubRoom_join_sendMsg_select(result)
         sendButton.style.visibility = 'visible';
         joinButton.style.visibility = 'hidden';
         roomMemberId.value = result;
-        //alert("member id = " + result);
     }
 }
 
