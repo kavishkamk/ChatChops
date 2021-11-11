@@ -123,10 +123,14 @@ class Chat implements MessageComponentInterface {
         $pubObj = new \publicRoomChat();    //store messages in the DB
         $res = $pubObj->storeMsgs($details['roomMemberId'], $details['msg']);
 
-        foreach ($this->clientsWithId as $client) {
-            $client->send(json_encode($data));
+        if($res != "sqlerror"){
+            foreach ($this->clientsWithId as $client) {
+                $client->send(json_encode($data));
+            }
+        }else{
+            $d = $this-> timeshow();
+            echo $d."message didn't save";
         }
-
     }
 
 

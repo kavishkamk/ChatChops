@@ -138,7 +138,35 @@ class publicRoomChat extends DbConnection {
         //public group chat
         //public group chat- member map
         /***************************** */
-        return 1;
+        $time = date("Y-n-d H:i:s");
+        $sqlQ = "INSERT INTO pub_grp_chat(msg, date_time) VALUES(?,?);";
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+        
+        if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ss", $msg, $time);
+        mysqli_stmt_execute($stmt);
+
+        //get the message id
+        $msgId = mysqli_stmt_insert_id($stmt);
+
+        $sqlQ1 = "INSERT INTO pub_grp_chat_mem_map(msg_id, member_id) VALUES(?,?);";
+        if(!mysqli_stmt_prepare($stmt, $sqlQ1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ii", $msgId, $memId);
+        mysqli_stmt_execute($stmt);
+        
+        $this->connclose($stmt, $conn);
+        return $msgId;
+        exit();
     }
 
     //connection closing
