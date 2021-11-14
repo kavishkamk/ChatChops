@@ -47,8 +47,72 @@
             <div class="chat-title">
                 <span id="reserver-name"></span> <!-- to set reserver name -->
                 
-                <i class="fas fa-ellipsis-v"></i> <!-- list icon -->
+                <!-- dropdown menu for public chat rooms -->
+                <div class= "final__dropdown" id = "dropdown" style= "visibility:hidden;">
+                    <i class="fas fa-ellipsis-v" class ="final__dropdown__hover"></i> <!-- list icon -->
+                    <div class= "final__dropdown__menu">
+                        <a href="#" id="open-group-info" class= "open-popup-link">Group Info</a>
+                        <a href="#" id="open-member-list" class= "open-popup-link">Members</a>
+                        <a href="#" id="open-exit-room" class= "open-popup-link">Exit Group</a>
+                    </div>
+                </div>
 
+                <!-- group info popup --> 
+                <div id="group-info" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p>group info of the public chat room..</p>
+                        <p>room icon, name, description, admin username,propic</p>
+                    </div>
+                </div>
+                
+                <!-- members list popup --> 
+                <div id="member-list" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p>member list of this public chat room...</p>
+                        <p>load member list in ajax</p>
+                    </div>
+                </div>
+
+                <!-- exit group popup --> 
+                <div id="exit-room" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p>are you sure you want to leave this chat room?</p>
+                        <p>Leave button, cancel button</p>
+                        <p>link the cancel button to close the modal</p>
+                    </div>
+                </div>
+
+                <script>
+                    var modal1 = document.getElementById("group-info");
+                    var open1 = document.getElementById("open-group-info");
+                    var span1 = document.getElementsByClassName("close")[0];
+                    open1.onclick = function() {modal1.style.display = "block";}
+                    span1.onclick = function() {modal1.style.display = "none";}
+
+                    var modal2 = document.getElementById("member-list");
+                    var open2 = document.getElementById("open-member-list");
+                    var span2 = document.getElementsByClassName("close")[0];
+                    open2.onclick = function() {modal2.style.display = "block";}
+                    span2.onclick = function() {modal2.style.display = "none";}
+
+                    var modal3 = document.getElementById("exit-room");
+                    var open3 = document.getElementById("open-exit-room");
+                    var span3 = document.getElementsByClassName("close")[0];
+                    open3.onclick = function() {modal3.style.display = "block";}
+                    span3.onclick = function() {modal3.style.display = "none";}
+
+                    window.onclick = function(event) {
+                        if (event.target == modal1 || event.target == modal2 || event.target == modal3) {
+                            modal1.style.display = "none";
+                            modal2.style.display = "none";
+                            modal3.style.display = "none";
+                        }
+                    }
+
+                </script>
                 <!-- public room join button -->
                 <button type="button" onclick= 'pubRoom_join()' class="join-room" id="join-room-btn" style="visibility:hidden;">Join</button>
             </div>
@@ -364,6 +428,11 @@ $(document).ready(function(){
         document.getElementById("roomId").value = null;
         document.getElementById("roomMemberId").value = null;
 
+        //change visibilities
+        document.getElementById("dropdown").style.visibility = "hidden";
+        document.getElementById("send-msg").style.visibility = "visible";
+        document.getElementById("join-room-btn").style.visibility = "hidden";
+        
         // remove last reserved message from user list
         var divid = 'lst-msg-'.concat(details[0]);
         document.getElementById(divid).innerHTML = "";
@@ -476,20 +545,24 @@ function pubRoom_join_sendMsg_select(result)
     var sendButton = document.getElementById('send-msg');
     var joinButton = document.getElementById('join-room-btn');
     var roomMemberId = document.getElementById("roomMemberId");
+    var dropdown = document.getElementById('dropdown');
 
     if(result == "0"){
         sendButton.style.visibility = 'hidden';
         joinButton.style.visibility = 'visible';
+        dropdown.style.visibility = 'hidden';
         roomMemberId.value = null;
     }
     else if(result == "sqlerror"){
         alert("Something went wrong");
         sendButton.style.visibility = 'visible';
         joinButton.style.visibility = 'hidden';
+        dropdown.style.visibility = 'hidden';
         roomMemberId.value = null;
     }
     else{
         sendButton.style.visibility = 'visible';
+        dropdown.style.visibility = 'visible';
         joinButton.style.visibility = 'hidden';
         roomMemberId.value = result;
     }
