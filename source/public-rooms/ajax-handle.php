@@ -3,6 +3,18 @@
 require "publicRoomChat.class.php";
 require "showPrevMsgs.class.php";
 
+//get the last msgId for all the chat rooms
+if(isset($_POST['prev_msgs']))
+{
+    $roomid = $_POST['roomid'];
+
+    $obj = new showPrevMsgs();
+    $result = $obj-> parse_messages($roomid);
+    unset($obj);
+    echo json_encode($result);
+}
+
+
 //check whether the given user is already a member of the given chat room
 if(isset($_POST['check_membership']))
 {
@@ -28,18 +40,6 @@ if(isset($_POST['set_memberId']))
 {
     $obj = new publicRoomChat();
     $result = $obj-> isMemberOfRoom($_POST['userid'], $_POST['roomid']);
-    unset($obj);
-    echo json_encode($result);
-}
-
-
-//get the last msgId for all the chat rooms
-if(isset($_POST['prev_msgs']))
-{
-    $roomid = $_POST['roomid'];
-
-    $obj = new showPrevMsgs();
-    $result = $obj-> parse_messages($roomid);
     unset($obj);
     echo json_encode($result);
 }

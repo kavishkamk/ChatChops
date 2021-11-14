@@ -54,7 +54,7 @@ class showPrevMsgs extends DbConnection {
                 WHERE pub_grp_member.group_id = ? AND 
                 pub_grp_member.user_id = users.user_id AND 
                 pub_grp_member.group_id = public_group.group_id
-                ORDER BY pub_grp_chat.msg_id DESC LIMIT 3) T
+                ORDER BY pub_grp_chat.msg_id DESC LIMIT 100) T
             ORDER by msg_id ASC;";
         
         $conn = $this->connect();
@@ -69,10 +69,20 @@ class showPrevMsgs extends DbConnection {
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
 
-        $count =0;
-        $row = mysqli_fetch_assoc($result);
+        $data = array();
+        $i =0;
+        while($row = mysqli_fetch_assoc($result)){
+            $data[$i] = array('senderId' => $row['user_id'],
+                            'username' => $row['username'],
+                            'propic' => $row['profilePicLink'],
+                            'roomId' => $row['group_id'],
+                            'roomname' => $row['group_name'],
+                            'roomMemberId' => $row['member_id'],
+                            'msg' => $row['msg']);
+            $i++;
+        }
         $this->connclose($stmt, $conn);
-        return $row;
+        return $data;
         exit();
     }
 

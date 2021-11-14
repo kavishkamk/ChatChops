@@ -326,9 +326,27 @@ $(document).ready(function(){
             $('#pri-chat-message-list').append(row);
 
             autoScrollDown();
-        }else{// this room is not selected to the chat UI
-
         }
+    }
+
+    //to set previous messages
+    function set_prev_pubg_msgs(data)
+    {
+        var title = document.getElementById("reserver-name").textContent;
+        var sender = document.getElementById("senderId").value;
+        //this room is selected to the chat UI
+        if(sender != data.senderId && title == data.roomname)
+        {
+            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
+
+        }else if(sender == data.senderId && title == data.roomname)
+        {
+            // set sended chat message
+            var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data.msg +'</div><div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
+        }
+        autoScrollDown();
     }
 
     // this method used to set chat room paramiters
@@ -427,23 +445,30 @@ function setPubRoomData(roomData)
         success: function(result){
             var res = JSON.parse(result);
             pubRoom_join_sendMsg_select(res);
+            
+            $.ajax({
+                method: "POST",
+                url: "../public-rooms/ajax-handle.php",
+                data: {
+                    prev_msgs: "set",
+                    roomid: roomData.id,
+                    userid: <?php echo ''.$_SESSION["userid"].'';?>
+                },
+                success: function(result){
+                    var res = JSON.parse(result);
+                    
+                    var i=0;
+                    while(res[i]){
+                        console.log(res[i]);
+                        set_prev_pubg_msgs(res[i]);
+                        i++;
+                    }
+                }
+            });
         }
     });
 
-    $.ajax({
-        method: "POST",
-        url: "../public-rooms/ajax-handle.php",
-        data: {
-            prev_msgs: "set",
-            roomid: roomData.id,
-            userid: <?php echo ''.$_SESSION["userid"].'';?>
-        },
-        success: function(result){
-            var res = JSON.parse(result);
-            alert("got the last msg Id of all the pubRooms..");
-            <?php print_r(res);?>
-        }
-    });
+    
 }
     
 function pubRoom_join_sendMsg_select(result)
