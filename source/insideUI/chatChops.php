@@ -51,9 +51,9 @@
                 <div class= "final__dropdown" id = "dropdown" style= "visibility:hidden;">
                     <i class="fas fa-ellipsis-v" class ="final__dropdown__hover"></i> <!-- list icon -->
                     <div class= "final__dropdown__menu">
-                        <a href="#" id="open-group-info" class= "open-popup-link">Group Info</a>
-                        <a href="#" id="open-member-list" class= "open-popup-link">Members</a>
-                        <a href="#" id="open-exit-room" class= "open-popup-link">Exit Group</a>
+                        <div id="open-group-info" class= "open-popup-link">Group Info</div><hr class= "hrr">
+                        <div id="open-member-list" class= "open-popup-link">Members</div><hr class= "hrr">
+                        <div id="open-exit-room" class= "open-popup-link">Exit Group</div>
                     </div>
                 </div>
 
@@ -61,49 +61,103 @@
                 <div id="group-info" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <p>group info of the public chat room..</p>
-                        <p>room icon, name, description, admin username,propic</p>
+                        <p class = "modal-topic">Public Room Info</p><hr>
+                        <div class= "grid-cont">
+                            <div class ="room-info-display" class= "column" style="grid-column:1 / 2; grid-row: 1 / 2">
+                                <img src= '' id= "roomicon" alt='group icon' width='200'height='200' class='img-circle room-icon'>
+                                <br><span id="gi-roomname"></span>
+                                <br><span id="gi-date"></span>
+                                <br><br><span>Description - </span>
+                                <br><span id="gi-bio"></span>
+                            </div>
+
+                            <div class= "admin-info-display" class= "column" style="grid-column:2 / 2; grid-row: 1 / 2">
+                                <img src= '' id="adminpic" alt='admin pic' width='200'height='200' class='img-circle room-icon'>
+								<br><span id="ai-fullname"></span>
+                                <br><span id="ai-username"></span>
+                                <br><span id="ai-date"></span>
+								
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
                 
                 <!-- members list popup --> 
                 <div id="member-list" class="modal">
                     <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p>member list of this public chat room...</p>
-                        <p>load member list in ajax</p>
+                        <p class = "modal-topic" id= "mem-count-show">Members</p><hr class= "hrr">
+
+                        <div class= "mem-list" id="mem-list" style="max-height: 300px; overflow-y: scroll;">
+                            <!-- sample member info -->
+                            <!--
+                            <div class= "mem-item">
+                                <div class="col1">
+                                    <img src= '../profile-pic/rashmi.png' width='50'height='50' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
+                                </div>
+                                <div class="col2">
+                                    <div class= "mem-fullname">rashmi wijesekara</div>
+                                    <div class= "mem-username">#rashmi</div>
+                                </div>
+                            </div>
+                            <hr class="hrr"> -->
+                        </div>
                     </div>
                 </div>
 
                 <!-- exit group popup --> 
                 <div id="exit-room" class="modal">
                     <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p>are you sure you want to leave this chat room?</p>
-                        <p>Leave button, cancel button</p>
-                        <p>link the cancel button to close the modal</p>
+                        <p class = "modal-topic">Exit Group</p><hr>
+                        <div class= "leave-msg">
+                            Are you sure you want to leave this chat room?
+                        </div>
+
+                        <div id= "leave-room-btn" onclick = "room_dropdown_menu(3)">Leave</div>
+                        
                     </div>
                 </div>
 
                 <script>
                     var modal1 = document.getElementById("group-info");
                     var open1 = document.getElementById("open-group-info");
-                    var span1 = document.getElementsByClassName("close")[0];
-                    open1.onclick = function() {modal1.style.display = "block";}
-                    span1.onclick = function() {modal1.style.display = "none";}
+                    var span = document.getElementsByClassName("close")[0];
 
                     var modal2 = document.getElementById("member-list");
                     var open2 = document.getElementById("open-member-list");
-                    var span2 = document.getElementsByClassName("close")[0];
-                    open2.onclick = function() {modal2.style.display = "block";}
-                    span2.onclick = function() {modal2.style.display = "none";}
+                    //var span2 = document.getElementsByClassName("close")[0];
 
                     var modal3 = document.getElementById("exit-room");
                     var open3 = document.getElementById("open-exit-room");
-                    var span3 = document.getElementsByClassName("close")[0];
-                    open3.onclick = function() {modal3.style.display = "block";}
-                    span3.onclick = function() {modal3.style.display = "none";}
+                    //var span3 = document.getElementsByClassName("close")[0];
 
+                    open1.onclick = function() {
+                        var res = room_dropdown_menu(1);
+                        
+                        if(res != 0){
+                            modal1.style.display = "block";
+                        }else{
+                            alert("Something went wrong! Try again later.");
+                        }
+                        
+                    }
+
+                    open2.onclick = function() {
+                        var res = room_dropdown_menu(2);
+                        if(res != 0){
+                            modal2.style.display = "block";
+                        }else{
+                            alert("Something went wrong! Try again later.");
+                        }
+                    }
+
+                    open3.onclick = function() {
+                        modal3.style.display = "block";
+                    }
+
+                    span.onclick = function() {
+                        modal1.style.display = "none";
+                    }
                     window.onclick = function(event) {
                         if (event.target == modal1 || event.target == modal2 || event.target == modal3) {
                             modal1.style.display = "none";
@@ -148,6 +202,7 @@
                     <input type="hidden" id="roomId" name="roomId" value=""> <!-- set room id -->
                     <input type="hidden" id="roomMemberId" name="roomMemberId" value=""> <!-- set room member id -->
                     <input type="hidden" id="roomname" name="roomname" value=""> <!-- set room name -->
+                    <input type="hidden" id="roomicon" name="roomicon" value=""> <!-- set room icon -->
 
                     <!-- when select a private group -->
                     
@@ -356,6 +411,132 @@ $(document).ready(function(){
     }
 
 })
+
+    //set chat room info into popup window
+    function room_dropdown_menu(option)
+    {
+        // ajax call and get relavent data to display
+        // set got data
+        //modal make display
+        var roomid = document.getElementById("roomId").value;
+        var memberid = document.getElementById("roomMemberId").value;
+        var title = document.getElementById("reserver-name").textContent;
+
+        //admin info
+        var fullname = document.getElementById("ai-fullname").textContent;
+        var username = document.getElementById("ai-username").textContent; 
+        var admindate = document.getElementById("ai-date").textContent;
+        var adminpic = document.getElementById("adminpic").src;
+
+        if(option == 1)
+        {   //set chat room info
+            $.ajax({
+                method: "POST",
+                url: "../public-rooms/ajax-handle.php",
+                data: {
+                    group_info: "set",
+                    roomid: roomid
+                },
+                success: function(result){
+                    //group info option
+                    document.getElementById("gi-roomname").textContent = "Room Name - "+ title;
+
+                    var obj = JSON.parse(result);
+                    if(obj == 0 || obj == "sqlerror"){
+                        return 0;
+                    }
+                    document.getElementById("gi-date").textContent = "Created on - "+ obj.created_date_and_time.substring(0,10);
+                    document.getElementById("gi-bio").textContent = obj.bio;
+                    document.getElementById("roomicon").src= '../group-icons/'+ obj.icon_link;
+
+                    $.ajax({
+                        method: "POST",
+                        url: "../public-rooms/ajax-handle.php",
+                        data: {
+                            admin_info: "set",
+                            roomid: roomid
+                        },
+                        success: function(result){
+                            //admin info
+                            var obj = JSON.parse(result);
+                            if(obj == 0 || obj == "sqlerror"){
+                                return 0;
+                            }
+                            document.getElementById("ai-fullname").textContent = "Admin Name - "+ obj.first_name + " "+ obj.last_name;
+                            document.getElementById("ai-username").textContent = "Username - "+ obj.username; 
+                            document.getElementById("ai-date").textContent = "Joined on - "+ obj.created_time.substring(0,10);
+                            document.getElementById("adminpic").src = "../profile-pic/"+ obj.profilePicLink;
+                            return 1;
+                        }
+                    });
+                }
+            });
+        }
+        else if(option == 2)
+        {   //set member list
+            $.ajax({
+                method: "POST",
+                url: "../public-rooms/ajax-handle.php",
+                data: {
+                    member_list: "set",
+                    roomid: roomid
+                },
+                success: function(result){
+                    //member list display
+
+                    var obj = JSON.parse(result);
+                    if(obj == 0 || obj == "sqlerror"){
+                        return 0;
+                    }
+                    document.getElementById("mem-list").innerHTML = "";
+                    document.getElementById("mem-count-show").textContent = "Members";
+
+                    var i=0;
+                    while(obj[i]){
+                        var member = `<div class= "mem-item">
+                                        <div class="col1">
+                                            <img src= '../profile-pic/`+ obj[i].propic+ `' width='55'height='55' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
+                                        </div>
+                                        <div class="col2">
+                                            <div class= "mem-fullname">`+ obj[i].fname+ " "+ obj[i].lname+ `</div>
+                                            <div class= "mem-username">#`+ obj[i].username+ `</div>
+                                        </div>
+                                    </div>
+                                    <hr class="hrr">`;
+                        $("#mem-list").append(member);
+                        i++;
+                    }
+                    var count = i;
+                    $("#mem-count-show").append("   ("+ count + ")");
+                    return 1;
+                }
+            });
+
+        }
+        else if(option == 3)
+        {   //leave the chat room
+            $.ajax({
+                method: "POST",
+                url: "../public-rooms/ajax-handle.php",
+                data: {
+                    leave_room: "set",
+                    roomid: roomid,
+                    memberid: memberid
+                },
+                success: function(result){
+                    var obj = JSON.parse(result);
+                    if(obj == 0 || obj == "sqlerror"){
+                        return 0;
+                    }
+                    //leave success -> red notif for 5sec, send button hide, join button hide
+                }
+            });
+            
+        }else{
+            return 0;
+        }
+        
+    }
 
     // to set private chat reserved data
     function setReservedPrivatChatData(data){

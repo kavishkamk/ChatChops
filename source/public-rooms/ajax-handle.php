@@ -2,6 +2,7 @@
 
 require "publicRoomChat.class.php";
 require "showPrevMsgs.class.php";
+require "dropDownMenu.class.php";
 
 //get the last msgId for all the chat rooms
 if(isset($_POST['prev_msgs']))
@@ -42,4 +43,40 @@ if(isset($_POST['set_memberId']))
     $result = $obj-> isMemberOfRoom($_POST['userid'], $_POST['roomid']);
     unset($obj);
     echo json_encode($result);
+}
+
+//set group info for the popup window
+if(isset($_POST['group_info']))
+{
+    $obj = new dropDownMenu();
+    $res = $obj -> get_room_info($_POST['roomid']);
+    unset($obj);
+    echo json_encode($res);
+}
+
+//set admin info
+if(isset($_POST['admin_info']))
+{
+    $obj = new dropDownMenu();
+    $res = $obj -> get_admin_info($_POST['roomid']);
+    unset($obj);
+    echo json_encode($res);
+}
+
+//set member list for the popup window
+if(isset($_POST['member_list']))
+{
+    $obj = new dropDownMenu();
+    $res = $obj -> get_member_list_data($_POST['roomid']);
+    unset($obj);
+    echo json_encode($res);
+}
+
+//leave the chat room
+if(isset($_POST['leave_room']))
+{
+    $obj = new dropDownMenu();
+    $res = $obj -> leave_room($_POST['roomid'], $_POST['memberid']);
+    unset($obj);
+    echo json_encode($res);
 }
