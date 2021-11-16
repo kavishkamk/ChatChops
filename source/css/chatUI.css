@@ -102,8 +102,8 @@
 }
 
 .alert-msg{
-    /*position: absolute;*/
-    z-index: 1;
+    position: fixed;
+    z-index: 99;
     background-color: #21cc63;
     padding: 7px;
     border-radius: 12px;

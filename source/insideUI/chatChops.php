@@ -527,6 +527,10 @@ $(document).ready(function(){
                     var obj = JSON.parse(result);
                     if(obj == 0 || obj == "sqlerror"){
                         return 0;
+                    }else if(obj == 1){
+                        var msg = "You have left the '"+ title + "' chat room";
+                        document.getElementById("exit-room").style.display = "none";
+                        displayMsg(msg, 0);
                     }
                     //leave success -> red notif for 5sec, send button hide, join button hide
                 }
@@ -799,6 +803,8 @@ function displayMsg(msg, type)
 
     if(type == 0){
         alertmsg.style.backgroundColor = "red";
+    }else{
+        alertmsg.style.backgroundColor = "#21cc63";
     }
     alertmsg.style.visibility = 'visible';
     setTimeout(hideMsg, 3000, msg);
