@@ -285,7 +285,7 @@ $(document).ready(function(){
             },
             success:function(result){
                 var obj = JSON.parse(result);
-                setPreviousMessages(obj);
+                setPreviousMessages(obj, senderId);
             }
         });
     }
@@ -315,11 +315,17 @@ $(document).ready(function(){
     }
 
     // set previous messages in chat windows
-    function setPreviousMessages(data){
+    function setPreviousMessages(data, senderId){
         var propic = document.getElementById("profilepiclink").value;
         for (var i=0; i<data.length; i++) {
-            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i] +'</div> <div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
+            if(data[i][1] != senderId){
+                var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data[i][0] +'</div><div class="message-time"></div></div></div>';
+                $('#pri-chat-message-list').append(row); // add to chat interface
+            }
+            else{
+                var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i][0] +'</div> <div class="message-time"></div></div></div>';
+                $('#pri-chat-message-list').append(row);
+            }
         }
     }
   

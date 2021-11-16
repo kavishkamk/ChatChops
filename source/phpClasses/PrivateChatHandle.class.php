@@ -115,10 +115,48 @@ require_once "DbConnection.class.php";
             }
         }
 
+        // this function is used to get readed messages for given user from given friend
+        // $uid = reserver , $fid = sender
+        public function getReaded100PreviousPrivateMessage($uid, $fid){
+            $sqlQ = "SELECT private_message.p_id, private_message.message, private_message.reserveId FROM private_message
+            WHERE private_message.p_id IN (SELECT p_msg_friend_map.p_id FROM (p_msg_friend_map INNER JOIN
+            friends ON p_msg_friend_map.friend_id = friends.friend_id AND 
+            ((friends.from_user_id = ? AND friends.to_user_id = ? ) OR 
+            (friends.to_user_id = ? AND friends.from_user_id = ? ))))
+            AND (((private_message.reserveId = ? OR private_message.reserveId = ?)AND private_message.msg_status = ?) OR 
+            (private_message.reserveId = ? AND private_message.msg_status = ?))
+            ORDER BY private_message.p_id DESC LIMIT ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                $datas = array();
+                $reaedMsg = array();
+                $val1 = 1; $limit = 100; $val0 = 0;
+                mysqli_stmt_bind_param($stmt, "iiiiiiiiii", $fid, $uid, $fid, $uid, $uid, $fid, $val1, $fid, $val0, $limit);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+                while($row = mysqli_fetch_assoc($result)){
+                    $datas[$row['p_id']] = array($row['message'], $row['reserveId']);
+                }
+                ksort($datas);
+                foreach($datas as $x => $x_value) {
+                    $reaedMsg[] = $x_value;
+                }
+                $this->connclose($stmt, $conn);
+                return $reaedMsg;
+            }
+        }
+
         // this function is used to get unreaded messages for given user from given friend
         // $uid = reserver , $fid = sender
         public function getUnreadPrivatMessage($uid, $fid){
-            $sqlQ = "SELECT private_message.p_id, private_message.message FROM private_message
+            $sqlQ = "SELECT private_message.p_id, private_message.message, private_message.reserveId FROM private_message
             WHERE private_message.p_id IN (SELECT p_msg_friend_map.p_id FROM (p_msg_friend_map INNER JOIN
             friends ON p_msg_friend_map.friend_id = friends.friend_id AND 
             ((friends.from_user_id = ? AND friends.to_user_id = ? ) OR 
@@ -139,7 +177,7 @@ require_once "DbConnection.class.php";
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
                 while($row = mysqli_fetch_assoc($result)){
-                    $datas[] = $row['message'];
+                    $datas[] = array($row['message'], $row['reserveId']);
                     $maxval = max($maxval, $row['p_id']);
                 }
                 $this->updatePrivatMsgAsRead($uid, $fid, $maxval);
