@@ -5,7 +5,9 @@
         
         require "../phpClasses/PrivateChatHandle.class.php";
         $priObj = new PrivateChatHandle(); // this for get privat chat detais
-        $datas = $priObj->getUnreadPrivatMessage( $_POST['sender'], $_POST['reserver']); // get friend lisg
+        $readmsg = $priObj->getReaded100PreviousPrivateMessage($_POST['sender'], $_POST['reserver']); // get previously readed houndrad messages
+        $datas = $priObj->getUnreadPrivatMessage($_POST['sender'], $_POST['reserver']); // get friend lisg
         unset($priObj);
-        echo json_encode($datas);
+        $allMsg = array_merge($readmsg, $datas);
+        echo json_encode($allMsg);
     }
