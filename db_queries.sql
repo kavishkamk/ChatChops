@@ -765,3 +765,6 @@ ALTER TABLE pub_grp_chat DROP COLUMN message;
 
 ALTER TABLE pub_grp_chat
 ADD msg TEXT NOT NULL;
+
+-- reason column deleted in pubRoom leave 
+ALTER TABLE pub_group_leave DROP COLUMN reason;
