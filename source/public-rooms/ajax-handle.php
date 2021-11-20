@@ -3,6 +3,7 @@
 require "publicRoomChat.class.php";
 require "showPrevMsgs.class.php";
 require "dropDownMenu.class.php";
+require "displayRoomList.class.php";
 
 //get the last msgId for all the chat rooms
 if(isset($_POST['prev_msgs']))
@@ -77,6 +78,15 @@ if(isset($_POST['leave_room']))
 {
     $obj = new dropDownMenu();
     $res = $obj -> leave_room($_POST['roomid'], $_POST['memberid']);
+    unset($obj);
+    echo json_encode($res);
+}
+
+//change the roomCount display when a new member joined the room
+if(isset($_POST['mem_count_update']))
+{
+    $obj = new displayRoomList();
+    $res = $obj -> getMemberCount($_POST['roomname']);
     unset($obj);
     echo json_encode($res);
 }
