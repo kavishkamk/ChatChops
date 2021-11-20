@@ -90,3 +90,12 @@ if(isset($_POST['mem_count_update']))
     unset($obj);
     echo json_encode($res);
 }
+
+//check whether the given user is the admin of that chat room or not
+if(isset($_POST['find_admin']))
+{
+    $obj = new dropDownMenu();
+    $res = $obj -> find_admin($_POST['member_id']);
+    unset($obj);
+    echo json_encode($res);
+}

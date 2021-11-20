@@ -178,6 +178,34 @@ class dropDownMenu extends DbConnection {
         exit();
     }
 
+    //check whether the given member is an admin of that chat room
+    public function find_admin($memid)
+    {
+        $sqlQ = "SELECT grpAdmin_id from pub_grp_admin where member_id = ?;";
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "i", $memid);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        
+        if($row = mysqli_fetch_assoc($res)){
+            $this->connclose($stmt, $conn);
+            return 1;
+            exit();
+        }
+        $this->connclose($stmt, $conn);
+        return 0;
+        exit();
+        
+    }
+
     //connection closing
     private function connclose($stmt, $conn)
     {

@@ -269,6 +269,19 @@ color: #323b40;
     width: 60%;
 }
 
+.col11{
+    float: left;
+    width: 30%;
+}
+.col22{
+    float: left;
+    width: 40%;
+}
+.col33{
+    float: right;
+    width: 30%;
+}
+
 .mem-username{
     color: rgb(107, 107, 107);
 }
@@ -283,7 +296,12 @@ color: #323b40;
     font-size: 17px;
 }
 
-#leave-room-btn{
+.delete-room-msg{
+    font-size: 17px;
+    color: rgb(221, 94, 94);
+}
+
+#leave-room-btn, #delete-room-btn{
     width: 100px;
     background-color: rgb(221, 94, 94);
     color: white;
@@ -298,7 +316,24 @@ color: #323b40;
     font-size: 20px;
     border-radius: 7px;
 }
-
-#leave-room-btn:hover{
+#delete-room-btn{
+    width: 200px;
+}
+.room-member-remove-btn{
+    width: 90px;
+    background-color: rgb(221, 94, 94);
+    color: white;
+    padding: 5px 15px;
+    margin-top: 40px;
+    margin-bottom: 5px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 17px;
+    border-radius: 7px;
+}
+#leave-room-btn:hover, .room-member-remove-btn:hover, #delete-room-btn:hover{
     cursor: pointer;
 }

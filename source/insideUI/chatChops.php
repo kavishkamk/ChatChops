@@ -50,10 +50,9 @@
                 <!-- dropdown menu for public chat rooms -->
                 <div class= "final__dropdown" id = "dropdown" style= "visibility:hidden;">
                     <i class="fas fa-ellipsis-v" class ="final__dropdown__hover"></i> <!-- list icon -->
-                    <div class= "final__dropdown__menu">
-                        <div id="open-group-info" class= "open-popup-link">Group Info</div><hr class= "hrr">
-                        <div id="open-member-list" class= "open-popup-link">Members</div><hr class= "hrr">
-                        <div id="open-exit-room" class= "open-popup-link">Exit Group</div>
+                    <div class= "final__dropdown__menu" id= "dropdown_list">
+                        <div id="open-group-info" class= "open-popup-link">Group Info</div>
+                        
                     </div>
                 </div>
 
@@ -117,6 +116,45 @@
                         
                     </div>
                 </div>
+                
+                <!-- delete chat room popup --> 
+                <div id="delete-room" class="modal">
+                    <div class="modal-content">
+                        <p class = "modal-topic">Delete Chat Room</p><hr>
+                        <div class= "delete-room-msg">
+                            No one will able to chat on this room anymore.<br>
+                            Are you sure you want to delete this chat room?
+                        </div>
+
+                        <div id= "delete-room-btn" onclick = "room_dropdown_menu(4)">Delete Room</div>
+                        
+                    </div>
+                </div>
+
+                <!-- member list for the admin popup -->
+                <div id="admin-member-list" class="modal">
+                    <div class="modal-content">
+                        <p class = "modal-topic" id= "admin-mem-count-show">Members</p><hr class= "hrr">
+
+                        <div class= "mem-list" id="admin-mem-list" style="max-height: 300px; overflow-y: scroll;">
+                            <!-- sample member info -->
+                            <!--
+                            <div class= "mem-item">
+                                <div class="col11">
+                                    <img src= '../profile-pic/rashmi.png' width='50'height='50' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
+                                </div>
+                                <div class="col22">
+                                    <div class= "mem-fullname">rashmi wijesekara</div>
+                                    <div class= "mem-username">#rashmi</div>
+                                </div>
+                                <div class= "col33">
+                                    remove button
+                                </div>
+                            </div>
+                            <hr class="hrr"> -->
+                        </div>
+                    </div>
+                </div>
 
                 <script>
                     var modal1 = document.getElementById("group-info");
@@ -124,12 +162,9 @@
                     var span = document.getElementsByClassName("close")[0];
 
                     var modal2 = document.getElementById("member-list");
-                    var open2 = document.getElementById("open-member-list");
-                    //var span2 = document.getElementsByClassName("close")[0];
-
                     var modal3 = document.getElementById("exit-room");
-                    var open3 = document.getElementById("open-exit-room");
-                    //var span3 = document.getElementsByClassName("close")[0];
+                    var modal4 = document.getElementById("admin-member-list");
+                    var modal5 = document.getElementById("delete-room");
 
                     open1.onclick = function() {
                         var res = room_dropdown_menu(1);
@@ -142,27 +177,16 @@
                         
                     }
 
-                    open2.onclick = function() {
-                        var res = room_dropdown_menu(2);
-                        if(res != 0){
-                            modal2.style.display = "block";
-                        }else{
-                            alert("Something went wrong! Try again later.");
-                        }
-                    }
-
-                    open3.onclick = function() {
-                        modal3.style.display = "block";
-                    }
-
                     span.onclick = function() {
                         modal1.style.display = "none";
                     }
                     window.onclick = function(event) {
-                        if (event.target == modal1 || event.target == modal2 || event.target == modal3) {
+                        if (event.target == modal1 || event.target == modal2 || event.target == modal3 || event.target == modal4 || event.target == modal5) {
                             modal1.style.display = "none";
                             modal2.style.display = "none";
                             modal3.style.display = "none";
+                            modal4.style.display = "none";
+                            modal5.style.display = "none";
                         }
                     }
 
@@ -413,277 +437,340 @@ $(document).ready(function(){
 
 })
 
-    //set chat room info into popup window
-    function room_dropdown_menu(option)
-    {
-        // ajax call and get relavent data to display
-        // set got data
-        //modal make display
-        var roomid = document.getElementById("roomId").value;
-        var memberid = document.getElementById("roomMemberId").value;
-        var title = document.getElementById("reserver-name").textContent;
+//set chat room info into popup window
+function room_dropdown_menu(option)
+{
+    // ajax call and get relavent data to display
+    // set got data
+    //modal make display
+    var roomid = document.getElementById("roomId").value;
+    var memberid = document.getElementById("roomMemberId").value;
+    var title = document.getElementById("reserver-name").textContent;
 
-        //admin info
-        var fullname = document.getElementById("ai-fullname").textContent;
-        var username = document.getElementById("ai-username").textContent; 
-        var admindate = document.getElementById("ai-date").textContent;
-        var adminpic = document.getElementById("adminpic").src;
+    //admin info
+    var fullname = document.getElementById("ai-fullname").textContent;
+    var username = document.getElementById("ai-username").textContent; 
+    var admindate = document.getElementById("ai-date").textContent;
+    var adminpic = document.getElementById("adminpic").src;
 
-        if(option == 1)
-        {   //set chat room info
-            $.ajax({
-                method: "POST",
-                url: "../public-rooms/ajax-handle.php",
-                data: {
-                    group_info: "set",
-                    roomid: roomid
-                },
-                success: function(result){
-                    //group info option
-                    document.getElementById("gi-roomname").textContent = "Room Name - "+ title;
-
-                    var obj = JSON.parse(result);
-                    if(obj == 0 || obj == "sqlerror"){
-                        return 0;
-                    }
-                    document.getElementById("gi-date").textContent = "Created on - "+ obj.created_date_and_time.substring(0,10);
-                    document.getElementById("gi-bio").textContent = obj.bio;
-                    document.getElementById("roomicon").src= '../group-icons/'+ obj.icon_link;
-
-                    $.ajax({
-                        method: "POST",
-                        url: "../public-rooms/ajax-handle.php",
-                        data: {
-                            admin_info: "set",
-                            roomid: roomid
-                        },
-                        success: function(result){
-                            //admin info
-                            var obj = JSON.parse(result);
-                            if(obj == 0 || obj == "sqlerror"){
-                                return 0;
-                            }
-                            document.getElementById("ai-fullname").textContent = "Admin Name - "+ obj.first_name + " "+ obj.last_name;
-                            document.getElementById("ai-username").textContent = "Username - "+ obj.username; 
-                            document.getElementById("ai-date").textContent = "Joined on - "+ obj.created_time.substring(0,10);
-                            document.getElementById("adminpic").src = "../profile-pic/"+ obj.profilePicLink;
-                            return 1;
-                        }
-                    });
-                }
-            });
-        }
-        else if(option == 2)
-        {   //set member list
-            $.ajax({
-                method: "POST",
-                url: "../public-rooms/ajax-handle.php",
-                data: {
-                    member_list: "set",
-                    roomid: roomid
-                },
-                success: function(result){
-                    //member list display
-
-                    var obj = JSON.parse(result);
-                    if(obj == 0 || obj == "sqlerror"){
-                        return 0;
-                    }
-                    document.getElementById("mem-list").innerHTML = "";
-                    document.getElementById("mem-count-show").textContent = "Members";
-
-                    var i=0;
-                    while(obj[i]){
-                        var member = `<div class= "mem-item">
-                                        <div class="col1">
-                                            <img src= '../profile-pic/`+ obj[i].propic+ `' width='55'height='55' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
-                                        </div>
-                                        <div class="col2">
-                                            <div class= "mem-fullname">`+ obj[i].fname+ " "+ obj[i].lname+ `</div>
-                                            <div class= "mem-username">#`+ obj[i].username+ `</div>
-                                        </div>
-                                    </div>
-                                    <hr class="hrr">`;
-                        $("#mem-list").append(member);
-                        i++;
-                    }
-                    var count = i;
-                    $("#mem-count-show").append("   ("+ count + ")");
-                    return 1;
-                }
-            });
-
-        }
-        else if(option == 3)
-        {   //leave the chat room
-            $.ajax({
-                method: "POST",
-                url: "../public-rooms/ajax-handle.php",
-                data: {
-                    leave_room: "set",
-                    roomid: roomid,
-                    memberid: memberid
-                },
-                success: function(result){
-                    var obj = JSON.parse(result);
-                    if(obj == 0 || obj == "sqlerror"){
-                        return 0;
-                    }else if(obj == 1){
-                        var msg = "You have left the '"+ title + "' chat room";
-                        document.getElementById("exit-room").style.display = "none";
-                        displayMsg(msg, 0);
-
-                        //send button, dropdown hide
-                        //join button show
-                        document.getElementById("send-msg").style.visibility = "hidden";;
-                        document.getElementById("dropdown").style.visibility = "hidden";;
-                        document.getElementById("join-room-btn").style.visibility = "visible";;
-
-                    }
-
-
-                }
-            });
-            
-        }else{
-            return 0;
-        }
-        
-    }
-
-    // to set private chat reserved data
-    function setReservedPrivatChatData(data){
-        var propic = document.getElementById("profilepiclink").value;
-        var title = document.getElementById("reserver-name").value;
-
-        // set reserved chat message it tha chat was opend
-        if(document.getElementById("reseverId").value == data.senderId){
-            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
-
-            // this for set message as readed when this user load this message to chat window
-            $.ajax({
-                method: "POST",
-                url: "../include/setPriMsgASRead.php",
-                data: { msgid:data.msgDbId }
-            });
-        }
-    }
-
-    //to set received public chat room's msgs
-    function set_received_pubg_msgs(data)
-    {
-        var propic = document.getElementById("propic").value;
-        var roomId = document.getElementById("roomId").value;
-        var title = document.getElementById("reserver-name").textContent;
-
-        //this room is selected to the chat UI
-        if(document.getElementById("senderId").value != data.senderId && title == data.roomname)
-        {
-            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
-
-            autoScrollDown();
-        }
-    }
-
-    //to set previous messages
-    function set_prev_pubg_msgs(data)
-    {
-        var title = document.getElementById("reserver-name").textContent;
-        var sender = document.getElementById("senderId").value;
-        //this room is selected to the chat UI
-        if(sender != data.senderId && title == data.roomname)
-        {
-            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
-
-        }else if(sender == data.senderId && title == data.roomname)
-        {
-            // set sended chat message
-            var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data.msg +'</div><div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
-        }
-        autoScrollDown();
-    }
-
-    // this method used to set chat room paramiters
-    function setChatRoomDetails(val){
-        var details = val.split(" ");
-
-        var senderId   = $("#senderId").val(); // get sender id
-        document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area before start other chat
-        document.getElementById("reseverId").value = details[0];
-        document.getElementById("profilepiclink").value = details[3];
-        document.getElementById("msgType").value = "pri";
-        document.getElementById("reserver-name").textContent= details[1].concat(" ",details[2]);
-
-        //set pubRoom data null
-        document.getElementById("roomId").value = null;
-        document.getElementById("roomMemberId").value = null;
-
-        //change visibilities
-        document.getElementById("dropdown").style.visibility = "hidden";
-        document.getElementById("send-msg").style.visibility = "visible";
-        document.getElementById("join-room-btn").style.visibility = "hidden";
-        
-        // remove last reserved message from user list
-        var divid = 'lst-msg-'.concat(details[0]);
-        document.getElementById(divid).innerHTML = "";
-
-        // call to get privious messages from given users
+    if(option == 1)
+    {   //set chat room info
         $.ajax({
             method: "POST",
-            url: "../include/PrivatePreviousChat.php",
-            data: { premsreq: "ok",
-            reserver: details[0],
-            sender: senderId 
+            url: "../public-rooms/ajax-handle.php",
+            data: {
+                group_info: "set",
+                roomid: roomid
             },
-            success:function(result){
+            success: function(result){
+                //group info option
+                document.getElementById("gi-roomname").textContent = "Room Name - "+ title;
+
                 var obj = JSON.parse(result);
-                setPreviousMessages(obj);
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }
+                document.getElementById("gi-date").textContent = "Created on - "+ obj.created_date_and_time.substring(0,10);
+                document.getElementById("gi-bio").textContent = obj.bio;
+                document.getElementById("roomicon").src= '../group-icons/'+ obj.icon_link;
+
+                $.ajax({
+                    method: "POST",
+                    url: "../public-rooms/ajax-handle.php",
+                    data: {
+                        admin_info: "set",
+                        roomid: roomid
+                    },
+                    success: function(result){
+                        //admin info
+                        var obj = JSON.parse(result);
+                        if(obj == 0 || obj == "sqlerror"){
+                            return 0;
+                        }
+                        document.getElementById("ai-fullname").textContent = "Admin Name - "+ obj.first_name + " "+ obj.last_name;
+                        document.getElementById("ai-username").textContent = "Username - "+ obj.username; 
+                        document.getElementById("ai-date").textContent = "Joined on - "+ obj.created_time.substring(0,10);
+                        document.getElementById("adminpic").src = "../profile-pic/"+ obj.profilePicLink;
+                        return 1;
+                    }
+                });
             }
         });
     }
+    else if(option == 2)
+    {   //set member list
+        $.ajax({
+            method: "POST",
+            url: "../public-rooms/ajax-handle.php",
+            data: {
+                member_list: "set",
+                roomid: roomid
+            },
+            success: function(result){
+                //member list display
 
-    //auto scroll down when send button is pressed
-    function autoScrollDown(){
-        $("#pri-chat-message-list").scrollTop($("#pri-chat-message-list").prop('scrollHeight'));
-    }
+                var obj = JSON.parse(result);
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }
+                document.getElementById("mem-list").innerHTML = "";
+                document.getElementById("mem-count-show").textContent = "Members";
 
-    // set private user onlie or offlien
-    function  setOnlineOrOffline(data){
-        var Status = '';
-        if(data.statval == 1){
-            Status = '<i class="fas fa-circle text-success"></i>';
-        }
-        else{
-            Status = '<i class="fas fa-circle text-danger"></i>';
-        }
-        var id = '#onoff-'.concat(data.friendid);
-        var divid = 'onoff-'.concat(data.friendid);
-        document.getElementById(divid).innerHTML = "";
-        $(id).append(Status);
-        
-    }
+                var i=0;
+                while(obj[i]){
+                    var member = `<div class= "mem-item">
+                                    <div class="col1">
+                                        <img src= '../profile-pic/`+ obj[i].propic+ `' width='55'height='55' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
+                                    </div>
+                                    <div class="col2">
+                                        <div class= "mem-fullname">`+ obj[i].fname+ " "+ obj[i].lname+ `</div>
+                                        <div class= "mem-username">#`+ obj[i].username+ `</div>
+                                    </div>
+                                </div>
+                                <hr class="hrr">`;
+                    $("#mem-list").append(member);
+                    i++;
+                }
+                var count = i;
+                $("#mem-count-show").append("   ("+ count + ")");
+                return 1;
+            }
+        });
 
-    // display last reserved message if that chat was not opend
-    function displayLastMsgOfuser(data){
-        if(document.getElementById("reseverId").value != data.senderId){
-            var divid = 'lst-msg-'.concat(data.senderId);
-            document.getElementById(divid).innerHTML = data.msg;
-        }
     }
+    else if(option == 3)
+    {   //leave the chat room
+        $.ajax({
+            method: "POST",
+            url: "../public-rooms/ajax-handle.php",
+            data: {
+                leave_room: "set",
+                roomid: roomid,
+                memberid: memberid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }else if(obj == 1){
+                    var msg = "You have left the '"+ title + "' chat room";
+                    document.getElementById("exit-room").style.display = "none";
+                    displayMsg(msg, 0);
 
-    // set previous messages in chat windows
-    function setPreviousMessages(data){
-        var propic = document.getElementById("profilepiclink").value;
-        for (var i=0; i<data.length; i++) {
-            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i] +'</div> <div class="message-time"></div></div></div>';
-            $('#pri-chat-message-list').append(row);
-        }
+                    //send button, dropdown hide
+                    //join button show
+                    document.getElementById("send-msg").style.visibility = "hidden";;
+                    document.getElementById("dropdown").style.visibility = "hidden";;
+                    document.getElementById("join-room-btn").style.visibility = "visible";;
+
+                }
+
+
+            }
+        });    
     }
-  
+    else if(option == 4)
+    {   //member list for admins (member remove)
+        /********************************* */
+        $.ajax({
+            method: "POST",
+            url: "../public-rooms/ajax-handle.php",
+            data: {
+                member_list: "set",
+                roomid: roomid
+            },
+            success: function(result){
+                //member list display
+
+                var obj = JSON.parse(result);
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }
+                document.getElementById("admin-mem-list").innerHTML = "";
+                document.getElementById("admin-mem-count-show").textContent = "Members";
+                var user1 = document.getElementById("username").value;
+                
+                var i=0;
+                var count=0;
+                while(obj[i]){
+                    var user2 = obj[i].username;
+                    var idss = "remove"+ user2;
+
+                    if(user1.localeCompare(user2) != 0){
+                        var member = `<div class= "mem-item">
+                                        <div class="col11">
+                                            <img src= '../profile-pic/`+ obj[i].propic+ `' width='55'height='55' class='img-circle mem-icon' style="grid-column:1 / 3; grid-row: 1 / 3">
+                                        </div>
+                                        <div class="col22">
+                                            <div class= "mem-fullname">`+ obj[i].fname+ " "+ obj[i].lname+ `</div>
+                                            <div class= "mem-username">#`+ obj[i].username+ `</div>
+                                        </div>
+                                        <div class= "col33">
+                                            <div class= "room-member-remove-btn" id="`+ idss +`" onclick= "user_remove('`+user2+`')">Remove</div>
+                                        </div>
+                                    </div>
+                                    <hr class="hrr">`;
+                        $("#admin-mem-list").append(member);
+                        count++;
+                    }
+                    i++;
+                }
+                $("#admin-mem-count-show").append("   ("+ count + ")");
+                return 1;
+            }
+        });
+
+    }
+    else if(option == 5)
+    {   //admin delete the chat room
+
+
+    }
+    else{
+        return 0;
+    }
+    
+}
+
+//public room admin removes members from the chat room
+function user_remove(username){
+    alert("User removed: " + username);
+    /************************************** */
+}
+
+// to set private chat reserved data
+function setReservedPrivatChatData(data){
+    var propic = document.getElementById("profilepiclink").value;
+    var title = document.getElementById("reserver-name").value;
+
+    // set reserved chat message it tha chat was opend
+    if(document.getElementById("reseverId").value == data.senderId){
+        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+
+        // this for set message as readed when this user load this message to chat window
+        $.ajax({
+            method: "POST",
+            url: "../include/setPriMsgASRead.php",
+            data: { msgid:data.msgDbId }
+        });
+    }
+}
+
+//to set received public chat room's msgs
+function set_received_pubg_msgs(data)
+{
+    var propic = document.getElementById("propic").value;
+    var roomId = document.getElementById("roomId").value;
+    var title = document.getElementById("reserver-name").textContent;
+
+    //this room is selected to the chat UI
+    if(document.getElementById("senderId").value != data.senderId && title == data.roomname)
+    {
+        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+
+        autoScrollDown();
+    }
+}
+
+//to set previous messages
+function set_prev_pubg_msgs(data)
+{
+    var title = document.getElementById("reserver-name").textContent;
+    var sender = document.getElementById("senderId").value;
+    //this room is selected to the chat UI
+    if(sender != data.senderId && title == data.roomname)
+    {
+        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+
+    }else if(sender == data.senderId && title == data.roomname)
+    {
+        // set sended chat message
+        var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data.msg +'</div><div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+    }
+    autoScrollDown();
+}
+
+// this method used to set chat room paramiters
+function setChatRoomDetails(val){
+    var details = val.split(" ");
+
+    var senderId   = $("#senderId").val(); // get sender id
+    document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area before start other chat
+    document.getElementById("reseverId").value = details[0];
+    document.getElementById("profilepiclink").value = details[3];
+    document.getElementById("msgType").value = "pri";
+    document.getElementById("reserver-name").textContent= details[1].concat(" ",details[2]);
+
+    //set pubRoom data null
+    document.getElementById("roomId").value = null;
+    document.getElementById("roomMemberId").value = null;
+
+    //change visibilities
+    document.getElementById("dropdown").style.visibility = "hidden";
+    document.getElementById("send-msg").style.visibility = "visible";
+    document.getElementById("join-room-btn").style.visibility = "hidden";
+    
+    // remove last reserved message from user list
+    var divid = 'lst-msg-'.concat(details[0]);
+    document.getElementById(divid).innerHTML = "";
+
+    // call to get privious messages from given users
+    $.ajax({
+        method: "POST",
+        url: "../include/PrivatePreviousChat.php",
+        data: { premsreq: "ok",
+        reserver: details[0],
+        sender: senderId 
+        },
+        success:function(result){
+            var obj = JSON.parse(result);
+            setPreviousMessages(obj);
+        }
+    });
+}
+
+//auto scroll down when send button is pressed
+function autoScrollDown(){
+    $("#pri-chat-message-list").scrollTop($("#pri-chat-message-list").prop('scrollHeight'));
+}
+
+// set private user onlie or offlien
+function  setOnlineOrOffline(data){
+    var Status = '';
+    if(data.statval == 1){
+        Status = '<i class="fas fa-circle text-success"></i>';
+    }
+    else{
+        Status = '<i class="fas fa-circle text-danger"></i>';
+    }
+    var id = '#onoff-'.concat(data.friendid);
+    var divid = 'onoff-'.concat(data.friendid);
+    document.getElementById(divid).innerHTML = "";
+    $(id).append(Status);
+    
+}
+
+// display last reserved message if that chat was not opend
+function displayLastMsgOfuser(data){
+    if(document.getElementById("reseverId").value != data.senderId){
+        var divid = 'lst-msg-'.concat(data.senderId);
+        document.getElementById(divid).innerHTML = data.msg;
+    }
+}
+
+// set previous messages in chat windows
+function setPreviousMessages(data){
+    var propic = document.getElementById("profilepiclink").value;
+    for (var i=0; i<data.length; i++) {
+        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i] +'</div> <div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+    }
+}
+
 function setPubRoomData(roomData)
 {
     document.getElementById("reserver-name").textContent = roomData.name;
@@ -707,7 +794,73 @@ function setPubRoomData(roomData)
         },
         success: function(result){
             var res = JSON.parse(result);
-            pubRoom_join_sendMsg_select(res);
+            var d = pubRoom_join_sendMsg_select(res);
+
+            //dropdown made visible
+            if(d == 1){
+                $.ajax({
+                    method: "POST",
+                    url: "../public-rooms/ajax-handle.php",
+                    data: {
+                        find_admin: "set",
+                        member_id : res
+                    },
+                    success: function(result){
+                        var c = JSON.parse(result);
+                        
+                        if(c == 1){ //this user is the admin
+                            var row = `<hr class= "hrr"><div id="open-admin-member-list" class= "open-popup-link">Members</div>
+                                        <hr class= "hrr"><div id="open-room-delete" class= "open-popup-link">Group Delete</div>`;
+                            $('#dropdown_list').append(row);
+
+                            var open4 = document.getElementById("open-admin-member-list");
+                            var modal4 = document.getElementById("admin-member-list");
+
+                            var open5 = document.getElementById("open-room-delete");
+                            var modal5 = document.getElementById("delete-room");
+
+                            open4.onclick = function() {
+                                var res = room_dropdown_menu(4);
+                                if(res != 0){
+                                    modal4.style.display = "block";
+                                }else{
+                                    alert("Something went wrong! Try again later.");
+                                }
+                            }
+                            open5.onclick = function() {
+                                modal5.style.display = "block";
+                            }
+
+                        }
+                        else{ //is not an admin
+                            var row = `<hr class= "hrr"><div id="open-member-list" class= "open-popup-link">Members</div>
+                                        <hr class= "hrr"><div id="open-exit-room" class= "open-popup-link">Exit Group</div>`;
+
+                            $('#dropdown_list').append(row);
+
+                            var open2 = document.getElementById("open-member-list");
+                            var open3 = document.getElementById("open-exit-room");
+
+                            var modal2 = document.getElementById("member-list");
+                            var modal3 = document.getElementById("exit-room");
+
+                            open2.onclick = function() {
+                                var res = room_dropdown_menu(2);
+                                if(res != 0){
+                                    modal2.style.display = "block";
+                                }else{
+                                    alert("Something went wrong! Try again later.");
+                                }
+                            }
+
+                            open3.onclick = function() {
+                                modal3.style.display = "block";
+                            }
+                        }
+                        
+                    }
+                });
+            }
             
             $.ajax({
                 method: "POST",
@@ -722,7 +875,7 @@ function setPubRoomData(roomData)
                     
                     var i=0;
                     while(res[i]){
-                        console.log(res[i]);
+                        //console.log(res[i]);
                         set_prev_pubg_msgs(res[i]);
                         i++;
                     }
@@ -759,7 +912,9 @@ function pubRoom_join_sendMsg_select(result)
         dropdown.style.visibility = 'visible';
         joinButton.style.visibility = 'hidden';
         roomMemberId.value = result;
+        return 1;
     }
+    return 0;
 }
 
 function pubRoom_join()
@@ -805,7 +960,7 @@ function pubRoom_join()
                         var id = room + "count";
                         var newCount = res + " Members";
                         document.getElementById(id).textContent = newCount;
-                        console.log(document.getElementById(id).textContent);
+                        //console.log(document.getElementById(id).textContent);
                     }
                 });
             }
@@ -844,6 +999,11 @@ function hideMsg(msg)
     var alertmsg = document.getElementById('alert-msg');
     alertmsg.innerHTML = msg;
     alertmsg.style.visibility = 'hidden';
+}
+
+function admin_menu()
+{
+
 }
 
 </script>
