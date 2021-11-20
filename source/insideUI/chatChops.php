@@ -271,10 +271,11 @@
                         $roomid = $arr[$i]['id'];
                         $roomDataJSON = json_encode($roomData);
 
-                        echo "<div onclick= 'setPubRoomData($roomDataJSON)' class= 'room active' id = '.$roomname.'>
+                        $id = $roomname."count";
+                        echo "<div onclick= 'setPubRoomData($roomDataJSON)' class= 'room active' id = '$roomname'>
                         <img src= '../group-icons/$icon' alt='group icon' width='35'height='35' class='img-circle pro-img'>&emsp; 
                         $roomname
-                        <span class= 'memcount' style='float: right'>$memCount Members</span>
+                        <span class= 'memcount' id = '$id' style='float: right'>$memCount Members</span>
                         </div>";
                         
                     }
@@ -531,8 +532,16 @@ $(document).ready(function(){
                         var msg = "You have left the '"+ title + "' chat room";
                         document.getElementById("exit-room").style.display = "none";
                         displayMsg(msg, 0);
+
+                        //send button, dropdown hide
+                        //join button show
+                        document.getElementById("send-msg").style.visibility = "hidden";;
+                        document.getElementById("dropdown").style.visibility = "hidden";;
+                        document.getElementById("join-room-btn").style.visibility = "visible";;
+
                     }
-                    //leave success -> red notif for 5sec, send button hide, join button hide
+
+
                 }
             });
             
@@ -758,6 +767,7 @@ function pubRoom_join()
     var room = document.getElementById("reserver-name").textContent;
     var sendButton = document.getElementById('send-msg');
     var joinButton = document.getElementById('join-room-btn');
+    var dropdown = document.getElementById('dropdown');
     var roomId = document.getElementById('roomId');
 
     $.ajax({
@@ -780,6 +790,24 @@ function pubRoom_join()
                 var welcome ="Welcome to '" + room + "' chat room!";
                 displayMsg(welcome, 1);
                 document.getElementById("roomMemberId").value = res;
+                document.getElementById('dropdown').style.visibility = 'visible';
+
+                //update the member count 
+                $.ajax({
+                    method: "POST",
+                    url: "../public-rooms/ajax-handle.php",
+                    data: {
+                        mem_count_update: "set",
+                        roomname: room
+                    },
+                    success: function(result) {
+                        var res = JSON.parse(result);
+                        var id = room + "count";
+                        var newCount = res + " Members";
+                        document.getElementById(id).textContent = newCount;
+                        console.log(document.getElementById(id).textContent);
+                    }
+                });
             }
             //else show error msg and set all to default
             else{

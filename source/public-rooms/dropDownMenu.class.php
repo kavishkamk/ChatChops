@@ -71,11 +71,16 @@ class dropDownMenu extends DbConnection {
     //get all the members' details
     public function get_member_list_data($roomid)
     {
-        //fname, lname, username, propic
-        
+        //fname, lname, username, propic 
+
         $sqlQ = "SELECT users.first_name, users.last_name, users.username, users.profilePicLink 
-                FROM (users INNER JOIN pub_grp_member ON pub_grp_member.user_id = users.user_id) 
-                WHERE pub_grp_member.group_id = ?;";
+                FROM users INNER JOIN 
+                (SELECT distinct pub_grp_member.user_id FROM 
+                ((pub_group_mem_status_map INNER JOIN 
+                pub_grp_member ON pub_grp_member.member_id = pub_group_mem_status_map.member_id) 
+                INNER JOIN pub_grp_mem_status ON pub_grp_mem_status.status_id = pub_group_mem_status_map.status_id) 
+                WHERE pub_grp_member.group_id = ? AND pub_grp_mem_status.active = ?) 
+                as aa ON users.user_id = aa.user_id;";
 
         $conn = $this->connect();
         $stmt = mysqli_stmt_init($conn);
@@ -85,7 +90,8 @@ class dropDownMenu extends DbConnection {
             return "sqlerror";
             exit();
         }
-        mysqli_stmt_bind_param($stmt, "i", $roomid);
+        $active =1;
+        mysqli_stmt_bind_param($stmt, "ii", $roomid, $active);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
 
@@ -143,17 +149,16 @@ class dropDownMenu extends DbConnection {
         mysqli_stmt_bind_param($stmt, "ii", $active, $status_id);
         mysqli_stmt_execute($stmt);
 
-        $q2 = "INSERT INTO pub_group_leave(date_and_time, reason) VALUES(?,?);";
+        $q2 = "INSERT INTO pub_group_leave(date_and_time) VALUES(?);";
         
         $left = date("Y-n-d H:i:s");
-        $reason = "a";
 
         if(!mysqli_stmt_prepare($stmt, $q2)){
             $this->connclose($stmt, $conn);
             return "sqlerror";
             exit();
         }
-        mysqli_stmt_bind_param($stmt, "ss", $left, $reason);
+        mysqli_stmt_bind_param($stmt, "s", $left);
         mysqli_stmt_execute($stmt);
 
         $leave_id = mysqli_stmt_insert_id($stmt);
@@ -172,8 +177,6 @@ class dropDownMenu extends DbConnection {
         return 1;
         exit();
     }
-
-
 
     //connection closing
     private function connclose($stmt, $conn)
