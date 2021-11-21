@@ -52,7 +52,12 @@
                     <i class="fas fa-ellipsis-v" class ="final__dropdown__hover"></i> <!-- list icon -->
                     <div class= "final__dropdown__menu" id= "dropdown_list">
                         <div id="open-group-info" class= "open-popup-link">Group Info</div>
-                        
+                        <div id="optional-dropdown">
+                            <!--
+                            <hr class= "hrr"><div id="open-admin-member-list" class= "open-popup-link">Members</div>
+                            <hr class= "hrr"><div id="open-room-delete" class= "open-popup-link">Group Delete</div>
+                            -->
+                        </div>
                     </div>
                 </div>
 
@@ -559,9 +564,13 @@ function room_dropdown_menu(option)
 
                     //send button, dropdown hide
                     //join button show
-                    document.getElementById("send-msg").style.visibility = "hidden";;
-                    document.getElementById("dropdown").style.visibility = "hidden";;
-                    document.getElementById("join-room-btn").style.visibility = "visible";;
+                    document.getElementById("send-msg").style.visibility = "hidden";
+                    document.getElementById("dropdown").style.visibility = "hidden";
+                    document.getElementById("join-room-btn").style.visibility = "visible";
+
+                    var room = document.getElementById("reserver-name").textContent;
+                    //update the member count on the user side
+                    member_count_update_on_user_side(room);
 
                 }
 
@@ -795,73 +804,9 @@ function setPubRoomData(roomData)
         success: function(result){
             var res = JSON.parse(result);
             var d = pubRoom_join_sendMsg_select(res);
-
-            //dropdown made visible
-            if(d == 1){
-                $.ajax({
-                    method: "POST",
-                    url: "../public-rooms/ajax-handle.php",
-                    data: {
-                        find_admin: "set",
-                        member_id : res
-                    },
-                    success: function(result){
-                        var c = JSON.parse(result);
-                        
-                        if(c == 1){ //this user is the admin
-                            var row = `<hr class= "hrr"><div id="open-admin-member-list" class= "open-popup-link">Members</div>
-                                        <hr class= "hrr"><div id="open-room-delete" class= "open-popup-link">Group Delete</div>`;
-                            $('#dropdown_list').append(row);
-
-                            var open4 = document.getElementById("open-admin-member-list");
-                            var modal4 = document.getElementById("admin-member-list");
-
-                            var open5 = document.getElementById("open-room-delete");
-                            var modal5 = document.getElementById("delete-room");
-
-                            open4.onclick = function() {
-                                var res = room_dropdown_menu(4);
-                                if(res != 0){
-                                    modal4.style.display = "block";
-                                }else{
-                                    alert("Something went wrong! Try again later.");
-                                }
-                            }
-                            open5.onclick = function() {
-                                modal5.style.display = "block";
-                            }
-
-                        }
-                        else{ //is not an admin
-                            var row = `<hr class= "hrr"><div id="open-member-list" class= "open-popup-link">Members</div>
-                                        <hr class= "hrr"><div id="open-exit-room" class= "open-popup-link">Exit Group</div>`;
-
-                            $('#dropdown_list').append(row);
-
-                            var open2 = document.getElementById("open-member-list");
-                            var open3 = document.getElementById("open-exit-room");
-
-                            var modal2 = document.getElementById("member-list");
-                            var modal3 = document.getElementById("exit-room");
-
-                            open2.onclick = function() {
-                                var res = room_dropdown_menu(2);
-                                if(res != 0){
-                                    modal2.style.display = "block";
-                                }else{
-                                    alert("Something went wrong! Try again later.");
-                                }
-                            }
-
-                            open3.onclick = function() {
-                                modal3.style.display = "block";
-                            }
-                        }
-                        
-                    }
-                });
-            }
+            optional_dropdown_update(d, res);
             
+            //load the previous messages in the chat room
             $.ajax({
                 method: "POST",
                 url: "../public-rooms/ajax-handle.php",
@@ -883,10 +828,82 @@ function setPubRoomData(roomData)
             });
         }
     });
-
-    
 }
-    
+
+//optional dropdown menu update
+function optional_dropdown_update(option, memberid)
+{
+    //dropdown made visible
+    if(option == 1){
+        //clear the optional dropdown menu
+        document.getElementById("optional-dropdown").innerHTML = "";
+
+        $.ajax({
+            method: "POST",
+            url: "../public-rooms/ajax-handle.php",
+            data: {
+                find_admin: "set",
+                member_id : memberid
+            },
+            success: function(result){
+                var c = JSON.parse(result);
+                
+                if(c == 1){ //this user is the admin
+                    var row = `<hr class= "hrr"><div id="open-admin-member-list" class= "open-popup-link">Members</div>
+                                <hr class= "hrr"><div id="open-room-delete" class= "open-popup-link">Group Delete</div>`;
+                    $('#optional-dropdown').append(row);
+
+                    var open4 = document.getElementById("open-admin-member-list");
+                    var modal4 = document.getElementById("admin-member-list");
+
+                    var open5 = document.getElementById("open-room-delete");
+                    var modal5 = document.getElementById("delete-room");
+
+                    open4.onclick = function() {
+                        var res = room_dropdown_menu(4);
+                        if(res != 0){
+                            modal4.style.display = "block";
+                        }else{
+                            alert("Something went wrong! Try again later.");
+                        }
+                    }
+                    open5.onclick = function() {
+                        modal5.style.display = "block";
+                    }
+
+                }
+                else{ //this user is not an admin
+                    var row = `<hr class= "hrr"><div id="open-member-list" class= "open-popup-link">Members</div>
+                                <hr class= "hrr"><div id="open-exit-room" class= "open-popup-link">Exit Group</div>`;
+
+                    $('#optional-dropdown').append(row);
+
+                    var open2 = document.getElementById("open-member-list");
+                    var open3 = document.getElementById("open-exit-room");
+
+                    var modal2 = document.getElementById("member-list");
+                    var modal3 = document.getElementById("exit-room");
+
+                    open2.onclick = function() {
+                        var res = room_dropdown_menu(2);
+                        if(res != 0){
+                            modal2.style.display = "block";
+                        }else{
+                            alert("Something went wrong! Try again later.");
+                        }
+                    }
+
+                    open3.onclick = function() {
+                        modal3.style.display = "block";
+                    }
+                }
+                
+            }
+        });
+    }
+}
+
+//change the button visibility based on membership status
 function pubRoom_join_sendMsg_select(result)
 {
     var sendButton = document.getElementById('send-msg');
@@ -917,6 +934,7 @@ function pubRoom_join_sendMsg_select(result)
     return 0;
 }
 
+//new member join to a public chat room
 function pubRoom_join()
 {
     var room = document.getElementById("reserver-name").textContent;
@@ -947,22 +965,11 @@ function pubRoom_join()
                 document.getElementById("roomMemberId").value = res;
                 document.getElementById('dropdown').style.visibility = 'visible';
 
-                //update the member count 
-                $.ajax({
-                    method: "POST",
-                    url: "../public-rooms/ajax-handle.php",
-                    data: {
-                        mem_count_update: "set",
-                        roomname: room
-                    },
-                    success: function(result) {
-                        var res = JSON.parse(result);
-                        var id = room + "count";
-                        var newCount = res + " Members";
-                        document.getElementById(id).textContent = newCount;
-                        //console.log(document.getElementById(id).textContent);
-                    }
-                });
+                optional_dropdown_update(1, res);
+
+                //update the member count on the user side
+                member_count_update_on_user_side(room);
+                
             }
             //else show error msg and set all to default
             else{
@@ -973,9 +980,25 @@ function pubRoom_join()
             joinButton.style.visibility = 'hidden';
         }
     });
+}
 
-
-
+//member count of public room update on user side
+function member_count_update_on_user_side(roomname)
+{
+    $.ajax({
+        method: "POST",
+        url: "../public-rooms/ajax-handle.php",
+        data: {
+            mem_count_update: "set",
+            roomname: roomname
+        },
+        success: function(result) {
+            var res = JSON.parse(result);
+            var id = roomname + "count";
+            var newCount = res + " Members";
+            document.getElementById(id).textContent = newCount;
+        }
+    });
 }
 
 //display the welcome to chat room message
