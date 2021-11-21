@@ -341,9 +341,10 @@
 ?>
 
 <script type="text/javascript">
+var conn;
 
 $(document).ready(function(){
-    var conn = new WebSocket('ws://localhost:8080');
+    conn = new WebSocket('ws://localhost:8080');
     conn.onopen = function(e) {
         console.log("Connection established!");
         sendIntroduceData(); // send data to user introduce
@@ -363,6 +364,10 @@ $(document).ready(function(){
 
             else if((data.msgType).localeCompare("pubg") == 0){
                 set_received_pubg_msgs(data);
+            }
+
+            else if((data.msgType).localeCompare("pubg-user-remove") == 0){
+                pubg_user_remove_notification(data);
             }
             
             
@@ -441,6 +446,20 @@ $(document).ready(function(){
     }
 
 })
+
+//user remove notification received from the server
+function pubg_user_remove_notification(data)
+{
+    /**check member_name = session[uname]
+            if so, hide the send, join buttons
+            you were removed by the admin
+    for all,
+            memcount update
+    for admin (roomMemberid == $("#roomMemberId").val())
+            user removal success
+            grey that member div in the member list and disable the remove button
+     */
+}
 
 //set chat room info into popup window
 function room_dropdown_menu(option)
@@ -644,7 +663,20 @@ function room_dropdown_menu(option)
 //public room admin removes members from the chat room
 function user_remove(username){
     alert("User removed: " + username);
-    /************************************** */
+    /************************************** */ 
+    
+    //var senderId   = $("#senderId").val(); // get sender id
+    var roomid = $("#roomId").val(); // get room id
+    var roomMemberId = $("#roomMemberId").val(); // get member id
+
+    var data = {
+                    msgType: "pubg-user-remove",
+                    room_id: roomid,
+                    member_id: roomMemberId,
+                    member_name: username
+                };
+
+    conn.send(JSON.stringify(data)); // send data
 }
 
 // to set private chat reserved data

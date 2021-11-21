@@ -6,6 +6,7 @@ use Ratchet\ConnectionInterface;
 require dirname(__DIR__) . "/phpClasses/PrivateChatHandle.class.php";
 require dirname(__DIR__) . "/phpClasses/OnlineOffline.class.php";
 require dirname(__DIR__) . "/public-rooms/publicRoomChat.class.php";
+require dirname(__DIR__) . "/public-rooms/dropDownMenu.class.php";
 
 class Chat implements MessageComponentInterface {
     protected $clients;
@@ -53,6 +54,10 @@ class Chat implements MessageComponentInterface {
             }
             else if($msgTypes == "pri"){
                $this->privateMsgReserverConn($data);
+            }
+            /******** */
+            else if($msgTypes == "pubg-user-remove"){
+                $this-> pubg_user_remove($data);
             }
         }
     }
@@ -105,6 +110,27 @@ class Chat implements MessageComponentInterface {
         else{
             $d = $this-> timeshow();
             echo $d."offline user <br>";
+        }
+    }
+
+    //send the message of user removal from a public chat room 
+    private function pubg_user_remove($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['room_id'] = $details['room_id'];
+        $data['member_id'] = $details['member_id'];
+        $data['member_name'] = $details['member_name'];
+
+        $obj = new \dropDownMenu();
+        $res = $obj-> user_remove($details['room_id'], $details['member_id'], $details['member_name']);
+        
+        if($res != "sqlerror"){
+            foreach ($this->clientsWithId as $client) {
+                $client->send(json_encode($data));
+            }
+        }else{
+            $d = $this-> timeshow();
+            echo $d."public room user remove was unsuccessful";
         }
     }
 

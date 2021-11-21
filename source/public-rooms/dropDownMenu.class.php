@@ -202,8 +202,25 @@ class dropDownMenu extends DbConnection {
         }
         $this->connclose($stmt, $conn);
         return 0;
-        exit();
+        exit();  
+    }
+
+    //admin remove a user from the chat room
+    public function user_remove($roomid, $admin_memberid, $username)
+    {
+        /**
+         * find admin id
+         * find member id -> username
+         */
         
+        //pubgrp member status-> status = 0
+        //pubgrp user remove-> 
+    }
+
+    //admin delete the chat room permenantly
+    public function public_room_delete()
+    {
+        return 1; //deleted
     }
 
     //connection closing
