@@ -127,7 +127,9 @@ class Chat implements MessageComponentInterface {
         $obj = new \dropDownMenu();
         $res = $obj-> user_remove($details['room_id'], $details['member_id'], $details['member_name']);
         
-        if($res != "sqlerror"){
+        echo $res;
+        
+        if($res == 1){
             foreach ($this->clientsWithId as $client) {
                 $client->send(json_encode($data));
             }
@@ -135,6 +137,7 @@ class Chat implements MessageComponentInterface {
             $d = $this-> timeshow();
             echo $d."public room user remove was unsuccessful";
         }
+        unset($obj);
     }
 
     //send public chat room message to all the users
@@ -160,6 +163,7 @@ class Chat implements MessageComponentInterface {
             $d = $this-> timeshow();
             echo $d."message didn't save";
         }
+        unset($pubObj);
     }
 
     //send the request of updating the member count of the given chat room

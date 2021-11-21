@@ -450,15 +450,37 @@ $(document).ready(function(){
 //user remove notification received from the server
 function pubg_user_remove_notification(data)
 {
-    /**check member_name = session[uname]
-            if so, hide the send, join buttons
-            you were removed by the admin
-    for all,
-            memcount update
-    for admin (roomMemberid == $("#roomMemberId").val())
-            user removal success
-            grey that member div in the member list and disable the remove button
-     */
+    console.log(data);
+    var room;
+
+    var myname = document.getElementById("username").value;
+    var myid = document.getElementById("roomMemberId").value;
+    var reserv = document.getElementById("reserver-name").textContent;
+
+    $.ajax({
+        method: "POST",
+        url: "../public-rooms/ajax-handle.php",
+        data: {
+            get_room_name: "set",
+            roomid: data.room_id
+        },
+        success: function(result){
+            room = JSON.parse(result);
+            member_count_update_on_user_side(room);
+
+            if(data.member_id == myid) 
+            { // this is the admin who removed that user
+                var msg = "You have removed a member";
+                displayMsg(msg, 0);
+            }   
+            if(data.member_name == myname && room == reserv) 
+            { // this is the removed user
+                var msg = "You were removed by the admin";
+                displayMsg(msg, 0);
+                pubRoom_join_sendMsg_select("member-remove");
+            }
+        }
+    }); 
 }
 
 //set chat room info into popup window
@@ -604,7 +626,6 @@ function room_dropdown_menu(option)
     }
     else if(option == 4)
     {   //member list for admins (member remove)
-        /********************************* */
         $.ajax({
             method: "POST",
             url: "../public-rooms/ajax-handle.php",
@@ -639,7 +660,7 @@ function room_dropdown_menu(option)
                                             <div class= "mem-username">#`+ obj[i].username+ `</div>
                                         </div>
                                         <div class= "col33">
-                                            <div class= "room-member-remove-btn" id="`+ idss +`" onclick= "user_remove('`+user2+`')">Remove</div>
+                                            <div class= "room-member-remove-btn" id="`+ idss +`" onclick= "user_remove('`+user2+`')" style="visibility: visible;">Remove</div>
                                         </div>
                                     </div>
                                     <hr class="hrr">`;
@@ -667,12 +688,14 @@ function room_dropdown_menu(option)
 
 //public room admin removes members from the chat room
 function user_remove(username){
-    alert("User removed: " + username);
+    //alert("User removed: " + username);
     /************************************** */ 
     
     //var senderId   = $("#senderId").val(); // get sender id
     var roomid = $("#roomId").val(); // get room id
     var roomMemberId = $("#roomMemberId").val(); // get member id
+
+    document.getElementById("admin-member-list").style.display = "none";
 
     var data = {
                     msgType: "pubg-user-remove",
@@ -949,20 +972,32 @@ function pubRoom_join_sendMsg_select(result)
     var roomMemberId = document.getElementById("roomMemberId");
     var dropdown = document.getElementById('dropdown');
 
-    if(result == "0"){
+    if(result == "0"){ // not a member
         sendButton.style.visibility = 'hidden';
         joinButton.style.visibility = 'visible';
         dropdown.style.visibility = 'hidden';
         roomMemberId.value = null;
     }
-    else if(result == "sqlerror"){
+    else if(result == "sqlerror"){ // error
         alert("Something went wrong");
         sendButton.style.visibility = 'visible';
         joinButton.style.visibility = 'hidden';
         dropdown.style.visibility = 'hidden';
         roomMemberId.value = null;
     }
-    else{
+    else if(result == "member-remove"){
+        joinButton.style.visibility = 'hidden';
+        dropdown.style.visibility = 'hidden';
+        sendButton.style.visibility = 'hidden';
+        roomMemberId.value = null;
+    }
+    else if(result == "-1"){ // a removed user
+        joinButton.style.visibility = 'hidden';
+        dropdown.style.visibility = 'hidden';
+        sendButton.style.visibility = 'hidden';
+        roomMemberId.value = null;
+    }
+    else{ // a member
         sendButton.style.visibility = 'visible';
         dropdown.style.visibility = 'visible';
         joinButton.style.visibility = 'hidden';

@@ -215,12 +215,111 @@ class dropDownMenu extends DbConnection {
         
         //pubgrp member status-> status = 0
         //pubgrp user remove-> 
+        $q1 = "SELECT pub_grp_member.member_id FROM 
+                (pub_grp_member INNER JOIN 
+                users ON users.user_id = pub_grp_member.user_id)
+                WHERE users.username = ? AND pub_grp_member.group_id = ?;";
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+        if(!mysqli_stmt_prepare($stmt, $q1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "si", $username, $roomid);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($res);
+
+        $memberid = $row['member_id'];
+
+        $q2 = "SELECT * FROM pub_group_mem_status_map WHERE member_id = ?;";
+
+        if(!mysqli_stmt_prepare($stmt, $q2)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "i", $memberid);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($res);
+        
+        $status_id = $row['status_id'];
+
+        $q3 = "UPDATE pub_grp_mem_status 
+                SET active = ?
+                WHERE status_id = ?;";
+        
+        $activ = 0;
+        if(!mysqli_stmt_prepare($stmt, $q3)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ii", $activ, $status_id);
+        mysqli_stmt_execute($stmt);
+        
+        $q4 = "SELECT * FROM pub_grp_admin WHERE member_id = ?;";
+
+        if(!mysqli_stmt_prepare($stmt, $q4)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "i", $admin_memberid);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($res);
+        
+        $admin_id = $row['grpAdmin_id'];
+        $removed = date("Y-n-d H:i:s");
+
+        $q5 = "INSERT INTO pub_group_user_remove
+                (member_id, admin_id, removeDate) VALUES 
+                (?, ?, ?);";
+
+        if(!mysqli_stmt_prepare($stmt, $q5)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "iis", $memberid, $admin_memberid, $removed);
+        mysqli_stmt_execute($stmt);
+
+        $this->connclose($stmt, $conn);
+
+        return 1;
+        exit();  
     }
 
     //admin delete the chat room permenantly
     public function public_room_delete()
     {
         return 1; //deleted
+    }
+
+    //get the room name for the given room id
+    public function get_room_name($room)
+    {
+        $sqlQ = "SELECT group_name FROM public_group WHERE group_id = ?;";
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "i", $room);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        
+        $result = mysqli_fetch_assoc($res);
+        return $result['group_name'];
+        exit();
     }
 
     //connection closing

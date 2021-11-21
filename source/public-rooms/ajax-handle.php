@@ -99,3 +99,12 @@ if(isset($_POST['find_admin']))
     unset($obj);
     echo json_encode($res);
 }
+
+//get the room id for the given room name
+if(isset($_POST['get_room_name']))
+{
+    $obj = new dropDownMenu();
+    $res = $obj -> get_room_name($_POST['roomid']);
+    unset($obj);
+    echo json_encode($res);
+}

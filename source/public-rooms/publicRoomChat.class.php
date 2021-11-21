@@ -7,6 +7,34 @@ class publicRoomChat extends DbConnection {
     //check whether the given user is a member of the given chatRoom
     public function isMemberOfRoom($userid, $roomid)
     {
+        /*
+        $q2 = "SELECT member_id from pub_grp_member where user_id = ? and group_id = ?;";
+
+        
+
+        $qq = "SELECT * FROM pub_group_user_remove WHERE member_id = ?;";
+
+        if(!mysqli_stmt_prepare($stmt, $qq)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        $active = 1;
+        mysqli_stmt_bind_param($stmt, "i", $mem);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+
+        if($row = mysqli_fetch_assoc($res)){// this user is removed by the admin
+            $this-> connclose($stmt, $conn);
+            return "-1";
+            exit();
+        }else{
+            $this-> connclose($stmt, $conn);
+            return $mem;
+            exit();
+        }
+        */
+
         $sqlQ = "SELECT pub_grp_member.member_id
             FROM ((pub_group_mem_status_map
             INNER JOIN pub_grp_member ON pub_group_mem_status_map.member_id = pub_grp_member.member_id)

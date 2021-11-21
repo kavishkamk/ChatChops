@@ -768,3 +768,6 @@ ADD msg TEXT NOT NULL;
 
 -- reason column deleted in pubRoom leave 
 ALTER TABLE pub_group_leave DROP COLUMN reason;
+
+-- foreign key dropped
+ALTER TABLE `pub_group_user_remove` DROP FOREIGN KEY `pub_group_user_remove_ibfk_2`;
