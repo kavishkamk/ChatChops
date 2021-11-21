@@ -361,15 +361,15 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("onoff") == 0){
                 setOnlineOrOffline(data);
             }
-
             else if((data.msgType).localeCompare("pubg") == 0){
                 set_received_pubg_msgs(data);
             }
-
             else if((data.msgType).localeCompare("pubg-user-remove") == 0){
                 pubg_user_remove_notification(data);
             }
-            
+            else if((data.msgType).localeCompare("memCount-update-req") == 0){
+                member_count_update_on_user_side(data.room);
+            }
             
         };
 
@@ -591,6 +591,11 @@ function room_dropdown_menu(option)
                     //update the member count on the user side
                     member_count_update_on_user_side(room);
 
+                    var datas = {
+                                msgType: "memCount-update-req",
+                                room: room
+                            };
+                    conn.send(JSON.stringify(datas));
                 }
 
 
@@ -812,6 +817,7 @@ function setPreviousMessages(data){
     }
 }
 
+//set public chat room data
 function setPubRoomData(roomData)
 {
     document.getElementById("reserver-name").textContent = roomData.name;
@@ -1002,6 +1008,11 @@ function pubRoom_join()
                 //update the member count on the user side
                 member_count_update_on_user_side(room);
                 
+                var datas = {
+                                msgType: "memCount-update-req",
+                                room: room
+                            };
+                conn.send(JSON.stringify(datas));
             }
             //else show error msg and set all to default
             else{

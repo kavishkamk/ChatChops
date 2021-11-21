@@ -59,6 +59,9 @@ class Chat implements MessageComponentInterface {
             else if($msgTypes == "pubg-user-remove"){
                 $this-> pubg_user_remove($data);
             }
+            else if($msgTypes == "memCount-update-req"){
+                $this-> memCount_update_req($data);
+            }
         }
     }
   
@@ -159,6 +162,16 @@ class Chat implements MessageComponentInterface {
         }
     }
 
+    //send the request of updating the member count of the given chat room
+    private function memCount_update_req($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['room'] = $details['room'];
+
+        foreach ($this->clientsWithId as $client) {
+            $client->send(json_encode($data));
+        }
+    }
 
     // send online or offliene status
     private function broadcastOnlineStatus($val, $newConnectionId){
