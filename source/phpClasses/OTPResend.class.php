@@ -8,7 +8,7 @@
         private $emaistatus;
         private $usermail;
 
-        // this method used to resend OTP code
+        // this method used to resend OTP code with uname
         public function resendOTP($username){
             $this->username = $username;
 
@@ -52,6 +52,34 @@
             }
         }
 
+        // this method used to resend OTP code with email
+        public function resendOTPWithEmail($usermail){
+            $this->usermail = $usermail;
+                $otpChande = $this->genarateAndChangeOTPusingMail();
+                if($otpChande == "success"){
+                    $sendres = $this->sendMailWithChangedMail();
+                    if($sendres == "SENDOTP"){
+                        return "1";
+                        exit();
+                    }
+                    else if($sendres == "sqlerror"){
+                        return "3";
+                        exit();
+                    }
+                    else if($sendres == "noemail"){
+                        return "4";
+                        exit();
+                    }
+                    else if($sendres = "OTPSENDERROR"){
+                        return "5";
+                    }
+                }
+                else if($otpChande == "sqlerror"){
+                    return "3";
+                    exit();
+                }
+        }
+
         // check user is alrady register or not 
         private function checkuser(){
             $sqlQ = "SELECT active_status, email FROM users WHERE username = ?;";
@@ -79,6 +107,26 @@
                     return "nouser"; // no user match
                     exit();
                 }
+            }
+        }
+
+        private function genarateAndChangeOTPusingMail(){
+            $sqlQ = "UPDATE users SET otpCode = ? WHERE email = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            else{
+                $userotp = rand(100000 , 999999); // genatate OTP code
+                mysqli_stmt_bind_param($stmt, "is", $userotp, $this->usermail);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+                return "success";
+                exit();
             }
         }
 

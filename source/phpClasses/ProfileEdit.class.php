@@ -324,6 +324,26 @@
             }
         }
 
+        public function changePwdAndActiveAcc($email, $pwd){
+            $sqlQ = "UPDATE users SET pwd = ?, active_status = ? WHERE email = ?;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "0"; // sql error
+                exit();
+            }
+            else{
+                $val1 = 1;
+                $hashpwd = password_hash($pwd, PASSWORD_DEFAULT); // hashing password
+                mysqli_stmt_bind_param($stmt, "sis", $hashpwd, $val1, $email);
+                mysqli_stmt_execute($stmt);
+                return "1"; // sql error
+                exit();
+            }
+        }
+
         private function connclose($stmt, $conn){
             mysqli_stmt_close($stmt);
             mysqli_close($conn);

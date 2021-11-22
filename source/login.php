@@ -43,6 +43,9 @@
                         else if($_GET['otpstatus'] == "deleteacc"){
                             echo '<p class="logsuss">Account Deleted</p>';
                         }
+                        else if($_GET['otpstatus'] == "pwdchanged"){
+                            echo '<p class="logsuss">Password Changed</p>';
+                        }
                         else{
                             $errmsg = setOtpErrorMessgess();
                             echo '<p class="logerr">'.$errmsg.'</p>';
@@ -83,7 +86,7 @@
                     <input type="password" name="pwd" placeholder="enter your password" size="30" class="flog"><br>
                     <button type="submit" name="log-submit" class="logbutn">Login</button>
                 </form>
-                <form method="post" action="">
+                <form method="post" action="pwdRecover.php">
                     <input type="hidden" name="usernameotp" value="">
                     <button type="submit" name="forgotpwd-submit" class="link-button">
                         Forgot your password?
