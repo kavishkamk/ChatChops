@@ -11,8 +11,9 @@ library(DBI)
 library(RMySQL)
 library(htmlwidgets)
 
+source("..\\R_execute\\R_getConnection.R")
 #get db Connection
-mydb <- dbConnect(MySQL(), user='root', password='', dbname='chatchops', host='localhost', port=3307)
+mydb <- dbConnect(MySQL(), user=getUser(), password=getPwd(), dbname=getDBName(), host=getHost(), port=getPort())
 
 args <- commandArgs(TRUE)
 ye <- args[1]
