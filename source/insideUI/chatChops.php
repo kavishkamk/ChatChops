@@ -477,7 +477,7 @@ function pubg_user_remove_notification(data)
             { // this is the removed user
                 var msg = "You were removed by the admin";
                 displayMsg(msg, 0);
-                pubRoom_join_sendMsg_select("member-remove");
+                pubRoom_join_sendMsg_select("member-remove"); //hide the msg sending and joining buttons
             }
         }
     }); 
@@ -908,7 +908,6 @@ function optional_dropdown_update(option, memberid)
             },
             success: function(result){
                 var c = JSON.parse(result);
-                
                 if(c == 1){ //this user is the admin
                     var row = `<hr class= "hrr"><div id="open-admin-member-list" class= "open-popup-link">Members</div>
                                 <hr class= "hrr"><div id="open-room-delete" class= "open-popup-link">Group Delete</div>`;
@@ -996,6 +995,9 @@ function pubRoom_join_sendMsg_select(result)
         dropdown.style.visibility = 'hidden';
         sendButton.style.visibility = 'hidden';
         roomMemberId.value = null;
+
+        var msg = "You were removed by the admin";
+        displayMsg(msg, 0);
     }
     else{ // a member
         sendButton.style.visibility = 'visible';

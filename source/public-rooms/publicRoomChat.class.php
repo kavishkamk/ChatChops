@@ -7,43 +7,51 @@ class publicRoomChat extends DbConnection {
     //check whether the given user is a member of the given chatRoom
     public function isMemberOfRoom($userid, $roomid)
     {
-        /*
+        
         $q2 = "SELECT member_id from pub_grp_member where user_id = ? and group_id = ?;";
 
-        
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
 
-        $qq = "SELECT * FROM pub_group_user_remove WHERE member_id = ?;";
-
-        if(!mysqli_stmt_prepare($stmt, $qq)){
+        if(!mysqli_stmt_prepare($stmt, $q2)){
             $this->connclose($stmt, $conn);
             return "sqlerror";
             exit();
         }
-        $active = 1;
-        mysqli_stmt_bind_param($stmt, "i", $mem);
+        mysqli_stmt_bind_param($stmt, "ii", $userid, $roomid);
         mysqli_stmt_execute($stmt);
         $res = mysqli_stmt_get_result($stmt);
-
-        if($row = mysqli_fetch_assoc($res)){// this user is removed by the admin
-            $this-> connclose($stmt, $conn);
-            return "-1";
-            exit();
-        }else{
-            $this-> connclose($stmt, $conn);
-            return $mem;
-            exit();
-        }
-        */
-
-        $sqlQ = "SELECT pub_grp_member.member_id
-            FROM ((pub_group_mem_status_map
-            INNER JOIN pub_grp_member ON pub_group_mem_status_map.member_id = pub_grp_member.member_id)
-            INNER JOIN pub_grp_mem_status ON pub_group_mem_status_map.status_id = pub_grp_mem_status.status_id)
-            WHERE pub_grp_mem_status.active = ? 
-            AND pub_grp_member.group_id = ?
-            AND pub_grp_member.user_id = ?;";
         
-        $conn = $this->connect();
+        if($row = mysqli_fetch_assoc($res)){    // is/was a member of the given room
+            $mem = $row['member_id'];
+
+            $qq = "SELECT * FROM pub_group_user_remove WHERE member_id = ?;";
+
+            if(!mysqli_stmt_prepare($stmt, $qq)){
+                $this->connclose($stmt, $conn);
+                return "sqlerror";
+                exit();
+            }
+            
+            mysqli_stmt_bind_param($stmt, "i", $mem);
+            mysqli_stmt_execute($stmt);
+            $res = mysqli_stmt_get_result($stmt);
+
+            if($row = mysqli_fetch_assoc($res)){// this user was removed by the admin
+                $this-> connclose($stmt, $conn);
+                return "-1";
+                exit();
+            }
+        }
+        
+        $sqlQ = "SELECT pub_grp_member.member_id
+        FROM ((pub_group_mem_status_map
+        INNER JOIN pub_grp_member ON pub_group_mem_status_map.member_id = pub_grp_member.member_id)
+        INNER JOIN pub_grp_mem_status ON pub_group_mem_status_map.status_id = pub_grp_mem_status.status_id)
+        WHERE pub_grp_mem_status.active = ? 
+        AND pub_grp_member.group_id = ?
+        AND pub_grp_member.user_id = ?;";
+        
         $stmt = mysqli_stmt_init($conn);
 
         if(!mysqli_stmt_prepare($stmt, $sqlQ)){
@@ -66,6 +74,7 @@ class publicRoomChat extends DbConnection {
             return "0";
             exit();
         }
+        
         
     }
     
