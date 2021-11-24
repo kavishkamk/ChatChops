@@ -131,7 +131,7 @@
                             Are you sure you want to delete this chat room?
                         </div>
 
-                        <div id= "delete-room-btn" onclick = "room_dropdown_menu(4)">Delete Room</div>
+                        <div id= "delete-room-btn" onclick = "room_dropdown_menu(5)">Delete Room</div>
                         
                     </div>
                 </div>
@@ -677,8 +677,40 @@ function room_dropdown_menu(option)
     }
     else if(option == 5)
     {   //admin delete the chat room
+        
+        /**
+        send to the server ===>
+            go to DB and make status 0 of that room
+            broadcast the delet room 
 
+        delet room broadcast receive ===>
+            if user == admin
+                red notif -> room deleted (You have deleted the 'name' chat room)
+                title, option menu disappear
+                cht ui make empty
 
+            if title == roomname
+                red notif -> room deleted ('name' chat room is deleted by the admin)
+                title, option menu disappear
+                cht ui make empty
+            
+            for all;
+                chat room list update
+        */
+        
+        document.getElementById("delete-room").style.display = "none";
+        var roomid = $("#roomId").val(); // get room id
+        var roomMemberId = $("#roomMemberId").val(); // get member id
+        var roomname = document.getElementById("roomname").value;
+
+        var data = {
+                msgType: "delete-room",
+                room_id : roomid,
+                admin_member_id : roomMemberId,
+                roomname: roomname
+        };
+        conn.send(JSON.stringify(data)); // send data
+        
     }
     else{
         return 0;

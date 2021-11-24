@@ -295,9 +295,25 @@ class dropDownMenu extends DbConnection {
     }
 
     //admin delete the chat room permenantly
-    public function public_room_delete()
+    public function delete_room($roomid)
     {
+        $q = "UPDATE public_group 
+            SET pubgrp_status = ?
+            WHERE group_id = ?;";
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+        if(!mysqli_stmt_prepare($stmt, $q)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        $activ = 0;
+        mysqli_stmt_bind_param($stmt, "ii", $activ, $roomid);
+        mysqli_stmt_execute($stmt);
+        $this->connclose($stmt, $conn);
         return 1; //deleted
+        exit();
     }
 
     //get the room name for the given room id

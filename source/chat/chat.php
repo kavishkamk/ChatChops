@@ -55,12 +55,14 @@ class Chat implements MessageComponentInterface {
             else if($msgTypes == "pri"){
                $this->privateMsgReserverConn($data);
             }
-            /******** */
             else if($msgTypes == "pubg-user-remove"){
                 $this-> pubg_user_remove($data);
             }
             else if($msgTypes == "memCount-update-req"){
                 $this-> memCount_update_req($data);
+            }
+            else if($msgTypes == "delete-room"){
+                $this-> delete_room($data);
             }
         }
     }
@@ -175,6 +177,30 @@ class Chat implements MessageComponentInterface {
         foreach ($this->clientsWithId as $client) {
             $client->send(json_encode($data));
         }
+    }
+
+    //admin delete the public chat room
+    private function delete_room($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['room_id'] = $details['room_id'];
+        $data['admin_member_id'] = $details['admin_member_id'];
+        $data['roomname'] = $details['roomname'];
+
+        $obj = new \dropDownMenu();
+        $res = $obj-> delete_room($details['room_id']);
+        
+        echo $res;
+        
+        if($res == 1){
+            foreach ($this->clientsWithId as $client) {
+                $client->send(json_encode($data));
+            }
+        }else{
+            $d = $this-> timeshow();
+            echo $d."public room deleting was unsuccessful";
+        }
+        unset($obj);
     }
 
     // send online or offliene status
