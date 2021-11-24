@@ -370,6 +370,9 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("memCount-update-req") == 0){
                 member_count_update_on_user_side(data.room);
             }
+            else if((data.msgType).localeCompare("delete-room") == 0){
+                pubRoom_delete_notification(data);
+            }
             
         };
 
@@ -446,6 +449,32 @@ $(document).ready(function(){
     }
 
 })
+
+//a public room was deleted by the admin user
+function pubRoom_delete_notification(data){
+    console.log(data);
+
+    var myid = document.getElementById("roomMemberId").value;
+    var reserv = document.getElementById("roomname").value;
+    
+    if(myid == data.admin_member_id){// this is the admin user
+        var msg = "You have deleted the '"+ data.roomname +"' chat room!";
+        displayMsg(msg, 0);
+
+        document.getElementById("reserver-name").textContent = "";
+        pubRoom_join_sendMsg_select("delete-room");
+        document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
+    }
+    else if(reserv == data.roomname && myid != data.admin_member_id){
+        var msg = "'"+ data.roomname+"' chat room is deleted by the admin!";
+        displayMsg(msg, 0);
+
+        document.getElementById("reserver-name").textContent = "";
+        pubRoom_join_sendMsg_select("delete-room");
+        document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
+    }
+
+}
 
 //user remove notification received from the server
 function pubg_user_remove_notification(data)
@@ -679,21 +708,7 @@ function room_dropdown_menu(option)
     {   //admin delete the chat room
         
         /**
-        send to the server ===>
-            go to DB and make status 0 of that room
-            broadcast the delet room 
-
         delet room broadcast receive ===>
-            if user == admin
-                red notif -> room deleted (You have deleted the 'name' chat room)
-                title, option menu disappear
-                cht ui make empty
-
-            if title == roomname
-                red notif -> room deleted ('name' chat room is deleted by the admin)
-                title, option menu disappear
-                cht ui make empty
-            
             for all;
                 chat room list update
         */
@@ -710,7 +725,7 @@ function room_dropdown_menu(option)
                 roomname: roomname
         };
         conn.send(JSON.stringify(data)); // send data
-        
+
     }
     else{
         return 0;
@@ -1030,6 +1045,12 @@ function pubRoom_join_sendMsg_select(result)
 
         var msg = "You were removed by the admin";
         displayMsg(msg, 0);
+    }
+    else if(result == "delete-room"){ // chat room deleted by the admin
+        joinButton.style.visibility = 'hidden';
+        dropdown.style.visibility = 'hidden';
+        sendButton.style.visibility = 'visible';
+        roomMemberId.value = null;
     }
     else{ // a member
         sendButton.style.visibility = 'visible';
