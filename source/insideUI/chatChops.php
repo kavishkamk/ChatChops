@@ -254,7 +254,7 @@
                 </div>
 
                 <div class = "create-grp-btn">
-                    <a href="#">
+                    <a href="../private-groups/create-private-group.php">
                     <button id= "grp">Create Group</button>
                     </a>
                 </div>
