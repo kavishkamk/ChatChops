@@ -34,7 +34,7 @@
         </style>
 </head>
 <body>
-<div class=container>
+    <div class=container>
         <div id="logo">
             <img src= "../images/chatchops.png">
         </div>

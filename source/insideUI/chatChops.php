@@ -623,6 +623,7 @@ function room_dropdown_menu(option)
                 document.getElementById("gi-roomname").textContent = "Room Name - "+ title;
 
                 var obj = JSON.parse(result);
+
                 if(obj == 0 || obj == "sqlerror"){
                     return 0;
                 }
@@ -787,7 +788,7 @@ function room_dropdown_menu(option)
     }
     else if(option == 5)
     {   //admin delete the chat room
-
+      
         document.getElementById("delete-room").style.display = "none";
         var roomid = $("#roomId").val(); // get room id
         var roomMemberId = $("#roomMemberId").val(); // get member id
@@ -800,13 +801,12 @@ function room_dropdown_menu(option)
                 roomname: roomname
         };
         conn.send(JSON.stringify(data)); // send data
-
     }
     else{
         return 0;
-    }
-    
+    }   
 }
+  
 
 //public room admin removes members from the chat room
 function user_remove(username){
@@ -919,11 +919,26 @@ function setChatRoomDetails(val){
         },
         success:function(result){
             var obj = JSON.parse(result);
-            setPreviousMessages(obj);
+            setPreviousMessages(obj, senderId);
         }
     });
 }
-
+           
+// set previous messages in chat windows
+    function setPreviousMessages(data, senderId){
+        var propic = document.getElementById("profilepiclink").value;
+        for (var i=0; i<data.length; i++) {
+            if(data[i][1] != senderId){
+                var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data[i][0] +'</div><div class="message-time"></div></div></div>';
+                $('#pri-chat-message-list').append(row); // add to chat interface
+            }
+            else{
+                var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i][0] +'</div> <div class="message-time"></div></div></div>';
+                $('#pri-chat-message-list').append(row);
+            }
+        }
+    }  
+      
 //auto scroll down when send button is pressed
 function autoScrollDown(){
     $("#pri-chat-message-list").scrollTop($("#pri-chat-message-list").prop('scrollHeight'));
