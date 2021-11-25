@@ -28,7 +28,6 @@
     font-size: 1.1vw;
     font-weight: bold;
     background-color: #5472d3;
-    z-index: 2;
 }
 
 #grp{
@@ -40,7 +39,6 @@
     font-size:1.1vw;
     font-weight: bold;
     background-color: #5472d3;
-    z-index: 2;
 }
 
 #grp:hover, #rm:hover{

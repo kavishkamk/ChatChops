@@ -108,3 +108,21 @@ if(isset($_POST['get_room_name']))
     unset($obj);
     echo json_encode($res);
 }
+
+//get the count of available chat rooms
+if(isset($_POST['get_pubg_count']))
+{
+    $obj = new displayRoomList();
+    $count = $obj->roomCount();
+    unset($obj);
+    echo json_encode($count);
+}
+
+//get full data of all the active chat rooms
+if(isset($_POST['get_pubg_list']))
+{
+    $obj = new displayRoomList();
+    $res = $obj->fullRoomSetData();
+    unset($obj);
+    echo json_encode($res);
+}

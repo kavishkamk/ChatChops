@@ -496,18 +496,65 @@ function pubRoom_delete_notification(data){
         pubRoom_join_sendMsg_select("delete-room");
         document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
     }
-    //chat room list update for all users
+    //chat room list update for all the users
     /************************************* */
 
-    $("#pub-room-list").empty(); // clear room list
+    $("#pub-room-list").empty(); // clear the room list
 
-    var room = `<div class="friend-conversation1 active">
-                    <img src="../group-icons/groupchat-icon.png"/>
-                    <div class= "title-text">My chat Room</div>
-                    <div class= "status-dot">3 Members</div>
-                </div>`;
-    $("#pub-room-list").append(room);
+    $.ajax({    // get the total count of public rooms available
+        method: "POST",
+        url: "../public-rooms/ajax-handle.php",
+        data: {
+            get_pubg_count: "set"
+        },
+        success: function(result){
+            var count = JSON.parse(result);
+            
+            if(count == "sqlerror"){
+                alert("Something went wrong");
+            }
+            else if(count > 0){
+                $.ajax({
+                    method: "POST",
+                    url: "../public-rooms/ajax-handle.php",
+                    data: {
+                        get_pubg_list: "set"
+                    },
+                    success: function(res){
+                        var roomlist = JSON.parse(res);
+                        
+                        for(var i=0; i< count; i++){
+                            var roomData = roomlist[i];
+                            var roomname = roomData.name;
+                            var icon = roomData.icon;
 
+                            console.log(roomData);
+                            
+                            var roomid = roomData.id;
+                            var id = roomname + "count";
+                            
+                            var data = {"id": roomid, 
+                                        "name": roomname,
+                                        "time": roomData.time,
+                                        "bio": roomData.bio,
+                                        "icon": icon
+                                        };
+                            
+                            var datas = JSON.stringify(data);
+                            var room = `<div onclick='setPubRoomData(`+datas+`)' class= 'friend-conversation1 active' id = '`+roomname+`'>
+                                            <img src= '../group-icons/`+icon+`' alt='group icon'>
+                                            <div class= 'title-text'>`+roomname+`</div>
+                                            <span class= 'memcount' id = '`+id+`' style='float: right'>`+0+` Members</span>
+                                        </div>`;
+                            $('#pub-room-list').append(room);
+                            
+                            member_count_update_on_user_side(roomname);
+                        }
+                    }
+                });
+            }
+        }
+    });
 }
 
 //user remove notification received from the server
@@ -918,6 +965,7 @@ function setPreviousMessages(data){
 //set public chat room data
 function setPubRoomData(roomData)
 {
+    console.log(roomData);
     document.getElementById("reserver-name").textContent = roomData.name;
     document.getElementById("msgType").value = "pubg";
     document.getElementById("roomId").value = roomData.id;
@@ -1162,6 +1210,22 @@ function member_count_update_on_user_side(roomname)
     });
 }
 
+//get the member count of the given public chat room
+function get_pubg_member_count(roomname, countArray, num)
+{
+    $.ajax({
+        method: "POST",
+        url: "../public-rooms/ajax-handle.php",
+        data: {
+            mem_count_update: "set",
+            roomname: roomname
+        },
+        success: function(result) {
+            countArray[num] = JSON.parse(result);
+        }
+    });
+}
+
 //display the welcome to chat room message
 function displayMsg(msg, type)
 {
@@ -1183,11 +1247,6 @@ function hideMsg(msg)
     var alertmsg = document.getElementById('alert-msg');
     alertmsg.innerHTML = msg;
     alertmsg.style.visibility = 'hidden';
-}
-
-function admin_menu()
-{
-
 }
 
 </script>
