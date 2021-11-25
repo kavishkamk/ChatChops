@@ -8,9 +8,13 @@ html, body {
   height: 100vh;
 }
 
+/*
 body {
-    /*background-color: #207398;*/
     background:linear-gradient(to right, #03203C 0%, #207398 50%, #03203C 99%);
+}*/
+
+body{
+  background:linear-gradient(to right, black, 0%, black 50%, black 99%);
 }
 
 h1 {
@@ -239,11 +243,11 @@ h1 {
 }
 
 #private-group {
-  background-color: indigo;
+  background-color:#5e92f3;
 }
 
 #public-group {
-  background-color: black;
+  background-color:#5e92f3;
 }
 
 .friend-container{
@@ -253,18 +257,19 @@ h1 {
 }
 
 .search-bar{
-  background-color: #0048AA;
+  background-color: #002171;
   box-shadow: 0 1px 3px -px rgba(0,0,0,0.75);
   height: 50px;
   border-bottom: 3px solid rgba(0, 0, 0);
   position:relative;
+  font-size: 1.3vw;
 }
 
 .friend-conversation{
   display:grid;
   grid-template-columns: 40px 1fr max-content;
   grid-gap: 10px;
-  color: #ddd;
+  color: #ffffff;
   font-size: 1.3rem;
   border-bottom: 1px solid black;
   padding: 5px 5px 5px 15px;
@@ -275,22 +280,23 @@ h1 {
   display:grid;
   grid-template-columns: 40px 1fr max-content;
   grid-gap: 10px;
-  color: #ddd;
+  color: #ffffff;
   font-size: 1.3rem;
   border-bottom: 1px solid black;
-  padding: 5px 5px 0px 15px;
+  padding: 5px 5px 5px 15px;
 }
 
 .friend-conversation.active,
 .friend-conversation:hover,
 .friend-conversation1.active,
 .friend-conversation1:hover {
-  background-color: #002c88;
+  background-color: #1565c0;
 }
 
 .friend-conversation:hover,
 .friend-conversation1:hover {
   cursor: pointer;
+  background-color: #5472d3;
 }
 
 .friend-conversation > img {
@@ -441,13 +447,9 @@ h1 {
   text-align: center;
   color: white;
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1.3vw;
+  padding-top: 10px;
 }
-
-/*
-.chat-message-list {
-  height: 80%;
-}*/
 
 .message-content {
   display: grid;

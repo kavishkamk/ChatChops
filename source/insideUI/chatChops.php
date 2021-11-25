@@ -248,29 +248,45 @@
         </div>
 
         <div class="chat" id="private-group" style="grid-column:3 / 4; grid-row: 1 / 2">
-            <div class= "topic">
-                Private Groups
-            </div>
+            <div class="first-line">
+                <div class= "topic" >
+                    <p>Private Groups</p>
+                </div>
 
-            <div style= "position: right">
-                <a href="#">
-                <button id= "grp">Create Group</button>
-                </a>
+                <div class = "create-grp-btn">
+                    <a href="#">
+                    <button id= "grp">Create Group</button>
+                    </a>
+                </div>
+            </div>
+            
+            <div class= "prig-list" id= "prig-list" style="height: 40vh; overflow-y: scroll;">
+                <!-- private chat groups list 
+                <div class= "friend-conversation1 active">
+                    <img src="../group-icons/groupchat-icon.png" alt='group icon'/>
+                    <div class= "title-text">My chat Group</div>
+                    <span class= 'memcount' style='float: right'>3 Members</span>
+                </div>
+                -->
+                
             </div>
         </div>
         
         <div class="chat" id="public-group" style="grid-column:3 / 4; grid-row: 2 / 3">
-            <div class= "topic">
-                Public Chat Rooms
-            </div>
+            <div class= "first-line">
+                <div class= "topic">
+                    Public Chat Rooms
+                </div>
 
-            <div style= "position: right">
-                <a href="../public-rooms/create-pub-room.php">
-                <button id= "rm">Create Room</button>
-                </a>
+                <div class = "create-grp-btn">
+                    <a href="../public-rooms/create-pub-room.php">
+                    <button id= "rm">Create Room</button>
+                    </a>
+                </div>
             </div>
+            
 
-            <div class= "pub-room-list" style="min-width: 400px; max-height: 225px; overflow-y: scroll;">
+            <div class= "pub-room-list" id= "pub-room-list" style="max-height: 260px; overflow-y: scroll;">
                 <?php
 
                 include_once "../public-rooms/displayRoomList.class.php";
@@ -280,7 +296,7 @@
                 $roomname;
                 
                 if($count == 0){
-                    echo '<div class= "room">No chat rooms</div>';
+                    //there is no any chat rooms available
                 }
                 else if($count == "sqlerror"){
                     echo '<script>alert ("Something went wrong");</script>';
@@ -300,10 +316,15 @@
                         $roomid = $arr[$i]['id'];
                         $roomDataJSON = json_encode($roomData);
 
+                        /*
+                        <img src="../group-icons/groupchat-icon.png" alt='group icon'/>
+                <div class= "title-text">My chat Room</div>
+                <span class= 'memcount' style='float: right'>3 Members</span>*/
+
                         $id = $roomname."count";
-                        echo "<div onclick= 'setPubRoomData($roomDataJSON)' class= 'room active' id = '$roomname'>
-                        <img src= '../group-icons/$icon' alt='group icon' width='35'height='35' class='img-circle pro-img'>&emsp; 
-                        $roomname
+                        echo "<div onclick= 'setPubRoomData($roomDataJSON)' class= 'friend-conversation1 active' id = '$roomname'>
+                        <img src= '../group-icons/$icon' alt='group icon'>
+                        <div class= 'title-text'>$roomname</div>
                         <span class= 'memcount' id = '$id' style='float: right'>$memCount Members</span>
                         </div>";
                         
@@ -456,8 +477,9 @@ function pubRoom_delete_notification(data){
 
     var myid = document.getElementById("roomMemberId").value;
     var reserv = document.getElementById("roomname").value;
-    
-    if(myid == data.admin_member_id){// this is the admin user
+
+    // this is the admin user
+    if(myid == data.admin_member_id){
         var msg = "You have deleted the '"+ data.roomname +"' chat room!";
         displayMsg(msg, 0);
 
@@ -465,6 +487,7 @@ function pubRoom_delete_notification(data){
         pubRoom_join_sendMsg_select("delete-room");
         document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
     }
+    // this is a member of the room who selected that as the active chat title
     else if(reserv == data.roomname && myid != data.admin_member_id){
         var msg = "'"+ data.roomname+"' chat room is deleted by the admin!";
         displayMsg(msg, 0);
@@ -473,6 +496,17 @@ function pubRoom_delete_notification(data){
         pubRoom_join_sendMsg_select("delete-room");
         document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
     }
+    //chat room list update for all users
+    /************************************* */
+
+    $("#pub-room-list").empty(); // clear room list
+
+    var room = `<div class="friend-conversation1 active">
+                    <img src="../group-icons/groupchat-icon.png"/>
+                    <div class= "title-text">My chat Room</div>
+                    <div class= "status-dot">3 Members</div>
+                </div>`;
+    $("#pub-room-list").append(room);
 
 }
 
@@ -706,13 +740,7 @@ function room_dropdown_menu(option)
     }
     else if(option == 5)
     {   //admin delete the chat room
-        
-        /**
-        delet room broadcast receive ===>
-            for all;
-                chat room list update
-        */
-        
+
         document.getElementById("delete-room").style.display = "none";
         var roomid = $("#roomId").val(); // get room id
         var roomMemberId = $("#roomMemberId").val(); // get member id
