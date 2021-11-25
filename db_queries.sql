@@ -760,8 +760,19 @@ CREATE TABLE analizePubGrpMsgEachMonthD(
 	CONSTRAINT yearMonth UNIQUE (recYear,recMonth)
 );
 
--- unique key adding 
+-- public chat room column changed
+ALTER TABLE pub_grp_chat DROP COLUMN message;
 
+ALTER TABLE pub_grp_chat
+ADD msg TEXT NOT NULL;
+
+-- reason column deleted in pubRoom leave 
+ALTER TABLE pub_group_leave DROP COLUMN reason;
+
+-- foreign key dropped
+ALTER TABLE `pub_group_user_remove` DROP FOREIGN KEY `pub_group_user_remove_ibfk_2`;
+
+-- unique key adding 
 ALTER TABLE acc_status_user_map
 ADD CONSTRAINT UC_sdumap UNIQUE (status_id,user_id);
 

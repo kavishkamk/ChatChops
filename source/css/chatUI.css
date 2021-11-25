@@ -1,44 +1,52 @@
-.topic{
+.first-line{
+    /*
     border: 1.5px solid black;
     background-color: #03203C;
     border-radius: 5px;
-    padding: 10px;
+    padding: 5px;
     margin: 0.5px 0;
     text-align: center;
     font-size:15px;
     text-shadow: 2.5px 2.5px 10px #49bee9;
-    color: white;
+    height: 40px;*/
+
+    box-sizing: border-box;
+    color: #ffffff;
+    background-color: #002171;
+    box-shadow: 0 1px 3px -px rgba(0,0,0,0.75);
+    height: 50px;
+    border-bottom: 3px solid rgba(0, 0, 0);
+    position:relative;
 }
 
 #rm{
     position: relative;
     color: black;
-    bottom: 55px;
-    top: -40px;
     float: right;
-    padding: 7px;
+    padding: 5px 10px;
     border-radius: 12px;
-    font-size:15px;
+    font-size: 1.1vw;
     font-weight: bold;
-    background-color: #9acfe2;
+    background-color: #5472d3;
 }
 
 #grp{
     position: relative;
     color: black;
-    bottom: 55px;
-    top: -40px;
     float: right;
-    padding: 7px;
+    padding: 5px 10px;
     border-radius: 12px;
-    font-size:15px;
+    font-size:1.1vw;
     font-weight: bold;
-    background-color: #9acfe2;
+    background-color: #5472d3;
 }
 
+#grp:hover, #rm:hover{
+    background-color: #5e92f3;
+}
 .room{
     border: 1.5px solid #dedede;
-    background-color: #12B0E8;
+    background-color: #0d47a1;
     border-radius: 5px;
     padding: 10px;
     margin: 0.5px 0;
@@ -52,7 +60,7 @@
 
 .memcount{
     font-weight: bold;
-    color: rgb(43, 42, 42);
+    color: rgb(214, 209, 209);
     font-size: 9px;
     text-decoration: none;  
 }
@@ -84,7 +92,14 @@
 .room:hover,
 .room:active{
     cursor: pointer;
-    background-color: rgba(58, 202, 228, 0.918)
+    background-color: #1565c0;
+    display:grid;
+  grid-template-columns: 40px 1fr max-content;
+  grid-gap: 10px;
+  color: #ffffff;
+  font-size: 1.3rem;
+  border-bottom: 1px solid black;
+  padding: 5px 5px 0px 15px;
 }
 
 .join-room{
@@ -102,8 +117,8 @@
 }
 
 .alert-msg{
-    position: absolute;
-    z-index: 1;
+    position: fixed;
+    z-index: 99;
     background-color: #21cc63;
     padding: 7px;
     border-radius: 12px;
@@ -112,6 +127,251 @@
     width: auto;
     justify-content: center;
     text-align: center;
-    top: 10px;
-    left: 500px;
+    top:0;
+}
+
+.username{
+    color: #555;
+    font-size: 12px;
+}
+
+/*dropdown menu of public rooms*/
+.final__dropdown{
+    position: relative;
+    z-index: 10;
+    display: inline-block;
+}
+
+.final__dropdown__hover{
+    display: inline-block;
+    padding: 10px;
+    background-color:#323b40;
+    color: #ffffff;
+    border:0 solid #323b40;
+    cursor: pointer;
+}
+.final__dropdown:hover{
+    cursor: pointer;
+}
+
+.final__dropdown__menu{
+    font-size: 15px;
+    position: absolute;
+    display: none;
+    top: 100%;
+    left: 0;
+    min-width: 150px;
+    background-color: #ffffff;
+    color: #323b40;
+    box-shadow: 0 3px 2px rgba(0,0,0,0.3);
+}
+.final__dropdown:hover .final__dropdown__menu{display: block;}
+
+.final__dropdown__menu a{
+display: block;
+padding: 5px;
+text-decoration: none;
+border-width: 0;
+border-top: 1px solid #e0e0e0;
+}
+
+.final__dropdown__menu a:hover{
+background-color:#f0f0f0;
+color: #323b40;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: fit-content;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-topic{
+    text-align: center;
+    color: #043a6d;
+}
+
+.room-info-display{
+    padding-right: 20px;
+}
+
+.admin-info-display{
+    padding-left: 20px;
+}
+
+.room-info-display, .admin-info-display{
+    font-size: 15px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.column{
+    float: left;
+    width: 50%;
+}
+
+.grid-cont{
+    display: grid;
+    padding: 10px;
+    grid-template-columns: auto auto;
+    color: black;
+}
+
+.open-popup-link{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    color: #043a6d;
+}
+
+.open-popup-link:hover{
+    cursor: pointer;
+    color: rgb(184, 184, 184);
+}
+
+.hrr{
+    padding: 0px;
+    margin: 0px;
+}
+
+.mem-item{
+    min-width: 300px;
+    font-size: 15px;
+    box-sizing: border-box;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.col1{
+    float: left;
+    width: 40%;
+}
+
+.col2{
+    float: right;
+    width: 60%;
+}
+
+.col11{
+    float: left;
+    width: 30%;
+}
+.col22{
+    float: left;
+    width: 40%;
+}
+.col33{
+    float: right;
+    width: 30%;
+}
+
+.mem-username{
+    color: rgb(107, 107, 107);
+}
+
+.mem-item:after{
+    clear: both;
+    display: table;
+    content: "";
+}
+
+.leave-msg{
+    font-size: 17px;
+}
+
+.delete-room-msg{
+    font-size: 17px;
+    color: rgb(221, 94, 94);
+}
+
+#leave-room-btn, #delete-room-btn{
+    width: 100px;
+    background-color: rgb(221, 94, 94);
+    color: white;
+    padding: 5px 20px;
+    margin-top: 40px;
+    margin-bottom: 5px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 20px;
+    border-radius: 7px;
+}
+#delete-room-btn{
+    width: 200px;
+}
+.room-member-remove-btn{
+    width: 90px;
+    background-color: rgb(221, 94, 94);
+    color: white;
+    padding: 5px 15px;
+    margin-top: 40px;
+    margin-bottom: 5px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 17px;
+    border-radius: 7px;
+}
+#leave-room-btn:hover, .room-member-remove-btn:hover, #delete-room-btn:hover{
+    cursor: pointer;
+}
+
+/* private groups list*/
+.topic{
+    float: left;
+    width: 60%;
+    font-weight: bold;
+    padding-left: 50px;
+    font-size: 1.3vw;
+    padding-top: 10px;
+}
+
+.create-grp-btn{
+    float: right;
+    width:40%;
+    padding-right: 10px;
+    padding-top: 5px;
+}
+
+.first-line:after{
+    clear: both;
+    display: table;
+    content: '';
 }

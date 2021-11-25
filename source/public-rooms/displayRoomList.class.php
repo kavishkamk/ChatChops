@@ -45,6 +45,7 @@ class displayRoomList extends DbConnection{
     //return an array of full data of every chat room
     public function fullRoomSetData()
     {
+        $this-> roomCount();
         return $this-> rooms_set;
     }
 

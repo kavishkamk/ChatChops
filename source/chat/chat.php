@@ -5,6 +5,8 @@ use Ratchet\ConnectionInterface;
 
 require dirname(__DIR__) . "/phpClasses/PrivateChatHandle.class.php";
 require dirname(__DIR__) . "/phpClasses/OnlineOffline.class.php";
+require dirname(__DIR__) . "/public-rooms/publicRoomChat.class.php";
+require dirname(__DIR__) . "/public-rooms/dropDownMenu.class.php";
 
 class Chat implements MessageComponentInterface {
     protected $clients;
@@ -19,12 +21,14 @@ class Chat implements MessageComponentInterface {
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
 
-        echo "New connection! ({$conn->resourceId})\n";
+        $d = $this-> timeshow();
+        echo $d. "New connection! ({$conn->resourceId})\n";
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
         $numRecv = count($this->clients) - 1;
-        echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
+        $d = $this-> timeshow();
+        echo sprintf($d.'Connection %d sending message "%s" to %d other connection%s' . "\n"
             , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
         $data = json_decode($msg, true);
@@ -42,20 +46,29 @@ class Chat implements MessageComponentInterface {
             $msgTypes = $data['msgType']; // get message type
 
             if($msgTypes == "pubg"){
-                echo "this is public group";
-                multicast($data);
+                //multicast($data);
+                $this-> send_pubg_msgs($data);
             }
             else if($msgTypes == "prig"){
-               echo "this is private group";
+               echo "this is private group <br>";
             }
             else if($msgTypes == "pri"){
                $this->privateMsgReserverConn($data);
+            }
+            else if($msgTypes == "pubg-user-remove"){
+                $this-> pubg_user_remove($data);
+            }
+            else if($msgTypes == "memCount-update-req"){
+                $this-> memCount_update_req($data);
+            }
+            else if($msgTypes == "delete-room"){
+                $this-> delete_room($data);
             }
         }
     }
   
     public function multicast($msg) {
-        foreach ($this->clients as $client) $client->send($msg);
+        foreach ($this->clientsWithId as $client) $client->send($msg);
     }
       
     public function onClose(ConnectionInterface $conn) {
@@ -68,11 +81,14 @@ class Chat implements MessageComponentInterface {
         unset($this->clientsWithId[$onCloseUserId]); // remove connction from privat connection list
         $this->updateDBuserOffline($onCloseUserId);
         $this->broadcastOnlineStatus($val0, $onCloseUserId); // to broad cast user offline status
-        echo "Connection {$conn->resourceId} has disconnected\n";
+
+        $d = $this-> timeshow();
+        echo $d."Connection {$conn->resourceId} has disconnected\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {
-        echo "An error has occurred: {$e->getMessage()}\n";
+        $d = $this-> timeshow();
+        echo $d."An error has occurred: {$e->getMessage()}\n";
 
         $conn->close();
     }
@@ -97,8 +113,94 @@ class Chat implements MessageComponentInterface {
             $resConn->send(json_encode($senddata));
         }
         else{
-            echo "offline user";
+            $d = $this-> timeshow();
+            echo $d."offline user <br>";
         }
+    }
+
+    //send the message of user removal from a public chat room 
+    private function pubg_user_remove($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['room_id'] = $details['room_id'];
+        $data['member_id'] = $details['member_id'];
+        $data['member_name'] = $details['member_name'];
+
+        $obj = new \dropDownMenu();
+        $res = $obj-> user_remove($details['room_id'], $details['member_id'], $details['member_name']);
+        
+        echo $res;
+        
+        if($res == 1){
+            foreach ($this->clientsWithId as $client) {
+                $client->send(json_encode($data));
+            }
+        }else{
+            $d = $this-> timeshow();
+            echo $d."public room user remove was unsuccessful";
+        }
+        unset($obj);
+    }
+
+    //send public chat room message to all the users
+    private function send_pubg_msgs($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['senderId'] = $details['senderId'];
+        $data['username'] = $details['username'];
+        $data['propic'] = $details['propic'];
+        $data['roomId'] = $details['roomId'];
+        $data['roomname'] = $details['roomname'];
+        $data['roomMemberId'] = $details['roomMemberId'];
+        $data['msg'] = $details['msg'];
+        
+        $pubObj = new \publicRoomChat();    //store messages in the DB
+        $res = $pubObj->storeMsgs($details['roomMemberId'], $details['msg']);
+
+        if($res != "sqlerror"){
+            foreach ($this->clientsWithId as $client) {
+                $client->send(json_encode($data));
+            }
+        }else{
+            $d = $this-> timeshow();
+            echo $d."message didn't save";
+        }
+        unset($pubObj);
+    }
+
+    //send the request of updating the member count of the given chat room
+    private function memCount_update_req($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['room'] = $details['room'];
+
+        foreach ($this->clientsWithId as $client) {
+            $client->send(json_encode($data));
+        }
+    }
+
+    //admin delete the public chat room
+    private function delete_room($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['room_id'] = $details['room_id'];
+        $data['admin_member_id'] = $details['admin_member_id'];
+        $data['roomname'] = $details['roomname'];
+
+        $obj = new \dropDownMenu();
+        $res = $obj-> delete_room($details['room_id']);
+        
+        echo $res;
+        
+        if($res == 1){
+            foreach ($this->clientsWithId as $client) {
+                $client->send(json_encode($data));
+            }
+        }else{
+            $d = $this-> timeshow();
+            echo $d."public room deleting was unsuccessful";
+        }
+        unset($obj);
     }
 
     // send online or offliene status
@@ -131,5 +233,11 @@ class Chat implements MessageComponentInterface {
         $onoffObj = new \OnlineOffline();
         $onoffObj->setOfflineStatusInDB($userId);
         unset($onoffObj);
+    }
+
+    private function timeshow()
+    {
+        $d = date("Y-n-d H:i:s");
+        return "$d - ";
     }
 }
