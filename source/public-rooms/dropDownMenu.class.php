@@ -311,6 +311,19 @@ class dropDownMenu extends DbConnection {
         $activ = 0;
         mysqli_stmt_bind_param($stmt, "ii", $activ, $roomid);
         mysqli_stmt_execute($stmt);
+
+        $q1 = "INSERT INTO pub_grp_delete(group_id, date_time) VALUES (?, ?);";
+
+        $deleted  = date("Y-n-d H:i:s");
+
+        if(!mysqli_stmt_prepare($stmt, $q1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "is", $roomid, $deleted);
+        mysqli_stmt_execute($stmt);
+
         $this->connclose($stmt, $conn);
         return 1; //deleted
         exit();

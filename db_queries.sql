@@ -859,3 +859,6 @@ ADD CONSTRAINT UC_frqmap UNIQUE (created_user_id,group_id);
 
 ALTER TABLE user_user_act_id_map
 ADD CONSTRAINT UC_frqmap UNIQUE (user_id,active_id);
+
+-- foreign key dropped
+ALTER TABLE `pub_grp_delete` DROP FOREIGN KEY `pub_grp_delete_ibfk_1`;
