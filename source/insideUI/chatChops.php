@@ -968,15 +968,6 @@ function displayLastMsgOfuser(data){
     }
 }
 
-// set previous messages in chat windows
-function setPreviousMessages(data){
-    var propic = document.getElementById("profilepiclink").value;
-    for (var i=0; i<data.length; i++) {
-        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i] +'</div> <div class="message-time"></div></div></div>';
-        $('#pri-chat-message-list').append(row);
-    }
-}
-
 //set public chat room data
 function setPubRoomData(roomData)
 {
