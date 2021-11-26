@@ -232,7 +232,8 @@
                     <input type="hidden" id="roomMemberId" name="roomMemberId" value=""> <!-- set room member id -->
                     <input type="hidden" id="roomname" name="roomname" value=""> <!-- set room name -->
                     <input type="hidden" id="roomicon" name="roomicon" value=""> <!-- set room icon -->
-
+                    <input type="hidden" id="room-list-status" name="roomListStatus" value="">
+                    
                     <!-- when select a private group -->
                     
                     <!-- when select a friend -->
@@ -341,26 +342,6 @@
 </body>
 </html>
 
-<?php
-    $msg = "";
-    if(isset($_GET['status'])){
-        $msg = setMessage();
-        echo '<script>alert ("'.$msg.'")</script>';
-    }
-    
-    function setMessage()
-    {
-        if(isset($_GET['status'])){
-            if($_GET['status'] == 'ok'){
-                return "You have successfully created a new chat room";
-            }
-            else if($_GET['status'] == 'wrong'){
-                return "Something went wrong";
-            }
-        }
-    }
-?>
-
 <script type="text/javascript">
 var conn;
 
@@ -369,6 +350,9 @@ $(document).ready(function(){
     conn.onopen = function(e) {
         console.log("Connection established!");
         sendIntroduceData(); // send data to user introduce
+
+        //if the user is created a new chat room the roomlist should be updated for others too
+        check_to_update_room_list();
     };
     
     // set reserved messages
@@ -393,6 +377,9 @@ $(document).ready(function(){
             }
             else if((data.msgType).localeCompare("delete-room") == 0){
                 pubRoom_delete_notification(data);
+            }
+            else if((data.msgType).localeCompare("update-room-list") == 0){
+                update_room_list();
             }
             
         };
@@ -469,6 +456,17 @@ $(document).ready(function(){
         conn.send(JSON.stringify(introdata));
     }
 
+    //send a msg to the server when a new chat room was created
+    //then the server will broadcast the message asking them to update the roomlist
+    function check_to_update_room_list()
+    {
+        var st = document.getElementById("room-list-status").value;
+
+        if(st == 'ok'){
+            update_room_list_broadcast();
+        }
+    }
+
 })
 
 //a public room was deleted by the admin user
@@ -496,11 +494,17 @@ function pubRoom_delete_notification(data){
         pubRoom_join_sendMsg_select("delete-room");
         document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
     }
+
     //chat room list update for all the users
-    /************************************* */
+    update_room_list();
 
+}
+
+//public room list update
+function update_room_list()
+{
     $("#pub-room-list").empty(); // clear the room list
-
+    
     $.ajax({    // get the total count of public rooms available
         method: "POST",
         url: "../public-rooms/ajax-handle.php",
@@ -925,19 +929,19 @@ function setChatRoomDetails(val){
 }
            
 // set previous messages in chat windows
-    function setPreviousMessages(data, senderId){
-        var propic = document.getElementById("profilepiclink").value;
-        for (var i=0; i<data.length; i++) {
-            if(data[i][1] != senderId){
-                var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data[i][0] +'</div><div class="message-time"></div></div></div>';
-                $('#pri-chat-message-list').append(row); // add to chat interface
-            }
-            else{
-                var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i][0] +'</div> <div class="message-time"></div></div></div>';
-                $('#pri-chat-message-list').append(row);
-            }
+function setPreviousMessages(data, senderId){
+    var propic = document.getElementById("profilepiclink").value;
+    for (var i=0; i<data.length; i++) {
+        if(data[i][1] != senderId){
+            var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data[i][0] +'</div><div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row); // add to chat interface
         }
-    }  
+        else{
+            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i][0] +'</div> <div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
+        }
+    }
+}  
       
 //auto scroll down when send button is pressed
 function autoScrollDown(){
@@ -965,15 +969,6 @@ function displayLastMsgOfuser(data){
     if(document.getElementById("reseverId").value != data.senderId){
         var divid = 'lst-msg-'.concat(data.senderId);
         document.getElementById(divid).innerHTML = data.msg;
-    }
-}
-
-// set previous messages in chat windows
-function setPreviousMessages(data){
-    var propic = document.getElementById("profilepiclink").value;
-    for (var i=0; i<data.length; i++) {
-        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i] +'</div> <div class="message-time"></div></div></div>';
-        $('#pri-chat-message-list').append(row);
     }
 }
 
@@ -1225,22 +1220,6 @@ function member_count_update_on_user_side(roomname)
     });
 }
 
-//get the member count of the given public chat room
-function get_pubg_member_count(roomname, countArray, num)
-{
-    $.ajax({
-        method: "POST",
-        url: "../public-rooms/ajax-handle.php",
-        data: {
-            mem_count_update: "set",
-            roomname: roomname
-        },
-        success: function(result) {
-            countArray[num] = JSON.parse(result);
-        }
-    });
-}
-
 //display the welcome to chat room message
 function displayMsg(msg, type)
 {
@@ -1264,6 +1243,13 @@ function hideMsg(msg)
     alertmsg.style.visibility = 'hidden';
 }
 
+//send a msg to the server to update the room list for all
+function update_room_list_broadcast()
+{
+    var datas = { msgType: 'update-room-list'};
+    conn.send(JSON.stringify(datas));
+}
+
 </script>
 
 <!--redirect from create new chat room-->
@@ -1272,9 +1258,11 @@ function hideMsg(msg)
 if(isset($_POST['status'])){
     if($_POST['status'] == 'ok'){
         $name = $_POST['roomname'];
+        $room_list_status = $_POST['status'];
         echo "<script>
-            displayMsg('You have successfully created $name', 1);
-        </script>";
+                displayMsg('You have successfully created $name', 1);
+                document.getElementById('room-list-status').value = 'ok';
+            </script>";
     }
     else if($_POST['status'] == 'wrong'){
         echo "<script>
@@ -1283,4 +1271,5 @@ if(isset($_POST['status'])){
     }
     unset($_POST['status']);
 }
+
 ?>

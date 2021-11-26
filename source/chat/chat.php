@@ -64,6 +64,11 @@ class Chat implements MessageComponentInterface {
             else if($msgTypes == "delete-room"){
                 $this-> delete_room($data);
             }
+            else if($msgTypes == "update-room-list"){
+                foreach ($this->clientsWithId as $client) {
+                    $client->send(json_encode($data));
+                }
+            }
         }
     }
   
