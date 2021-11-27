@@ -48,7 +48,7 @@ class pubRoomDbHandle extends DbConnection{
     //check whether the given name is free or already available
     public function checkUniqueName($name)
     {
-        $sqlQ = "SELECT group_id FROM public_group WHERE group_name = ?;";
+        $sqlQ = "SELECT group_id FROM public_group WHERE group_name = ? AND pubgrp_status = ?;";
 
         $conn = $this->connect();
         $stmt = mysqli_stmt_init($conn);
@@ -58,7 +58,8 @@ class pubRoomDbHandle extends DbConnection{
             return "sqlerror";
             exit();
         }
-        mysqli_stmt_bind_param($stmt, "s", $name);
+        $st = 1;
+        mysqli_stmt_bind_param($stmt, "si", $name, $st);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
         $resultcheck = mysqli_stmt_num_rows($stmt);

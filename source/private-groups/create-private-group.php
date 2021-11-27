@@ -50,10 +50,10 @@
                             <?php
                             if(isset($_GET['picn'])){
                                 //echo '<script>alert ("'.$_GET['picn'].'")</script>';
-                                echo '<img src="group-icons/'.$_GET['picn'].'" id="uploaded_image" class="img-responsive img-circle" />';
+                                echo '<img src="private-group-icons/'.$_GET['picn'].'" id="uploaded_image" class="img-responsive img-circle" />';
                             }
                             else {
-                                echo '<img src="group-icons/groupchat-icon.png" id="uploaded_image" class="img-responsive img-circle" />';
+                                echo '<img src="private-group-icons/groupchat-icon.png" id="uploaded_image" class="img-responsive img-circle" />';
                             }
                             ?>
                             <div class="overlay">
@@ -246,7 +246,7 @@ $(document).ready(function(){
 				$.ajax({
 					url:'profileUpload.php',
 					method:'POST',
-					data:{pubGIcon:base64data, pre:prePhoto},
+					data:{priGIcon:base64data, pre:prePhoto},
 					success:function(data)
 					{
 						$modal.modal('hide');

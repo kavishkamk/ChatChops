@@ -37,7 +37,7 @@ if(isset($_POST['pri-grp-submit'])){
 
                 /****************************** */
 
-                /*
+                
                 echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
                         <input type='hidden' name='status' value = 'ok' />   
                         <input type='hidden' name='roomname' value = $groupname /> 
@@ -46,7 +46,7 @@ if(isset($_POST['pri-grp-submit'])){
                 echo '<script>
                         document.formAlert.submit();
                     </script>';
-                */
+                
             }
             else{
                 echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
