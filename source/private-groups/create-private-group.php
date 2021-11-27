@@ -162,7 +162,7 @@
 
             <div class= "mem-list" id="mem-list" style="max-height: 300px; overflow-y: scroll;">
                 <!-- sample member info -->
-                
+                <!--
                 <div class= "mem-item">
                     <div class="col11">
                         <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
@@ -177,57 +177,14 @@
                     </div>
                 </div>
                 <hr class="hrr"> 
+                -->
                 
-                <div class= "mem-item">
-                    <div class="col11">
-                        <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
-                    </div>
-                    <div class="col22">
-                        <div class= "mem-fullname">rashmi wijesekara</div>
-                        <div class= "mem-username">#rashmi</div>
-                    </div>
-                    <div class= "col33">
-                        <div id= "add-btn" class= "col33-1">Add</div>
-                        <div id= "remove-btn" class= "col33-2">Remove</div>
-                    </div>
-                </div>
-                <hr class="hrr">
-
-                <div class= "mem-item">
-                    <div class="col11">
-                        <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
-                    </div>
-                    <div class="col22">
-                        <div class= "mem-fullname">rashmi wijesekara</div>
-                        <div class= "mem-username">#rashmi</div>
-                    </div>
-                    <div class= "col33">
-                        <div id= "add-btn" class= "col33-1">Add</div>
-                        <div id= "remove-btn" class= "col33-2">Remove</div>
-                    </div>
-                </div>
-                <hr class="hrr">
-
-                <div class= "mem-item">
-                    <div class="col11">
-                        <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
-                    </div>
-                    <div class="col22">
-                        <div class= "mem-fullname">rashmi wijesekara</div>
-                        <div class= "mem-username">#rashmi</div>
-                    </div>
-                    <div class= "col33">
-                        <div id= "add-btn" class= "col33-1">Add</div>
-                        <div id= "remove-btn" class= "col33-2">Remove</div>
-                    </div>
-                </div>
-                <hr class="hrr">
             </div>
 
             <!-- buttons at the bottom -->
             <div class= "button-section">
-                <div id= "cancel-btn" class= "col1">Cancel</div>
-                <div id= "members-save-btn" class= "col2">Add Members</div>
+                <div id= "cancel-btn" class= "col1" onclick= "cancel()">Cancel</div>
+                <div id= "members-save-btn" class= "col2" onclick= "members_save()">Add Members</div>
             </div>
 
         </div>
@@ -285,11 +242,64 @@ $(document).ready(function(){
 
     var modal = document.getElementById("member-list");
 
-        if(document.getElementById("create-ok").value == ''){
-            modal.style.display = "block";
-        }
+    //this user has just created a new private group
+    if(document.getElementById("create-ok").value == 'ok'){
+        // add members from his friends list
 
+        modal.style.display = "block";
+        set_friend_list();
+    }
 
+    //set friend list in the member selecting popup
+    function set_friend_list()
+    {
+        document.getElementById("mem-list").innerHTML = "";
+        var userid = document.getElementById("admin-userid").value;
+        alert(userid);
+        $.ajax({
+            method: "POST",
+            url: "private-groups/ajax-handle.php",
+            data: {
+                set_friend_list: "set",
+                userid: userid
+            },
+            success: function(result){
+                console.log(result);
+                var obj = JSON.parse(result);
+
+                if(obj == "sqlerror"){
+                    return;
+                }
+                var i=0;
+
+                while(obj[i])
+                {
+                    var addid = "add"+ obj[i].user_id;
+                    var removeid = "remove"+ obj[i].user_id;
+
+                    console.log(obj[i]);
+                    var friend = `<div class= "mem-item">
+                                    <div class="col11">
+                                        <img src= 'profile-pic/`+obj[i].profilePicLink+`' width='60'height='60' class='img-circle mem-icon'>
+                                    </div>
+                                    <div class="col22">
+                                        <div class= "mem-fullname">`+obj[i].first_name+ ' '+ obj[i].last_name +`</div>
+                                        <div class= "mem-username">#`+obj[i].username + `</div>
+                                    </div>
+                                    <div class= "col33">
+                                        <div class= "add-btn" id= "`+addid +`" class= "col33-1">Add</div>
+                                        <div class= "remove-btn" id= "`+removeid+`" class= "col33-2">Remove</div>
+                                    </div>
+                                </div>
+                                <hr class="hrr">`;
+                    
+                    $("#mem-list").append(friend);
+                    i++;
+                }
+            }
+        });
+    }
+    
 	var $modal = $('#modal');
 
 	var image = document.getElementById('sample_image');
@@ -369,4 +379,14 @@ $(document).ready(function(){
 	});
 	
 });
+
+function cancel()
+{
+
+}
+
+function members_save()
+{
+
+}
 </script>

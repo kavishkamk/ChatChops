@@ -315,7 +315,7 @@ textarea {
     padding-left: 10px;
 }
 
-#add-btn{
+.add-btn{
     text-align: center;
     padding: 4px 5px;
     width: 50px;
@@ -324,11 +324,11 @@ textarea {
     border:none;
     border-radius:5px;
     color:black;
-    justify-self: right;
+    justify-self: left;
     margin-left: 25px;
 }
 
-#remove-btn{
+.remove-btn{
     text-align: center;
     padding: 4px 5px;
     width: 75px;
@@ -340,6 +340,7 @@ textarea {
     justify-self: right;
     margin-right: 15px;
     margin-top: 5px;
+    margin-left: 10px;
 }
 
 #members-save-btn{
@@ -372,13 +373,13 @@ textarea {
     cursor:pointer;
 }
 
-#add-btn:hover{
+.add-btn:hover{
     color:white;
     cursor:pointer;
     background-color: #63c3f0;
 }
 
-#remove-btn:hover{
+.remove-btn:hover{
     color:white;
     cursor:pointer;
     background-color: #e48592;
