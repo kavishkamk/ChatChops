@@ -233,5 +233,97 @@ textarea {
     background-color: #f8f8f8;
     font-size: 15px;
     resize: none;
-    
 }
+
+/* member adding popup */
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: fit-content;
+}
+
+.modal-topic{
+    text-align: center;
+    color: #043a6d;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.col1{
+    float: left;
+    width: 40%;
+    padding-right: 50px;
+}
+
+.col2{
+    float: right;
+    width: 60%;
+    padding-left: 50px;
+}
+
+.col11{
+    float: left;
+    width: 30%;
+}
+.col22{
+    float: left;
+    width: 40%;
+}
+.col33{
+    float: right;
+    width: 30%;
+}
+
+.button-section{
+    padding-top: 50px;
+    padding-bottom: 25px;
+    padding-left: 10px;
+}
+
+#members-save-btn{
+    text-align: center;
+    padding:10px 10px;
+    width: 150px;
+    background-color: #207398;
+    font-size:17px;
+    border:none;
+    border-radius:5px;
+    color:#caeef5;
+    justify-self: right;
+}
+
+#cancel-btn{
+    text-align: center;
+    padding:10px 10px;
+    width: 100px;
+    background-color: #207398;
+    font-size:17px;
+    border:none;
+    border-radius:5px;
+    color:#caeef5;
+    justify-self: left;
+}
+#members-save-btn:hover, #cancel-btn:hover{
+    background-color: #12B0E8;
+    color:white;
+    cursor:pointer;
+}
+

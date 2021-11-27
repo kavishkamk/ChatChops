@@ -13,7 +13,8 @@
 
     <base href="http://localhost/chatchops/source/"/>
     <link rel="stylesheet" href="css/create-private-group.css">
-    
+    <link rel="stylesheet" href="css/chatUI.css">
+
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <style>
     body {
@@ -147,6 +148,45 @@
             </div>
         </form>
     </div>
+    
+    <form class = "hidden-form">
+        <input type="hidden" id="create-ok" name="create_ok" value="">
+    </form>
+
+    <!-- member adding popup -->
+    <div id="member-list" class="modal">
+        <div class="modal-content">
+            <p class = "modal-topic" id= "mem-count-show">Select Members</p><hr class= "hrr">
+
+            <div class= "mem-list" id="mem-list" style="max-height: 300px; overflow-y: scroll;">
+                <!-- sample member info -->
+                
+                <div class= "mem-item">
+                    <div class="col11">
+                        
+                        <img src= 'private-group-icons/groupchat-icon.png' width='50'height='50' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
+                        
+                    </div>
+                    <div class="col22">
+                        <div class= "mem-fullname">rashmi wijesekara</div>
+                        <div class= "mem-username">#rashmi</div>
+                    </div>
+                    <div class= "col33">
+                        Add
+                    </div>
+                </div>
+                <hr class="hrr"> 
+                
+                <!-- buttons at the bottom -->
+                <div class= "button-section">
+                    <div id= "cancel-btn" class= "col1">Cancel</div>
+                    <div id= "members-save-btn" class= "col2">Add Members</div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
 
@@ -173,12 +213,33 @@ function setErrMessage()
         }
     }
 }
+
+if(isset($_POST['status'])){
+    if($_POST['status'] == 'ok'){
+        $name = $_POST['groupname'];
+       
+        echo "<script>
+                document.getElementById('create-ok').value = 'ok';
+            </script>";
+    }
+    
+    unset($_POST['status']);
+}
+
+
 ?>
 
 <!-- script for inserting group icon -->
 <script>
 
 $(document).ready(function(){
+
+    var modal = document.getElementById("member-list");
+
+        if(document.getElementById("create-ok").value == ''){
+            modal.style.display = "block";
+        }
+
 
 	var $modal = $('#modal');
 

@@ -38,9 +38,9 @@ if(isset($_POST['pri-grp-submit'])){
                 /****************************** */
 
                 
-                echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
+                echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/private-groups/create-private-group.php'>
                         <input type='hidden' name='status' value = 'ok' />   
-                        <input type='hidden' name='roomname' value = $groupname /> 
+                        <input type='hidden' name='groupname' value = $groupname /> 
                     </form>";
                 
                 echo '<script>
@@ -78,7 +78,7 @@ if(isset($_POST['pri-grp-submit'])){
         header("Location:create-private-group.php?error=biomax&groupname=$groupname&groupbio=$groupbio&picn=$icon");
     }
     else{
-        /*
+        
         echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
                 <input type='hidden' name='status' value = 'wrong' />   
             </form>";
@@ -86,7 +86,7 @@ if(isset($_POST['pri-grp-submit'])){
         echo '<script>
                 document.formAlert.submit();
             </script>';
-            */
+    
     }
 
     unset($obj);
