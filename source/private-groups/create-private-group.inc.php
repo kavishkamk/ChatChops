@@ -37,10 +37,11 @@ if(isset($_POST['pri-grp-submit'])){
 
                 /****************************** */
 
-                
+                $userid = $_SESSION['userid'];
                 echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/private-groups/create-private-group.php'>
                         <input type='hidden' name='status' value = 'ok' />   
                         <input type='hidden' name='groupname' value = $groupname /> 
+                        <input type='hidden' name='admin_userid' value =  $userid /> 
                     </form>";
                 
                 echo '<script>

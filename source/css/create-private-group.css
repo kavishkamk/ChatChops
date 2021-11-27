@@ -258,6 +258,7 @@ textarea {
     padding: 20px;
     border: 1px solid #888;
     width: fit-content;
+    padding-bottom: 20px;
 }
 
 .modal-topic{
@@ -267,6 +268,11 @@ textarea {
     font-weight: bold;
 }
 
+.mem-item {
+    min-width: 500px;
+    margin-bottom: 3px;
+    margin-top: 2px;
+}
 .col1{
     float: left;
     width: 40%;
@@ -285,17 +291,55 @@ textarea {
 }
 .col22{
     float: left;
-    width: 40%;
+    width: 20%;
 }
 .col33{
     float: right;
-    width: 30%;
+    width: 50%;
+}
+
+.col33-1{
+    float: left;
+    width: 40%;
+}
+
+.col33-2{
+    float: right;
+    width: 40%;
 }
 
 .button-section{
-    padding-top: 50px;
-    padding-bottom: 25px;
+    z-index: 102;
+    padding-top: 30px;
+    padding-bottom: 40px;
     padding-left: 10px;
+}
+
+#add-btn{
+    text-align: center;
+    padding: 4px 5px;
+    width: 50px;
+    background-color: #39b6f0;
+    font-size:15px;
+    border:none;
+    border-radius:5px;
+    color:black;
+    justify-self: right;
+    margin-left: 25px;
+}
+
+#remove-btn{
+    text-align: center;
+    padding: 4px 5px;
+    width: 75px;
+    background-color: #df6c7b;
+    font-size:15px;
+    border:none;
+    border-radius:5px;
+    color: black;
+    justify-self: right;
+    margin-right: 15px;
+    margin-top: 5px;
 }
 
 #members-save-btn{
@@ -321,9 +365,32 @@ textarea {
     color:#caeef5;
     justify-self: left;
 }
+
 #members-save-btn:hover, #cancel-btn:hover{
     background-color: #12B0E8;
     color:white;
     cursor:pointer;
 }
 
+#add-btn:hover{
+    color:white;
+    cursor:pointer;
+    background-color: #63c3f0;
+}
+
+#remove-btn:hover{
+    color:white;
+    cursor:pointer;
+    background-color: #e48592;
+}
+
+.mem-fullname{
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+}
+
+.mem-username{
+    color: rgb(97, 97, 97);
+    font-size: 14px;
+}

@@ -150,7 +150,9 @@
     </div>
     
     <form class = "hidden-form">
-        <input type="hidden" id="create-ok" name="create_ok" value="">
+        <input type="hidden" id="create-ok" name="create_ok" value=""> <!-- group created, ready to add members -->
+        <input type="hidden" id="group-name" name="group-name" value=""> <!-- group name -->
+        <input type="hidden" id="admin-userid" name="admin-userid" value=""> <!-- user admin id -->
     </form>
 
     <!-- member adding popup -->
@@ -163,27 +165,71 @@
                 
                 <div class= "mem-item">
                     <div class="col11">
-                        
-                        <img src= 'private-group-icons/groupchat-icon.png' width='50'height='50' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
-                        
+                        <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
                     </div>
                     <div class="col22">
                         <div class= "mem-fullname">rashmi wijesekara</div>
                         <div class= "mem-username">#rashmi</div>
                     </div>
                     <div class= "col33">
-                        Add
+                        <div id= "add-btn" class= "col33-1">Add</div>
+                        <div id= "remove-btn" class= "col33-2">Remove</div>
                     </div>
                 </div>
                 <hr class="hrr"> 
                 
-                <!-- buttons at the bottom -->
-                <div class= "button-section">
-                    <div id= "cancel-btn" class= "col1">Cancel</div>
-                    <div id= "members-save-btn" class= "col2">Add Members</div>
+                <div class= "mem-item">
+                    <div class="col11">
+                        <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
+                    </div>
+                    <div class="col22">
+                        <div class= "mem-fullname">rashmi wijesekara</div>
+                        <div class= "mem-username">#rashmi</div>
+                    </div>
+                    <div class= "col33">
+                        <div id= "add-btn" class= "col33-1">Add</div>
+                        <div id= "remove-btn" class= "col33-2">Remove</div>
+                    </div>
                 </div>
-                
+                <hr class="hrr">
+
+                <div class= "mem-item">
+                    <div class="col11">
+                        <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
+                    </div>
+                    <div class="col22">
+                        <div class= "mem-fullname">rashmi wijesekara</div>
+                        <div class= "mem-username">#rashmi</div>
+                    </div>
+                    <div class= "col33">
+                        <div id= "add-btn" class= "col33-1">Add</div>
+                        <div id= "remove-btn" class= "col33-2">Remove</div>
+                    </div>
+                </div>
+                <hr class="hrr">
+
+                <div class= "mem-item">
+                    <div class="col11">
+                        <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
+                    </div>
+                    <div class="col22">
+                        <div class= "mem-fullname">rashmi wijesekara</div>
+                        <div class= "mem-username">#rashmi</div>
+                    </div>
+                    <div class= "col33">
+                        <div id= "add-btn" class= "col33-1">Add</div>
+                        <div id= "remove-btn" class= "col33-2">Remove</div>
+                    </div>
+                </div>
+                <hr class="hrr">
             </div>
+
+            <!-- buttons at the bottom -->
+            <div class= "button-section">
+                <div id= "cancel-btn" class= "col1">Cancel</div>
+                <div id= "members-save-btn" class= "col2">Add Members</div>
+            </div>
+
         </div>
     </div>
 
@@ -217,9 +263,12 @@ function setErrMessage()
 if(isset($_POST['status'])){
     if($_POST['status'] == 'ok'){
         $name = $_POST['groupname'];
-       
+        $admin = $_POST['admin_userid'];
+
         echo "<script>
                 document.getElementById('create-ok').value = 'ok';
+                document.getElementById('group-name').value = $name;
+                document.getElementById('admin-userid').value = $admin;
             </script>";
     }
     
