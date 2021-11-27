@@ -251,7 +251,7 @@ $(document).ready(function(){
 					{
 						$modal.modal('hide');
 						$('#uploaded_image').attr('src', data);
-                        document.getElementById("prouppic").value = data.substr(12);
+                        document.getElementById("prouppic").value = data.substr(20);
 					}
 				});
 			};

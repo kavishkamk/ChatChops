@@ -151,7 +151,7 @@ class privateGroupDbHandle extends DbConnection{
         mysqli_stmt_bind_param($stmt, "ii", $user, $group);
         mysqli_stmt_execute($stmt);
 
-        $q1 = "INSERT INTO p_grp_member(group_id, user_id) VALUES(?,?);";
+        $q1 = "INSERT INTO p_group_member(group_id, user_id) VALUES(?,?);";
         
         if(!mysqli_stmt_prepare($stmt, $q1)){
             $this->connclose($stmt, $conn);
@@ -183,7 +183,7 @@ class privateGroupDbHandle extends DbConnection{
             exit();
         }
 
-        $time = $this->created_date_and_time;
+        $time = $this->created_date_time;
         $s = 1;
         mysqli_stmt_bind_param($stmt, "si", $time, $s);
         mysqli_stmt_execute($stmt);

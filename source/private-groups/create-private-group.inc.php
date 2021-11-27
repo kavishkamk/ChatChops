@@ -78,6 +78,7 @@ if(isset($_POST['pri-grp-submit'])){
         header("Location:create-private-group.php?error=biomax&groupname=$groupname&groupbio=$groupbio&picn=$icon");
     }
     else{
+        /*
         echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
                 <input type='hidden' name='status' value = 'wrong' />   
             </form>";
@@ -85,6 +86,7 @@ if(isset($_POST['pri-grp-submit'])){
         echo '<script>
                 document.formAlert.submit();
             </script>';
+            */
     }
 
     unset($obj);
