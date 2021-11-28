@@ -149,10 +149,16 @@
         </form>
     </div>
     
-    <form class = "hidden-form">
+    <form class = "hidden-form" method='post' name = 'prigCreate' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
         <input type="hidden" id="create-ok" name="create_ok" value=""> <!-- group created, ready to add members -->
+        <input type="hidden" id="group-id" name="group-id" value="">
         <input type="hidden" id="group-name" name="group-name" value=""> <!-- group name -->
-        <input type="hidden" id="admin-userid" name="admin-userid" value=""> <!-- user admin id -->
+        <input type="hidden" id="created-on" name="created-on" value="">
+        <input type="hidden" id="bio" name="bio" value="">
+        <input type="hidden" id="group-icon" name="group-icon" value="">
+        <input type="hidden" id="admin-userid" name="admin-userid" value=""> <!-- admin's user id -->
+        <input type="hidden" id="member-userids" name="member-userids" value=""> <!-- selected user ids -->
+
     </form>
 
     <!-- member adding popup -->
@@ -184,7 +190,7 @@
             <!-- buttons at the bottom -->
             <div class= "button-section">
                 <div id= "cancel-btn" class= "col1" onclick= "cancel()">Cancel</div>
-                <div id= "members-save-btn" class= "col2" onclick= "members_save()">Add Members</div>
+                <div id= "members-save-btn" class= "col2" onclick= "members_save()" style= "visibility:visible;">Add Members</div>
             </div>
 
         </div>
@@ -219,12 +225,20 @@ function setErrMessage()
 
 if(isset($_POST['status'])){
     if($_POST['status'] == 'ok'){
+        $id = $_POST['group_id'];
         $name = $_POST['groupname'];
+        $on = $_POST['created_on'];
+        $bio = $_POST['bio'];
+        $icon = $_POST['group_icon'];
         $admin = $_POST['admin_userid'];
 
         echo "<script>
                 document.getElementById('create-ok').value = 'ok';
-                document.getElementById('group-name').value = $name;
+                document.getElementById('group-id').value = $id;
+                document.getElementById('group-name').value = '$name';
+                document.getElementById('created-on').value = '$on';
+                document.getElementById('bio').value = '$bio';
+                document.getElementById('group-icon').value = '$icon';
                 document.getElementById('admin-userid').value = $admin;
             </script>";
     }
@@ -255,7 +269,7 @@ $(document).ready(function(){
     {
         document.getElementById("mem-list").innerHTML = "";
         var userid = document.getElementById("admin-userid").value;
-        alert(userid);
+
         $.ajax({
             method: "POST",
             url: "private-groups/ajax-handle.php",
@@ -264,20 +278,22 @@ $(document).ready(function(){
                 userid: userid
             },
             success: function(result){
-                console.log(result);
                 var obj = JSON.parse(result);
 
                 if(obj == "sqlerror"){
                     return;
+                }else if(obj == ""){
+                    document.getElementById("members-save-btn").style.visibility = "hidden";
                 }
                 var i=0;
 
                 while(obj[i])
                 {
-                    var addid = "add"+ obj[i].user_id;
-                    var removeid = "remove"+ obj[i].user_id;
-
                     console.log(obj[i]);
+                    var userid = obj[i].user_id;
+                    var addid = "add"+ userid;
+                    var removeid = "remove"+ userid;
+
                     var friend = `<div class= "mem-item">
                                     <div class="col11">
                                         <img src= 'profile-pic/`+obj[i].profilePicLink+`' width='60'height='60' class='img-circle mem-icon'>
@@ -287,8 +303,8 @@ $(document).ready(function(){
                                         <div class= "mem-username">#`+obj[i].username + `</div>
                                     </div>
                                     <div class= "col33">
-                                        <div class= "add-btn" id= "`+addid +`" class= "col33-1">Add</div>
-                                        <div class= "remove-btn" id= "`+removeid+`" class= "col33-2">Remove</div>
+                                        <div class= "add-btn" id= "`+addid +`" onclick="member_added(`+userid+`)" class= "col33-1" style= "visibility:visible;">Add</div>
+                                        <div class= "remove-btn" id= "`+removeid+`" onclick="member_removed(`+userid+`)" class= "col33-2" style= "visibility:hidden;">Remove</div>
                                     </div>
                                 </div>
                                 <hr class="hrr">`;
@@ -380,13 +396,113 @@ $(document).ready(function(){
 	
 });
 
-function cancel()
+//when click on a add button of a user
+function member_added(userid)
 {
+    var removebtn = "remove"+ userid;
+    var addbtn = "add"+ userid;
+
+    var str = document.getElementById("member-userids").value;
+    
+    var add;
+    if(str == ""){
+        add = userid;
+    }else{
+        add = ","+ userid;
+    }
+
+    var newstr = str + add;
+    document.getElementById("member-userids").value = newstr;
+
+    console.log(document.getElementById("member-userids").value);
+
+    document.getElementById(removebtn).style.visibility = 'visible';
+    document.getElementById(addbtn).style.visibility = 'hidden';
 
 }
 
-function members_save()
+//when click on a remove button of a user
+function member_removed(userid)
 {
+    var removebtn = "remove"+ userid;
+    var addbtn = "add"+ userid;
 
+    var str = document.getElementById("member-userids").value;
+    var ids = str.split(",");
+
+    var newstr ="";
+    var str1;
+    var i=0;
+    while(ids[i]){
+        var id = ids[i];
+        
+        if(id != userid){
+            if(newstr == "")
+                str1 = id;
+            else
+                str1 = ","+ id;
+
+            i++;
+        }else{
+            i++;
+            continue;
+        }
+        newstr = newstr+ str1;
+        
+    }
+    document.getElementById("member-userids").value = newstr;
+
+    console.log(document.getElementById("member-userids").value);
+
+    document.getElementById(removebtn).style.visibility = 'hidden';
+    document.getElementById(addbtn).style.visibility = 'visible';
+}
+
+// when clicked on cancel button
+function cancel()
+{
+    if(document.getElementById("members-save-btn").style.visibility == "hidden"){
+        members_save();
+    }
+}
+
+//when clicked on add members button
+function members_save()
+{   
+    /********************************* */
+    /** send the member list of the new group to the DB
+        if successful ==> submit the hidden form to the main UI
+
+        else ==> create the member list empty
+                send the hidden form to the main UI with a notif saying 
+                    (Add members to the 'groupname' group again)*/
+    var memlist = document.getElementById("member-userids").value;
+    var temp = new Array();
+
+    if(memlist == ""){
+        document.prigCreate.submit();
+        return;
+    }else{
+        temp = memlist.split(",");
+
+        for (a in temp){ 
+            //store the userids as base 10 integers instead of strings
+            temp[a] = parseInt(temp[a], 10); 
+        }
+    }
+
+    $.ajax({
+        method: "POST",
+        url: "private-groups/ajax-handle.php",
+        data: {
+            members_save: "set",
+            memlist: temp
+        },
+        success: function(result){
+
+        }
+    });
+
+    //document.prigCreate.submit();
 }
 </script>

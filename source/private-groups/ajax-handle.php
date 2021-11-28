@@ -12,26 +12,14 @@ if(isset($_POST['set_friend_list']))
     $result = $obj-> getFriendList($userid);
     unset($obj);
     echo json_encode($result);
-    exit();
-    /*
-    if($result != "sqlerror"){
-        $data = array();
-        $obj1 = new displayGroupList();
+}
 
-        $i=0;
-        while($result[$i]){
-            $row = $result[$i];
-            $id = $row['user_id'];
-
-            $username = $obj1 -> get_username($id);
-            $row['username'] = $username;
-            
-            $data[$i] = $row;
-            $i++;
-        }
-        unset($obj1);
-        echo json_encode($data);
-    }
-    */
-    
+//save the member list of newly created private group in the DB
+if(isset($_POST['members_save']))
+{
+    $memlist = $_POST['memlist'];
+    $obj = new displayGroupList();
+    $res = $obj-> save_member_list($memlist);
+    unset($obj);
+    echo json_encode($res);
 }

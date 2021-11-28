@@ -205,6 +205,21 @@ class privateGroupDbHandle extends DbConnection{
         exit();
     }
 
+    //send the full dataset of the newly created group
+    public function full_group_dataset()
+    {
+        $data = array();
+
+        $data['group_id'] = $this-> group_id;
+        $data['group_name'] = $this-> group_name;
+        $data['created'] = $this-> created_date_time;
+        $data['bio'] = $this-> bio;
+        $data['group_icon'] = $this-> group_icon;
+        $data['created_user_id'] = $this-> created_user_id;
+
+        return $data;
+        exit();
+    }
 
     private function connclose($stmt, $conn)
     {

@@ -235,7 +235,14 @@
                     <input type="hidden" id="room-list-status" name="roomListStatus" value="">
                     
                     <!-- when select a private group -->
-                    
+                    <input type="hidden" id="group-id" name="group-id" value="">
+                    <input type="hidden" id="group-name" name="group-name" value=""> <!-- group name -->
+                    <input type="hidden" id="created-on" name="created-on" value="">
+                    <input type="hidden" id="bio" name="bio" value="">
+                    <input type="hidden" id="group-icon" name="group-icon" value="">
+                    <input type="hidden" id="admin-userid" name="admin-userid" value=""> <!-- admin's user id -->
+                    <input type="hidden" id="member-userids" name="member-userids" value=""> <!-- selected user ids -->
+
                     <!-- when select a friend -->
                     <input type="hidden" id="reseverId" name="reseverId" value=""> <!--reserver id-->
                     <input type="hidden" id="profilepiclink" name="profilepiclink" value=""> <!--profie pic link-->
@@ -1252,9 +1259,9 @@ function update_room_list_broadcast()
 
 </script>
 
-<!--redirect from create new chat room-->
 <?php
 
+// redirect from create new chat room
 if(isset($_POST['status'])){
     if($_POST['status'] == 'ok'){
         $name = $_POST['roomname'];
@@ -1270,6 +1277,11 @@ if(isset($_POST['status'])){
         </script>";
     }
     unset($_POST['status']);
+}
+
+// redirect from create new private group
+if(isset($_POST['create-ok'])){
+
 }
 
 ?>

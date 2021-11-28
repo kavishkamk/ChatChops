@@ -26,22 +26,26 @@ if(isset($_POST['pri-grp-submit'])){
             $create = $pubObj-> createPrivateGroup($groupname, $groupbio, $icon, $_SESSION['userid']);
 
             if($create == "ok"){
-                /***************************** */
-                // redirect into a new pg 
-                        //to select members from his friend list
-
-                // propic, fname lname, username, add button
-                        //if add button is clicked once, add button hide -> cancel button visible
+                //get the full dataset of that group
+                $data = $pubObj-> full_group_dataset();
                 
-                //create group button to submit selected member list
-
-                /****************************** */
+                $group_id = $data['group_id'];
+                $group_name = $data['group_name'];
+                $created = $data['created'];
+                $bio = $data['bio'] ;
+                $group_icon = $data['group_icon'];
+                $created_user_id = $data['created_user_id'];
 
                 $userid = $_SESSION['userid'];
                 echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/private-groups/create-private-group.php'>
-                        <input type='hidden' name='status' value = 'ok' />   
-                        <input type='hidden' name='groupname' value = $groupname /> 
-                        <input type='hidden' name='admin_userid' value =  $userid /> 
+                        <input type='hidden' name='status' value = 'ok' />  
+                        <input type='hidden' name='group_id' value = $group_id /> 
+                        <input type='hidden' name='groupname' value = $group_name /> 
+                        <input type='hidden' name='created_on' value = $created /> 
+                        <input type='hidden' name='bio' value = $bio /> 
+                        <input type='hidden' name='group_icon' value = $group_icon /> 
+                        <input type='hidden' name='admin_userid' value =  $created_user_id /> 
+
                     </form>";
                 
                 echo '<script>
@@ -64,6 +68,9 @@ if(isset($_POST['pri-grp-submit'])){
         
         //send to db and check errors
         //if all good, redirect to another page to select the members from his friends list
+
+        unset($pubObj);
+        exit();
     }
 
     else if($validate == 1){

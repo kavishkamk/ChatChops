@@ -29,6 +29,13 @@ class displayGroupList extends DbConnection{
         exit();
     }
 
+    //store the new member list of a private group in the DB
+    public function save_member_list($arr)
+    {
+        /******************** */
+        
+    }
+
     private function connclose($stmt, $conn){
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
