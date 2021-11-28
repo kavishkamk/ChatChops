@@ -360,7 +360,7 @@ $(document).ready(function(){
     conn = new WebSocket('ws://localhost:8080');
 
     load_group_list();
-    
+
     conn.onopen = function(e) {
         console.log("Connection established!");
         sendIntroduceData(); // send data to user introduce
@@ -498,8 +498,29 @@ function load_group_list()
         success: function(result){
             var obj = JSON.parse(result);
             console.log(obj);
+
+            var i=0;
+            while(obj[i]){
+                var group = obj[i];
+                grp = JSON.stringify(group);
+
+                var datas = `<div onclick='set_private_group_data(`+ grp +`)' class= "friend-conversation1 active">
+                    <img src="../group-icons/`+group.icon+`" alt='group icon'/>
+                    <div class= "title-text">`+group.group_name+`</div>
+                    <span class= 'memcount' style='float: right'>3 Members</span>
+                </div>`;
+
+                $('#prig-list').append(datas);
+                i++;
+            }
         }
     });
+}
+
+// set selected private group data
+function set_private_group_data(data)
+{
+    console.log(data);
 }
 
 //a public room was deleted by the admin user
