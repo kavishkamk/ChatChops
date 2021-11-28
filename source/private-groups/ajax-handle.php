@@ -25,3 +25,13 @@ if(isset($_POST['members_save']))
     unset($obj);
     echo json_encode($res);
 }
+
+//user asked to load his group list
+if(isset($_POST['load_group_list']))
+{
+    $userid = $_POST['userid'];
+    $obj = new displayGroupList();
+    $res = $obj -> load_group_list($userid);
+    unset($obj);
+    echo json_encode($res);
+}

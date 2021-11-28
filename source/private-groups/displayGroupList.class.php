@@ -82,6 +82,55 @@ class displayGroupList extends DbConnection{
         exit();
     }
 
+    //load all the data of the group list of given userid
+    public function load_group_list($userid)
+    {
+        $q1 = "SELECT   private_group.group_id, 
+                        private_group.group_name, 
+                        private_group.created_date_time,
+                        private_group.bio,
+                        private_group.group_icon 
+                FROM private_group INNER JOIN 
+                (SELECT DISTINCT p_group_member.group_id FROM 
+                ((p_grp_mem_status_map 
+                INNER JOIN p_group_member ON 
+                p_group_member.mem_id = p_grp_mem_status_map.member_id)
+                INNER JOIN pgrp_mem_status ON 
+                pgrp_mem_status.statusId = p_grp_mem_status_map.status_id) 
+                WHERE p_group_member.user_id = ? AND pgrp_mem_status.actStatus = ?) 
+                as aa ON aa.group_id = private_group.group_id AND private_group.pgrp_status = ?;";
+        
+        $status =1;
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt, $q1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+
+        mysqli_stmt_bind_param($stmt, "iii", $userid, $status, $status);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        $data = array();
+        $i =0;
+        while($row = mysqli_fetch_assoc($result)){
+            $data[$i] = array('group_id' => $row['group_id'],
+                            'group_name' => $row['group_name'],
+                            'created' => $row['created_date_time'],
+                            'bio' => $row['bio'],
+                            'icon' => $row['group_icon']);
+            $i++;
+        }
+        $this->connclose($stmt, $conn);
+        return $data;
+        exit();
+
+    }
+
     private function connclose($stmt, $conn){
         mysqli_stmt_close($stmt);
         mysqli_close($conn);

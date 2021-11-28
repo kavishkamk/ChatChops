@@ -276,7 +276,11 @@
                     <span class= 'memcount' style='float: right'>3 Members</span>
                 </div>
                 -->
-                
+                <?php
+                include_once "../private-groups/displayGroupList.class.php";
+                $obj = new displayGroupList();
+
+                ?>
             </div>
         </div>
         
@@ -354,6 +358,9 @@ var conn;
 
 $(document).ready(function(){
     conn = new WebSocket('ws://localhost:8080');
+
+    load_group_list();
+    
     conn.onopen = function(e) {
         console.log("Connection established!");
         sendIntroduceData(); // send data to user introduce
@@ -475,6 +482,25 @@ $(document).ready(function(){
     }
 
 })
+
+
+//load the group list
+function load_group_list()
+{
+    var userid = document.getElementById("senderId").value;
+    $.ajax({
+        method: "POST",
+        url: "../private-groups/ajax-handle.php",
+        data: {
+            load_group_list: "set",
+            userid: userid
+        },
+        success: function(result){
+            var obj = JSON.parse(result);
+            console.log(obj);
+        }
+    });
+}
 
 //a public room was deleted by the admin user
 function pubRoom_delete_notification(data){
@@ -818,7 +844,6 @@ function room_dropdown_menu(option)
     }   
 }
   
-
 //public room admin removes members from the chat room
 function user_remove(username){
     //alert("User removed: " + username);
