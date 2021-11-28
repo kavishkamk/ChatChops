@@ -18,8 +18,10 @@ if(isset($_POST['set_friend_list']))
 if(isset($_POST['members_save']))
 {
     $memlist = $_POST['memlist'];
+    $groupid = $_POST['group_id'];
+
     $obj = new displayGroupList();
-    $res = $obj-> save_member_list($memlist);
+    $res = $obj-> save_member_list($groupid, $memlist);
     unset($obj);
     echo json_encode($res);
 }

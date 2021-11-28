@@ -477,6 +477,8 @@ function members_save()
                 send the hidden form to the main UI with a notif saying 
                     (Add members to the 'groupname' group again)*/
     var memlist = document.getElementById("member-userids").value;
+    var groupid = document.getElementById('group-id').value;
+
     var temp = new Array();
 
     if(memlist == ""){
@@ -496,13 +498,18 @@ function members_save()
         url: "private-groups/ajax-handle.php",
         data: {
             members_save: "set",
+            group_id: groupid,
             memlist: temp
         },
         success: function(result){
+            var obj = JSON.parse(result);
+            console.log(obj);
 
+            if(obj == "ok"){
+                document.prigCreate.submit();
+            }
         }
     });
 
-    //document.prigCreate.submit();
 }
 </script>
