@@ -319,11 +319,6 @@
                     <span class= 'memcount' style='float: right'>3 Members</span>
                 </div>
                 -->
-                <?php
-                include_once "../private-groups/displayGroupList.class.php";
-                $obj = new displayGroupList();
-
-                ?>
             </div>
         </div>
         
@@ -547,13 +542,17 @@ function load_group_list()
                 var group = obj[i];
                 grp = JSON.stringify(group);
 
-                var datas = `<div onclick='set_private_group_data(`+ grp +`)' class= "friend-conversation1 active">
+                var id = group.group_id + "memcount";
+                var id2 = group.group_name + "prig";
+
+                var datas = `<div onclick='set_private_group_data(`+ grp +`)' id= "`+id2+`" class= "friend-conversation1 active">
                     <img src="../group-icons/`+group.icon+`" alt='group icon'/>
                     <div class= "title-text">`+group.group_name+`</div>
-                    <span class= 'memcount' style='float: right'>3 Members</span>
+                    <span class= 'memcount' id='`+id+`' style='float: right'></span>
                 </div>`;
 
                 $('#prig-list').append(datas);
+
                 i++;
             }
         }
@@ -564,6 +563,9 @@ function load_group_list()
 function set_private_group_data(data)
 {
     console.log(data);
+
+    //set the active chat's color in the list
+    //document.getElementById(data.group_name).style.backgroundColor = "white";
 
     //set private chat details null if a group selected
     document.getElementById("reseverId").value = "";
@@ -765,8 +767,8 @@ function private_group_dropdown(option)
                     member_count_update_on_user_side(room);
 
                     var datas = {
-                                msgType: "memCount-update-req",
-                                room: room
+                                msgType: "prig-memCount-update-req",
+                                group: room
                             };
                     conn.send(JSON.stringify(datas));
                     */
@@ -785,6 +787,25 @@ function private_group_dropdown(option)
     else{
         return 0;
     }
+}
+
+// get the member count of a given private group
+function set_member_count(grpid)
+{
+    $.ajax({
+        method: "POST",
+        url: "../private-groups/ajax-handle.php",
+        data: {
+            member_count: "set",
+            group_id: grpid
+        },
+        success: function(result){
+            count = JSON.parse(result);
+            var id = grpid + "memcount";
+            var newCount = res + " Members";
+            document.getElementById(id).textContent = newCount;
+        }
+    }); 
 }
 
 //a public room was deleted by the admin user

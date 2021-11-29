@@ -81,3 +81,13 @@ if(isset($_POST['leave_group']))
     unset($obj);
     echo json_encode($res);
 }
+
+//return the member count of a given private group
+if(isset($_POST['member_count']))
+{
+    $grp = $_POST['group_id'];
+    $obj = new displayGroupList();
+    $res = $obj -> get_member_count($grp);
+    unset($obj);
+    echo json_encode($res);
+}

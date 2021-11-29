@@ -164,7 +164,32 @@ class displayGroupList extends DbConnection{
         }
     }
 
+    //return member count of a given private group
+    public function get_member_count($grpid)
+    {
+        $sqlQ = "SELECT p_group_member.mem_id
+            FROM ((p_grp_mem_status_map
+            INNER JOIN p_group_member ON p_grp_mem_status_map.member_id = p_group_member.mem_id)
+            INNER JOIN pgrp_mem_status ON p_grp_mem_status_map.status_id = pgrp_mem_status.statusId)
+            WHERE pgrp_mem_status.actStatus = ? AND p_group_member.group_id = ?;";
 
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+
+        $active = 1;
+        mysqli_stmt_bind_param($stmt, "ii", $active, $grpid);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        $resultcheck = mysqli_stmt_num_rows($stmt);
+        $this->connclose($stmt, $conn);
+        return $resultcheck;
+    }
 
     private function connclose($stmt, $conn){
         mysqli_stmt_close($stmt);
