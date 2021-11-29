@@ -868,3 +868,6 @@ ALTER TABLE private_group DROP COLUMN group_icon;
 
 ALTER TABLE private_group
 ADD group_icon VARCHAR(60) NOT NULL;
+
+-- reason column deleted in private group leave 
+ALTER TABLE private_group_leave DROP COLUMN reason;
