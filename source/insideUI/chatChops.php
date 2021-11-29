@@ -659,7 +659,7 @@ function private_group_dropdown(option)
     var bio = document.getElementById("bio").value;
     var created = document.getElementById("created-on").value;
     var memberid = document.getElementById("member-id").value;
-    
+
     if(option == 1)
     {   // set group info popup
         
@@ -753,18 +753,15 @@ function private_group_dropdown(option)
                 if(obj == 0 || obj == "sqlerror"){
                     return 0;
                 }else if(obj == 1){
-                    var msg = "You have left the '"+ title + "' chat room";
-                    document.getElementById("exit-room").style.display = "none";
+                    var msg = "You have left the '"+ groupname + "' group";
+                    document.getElementById("exit-group").style.display = "none";
                     displayMsg(msg, 0);
 
-                    //send button, dropdown hide
-                    //join button show
-                    document.getElementById("send-msg").style.visibility = "hidden";
+                    //dropdown hide
                     document.getElementById("dropdown").style.visibility = "hidden";
-                    document.getElementById("join-room-btn").style.visibility = "visible";
-
-                    var room = document.getElementById("reserver-name").textContent;
-                    //update the member count on the user side
+                    document.getElementById("reserver-name").textContent = "";
+                    document.getElementById("pri-chat-message-list").innerHTML = ""; // clear chat area
+                    /*
                     member_count_update_on_user_side(room);
 
                     var datas = {
@@ -772,6 +769,7 @@ function private_group_dropdown(option)
                                 room: room
                             };
                     conn.send(JSON.stringify(datas));
+                    */
                 }
             }
         });

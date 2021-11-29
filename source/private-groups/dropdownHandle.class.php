@@ -82,7 +82,67 @@ class dropdownHandle extends DbConnection {
     // member leave the group
     public function leave_group($grpid, $memid)
     {
+        $sqlQ = "SELECT pgrp_mem_status.statusId
+                FROM ((p_grp_mem_status_map 
+                    INNER JOIN p_group_member ON p_grp_mem_status_map.member_id = p_group_member.mem_id) 
+                    INNER JOIN pgrp_mem_status ON p_grp_mem_status_map.status_id = pgrp_mem_status.statusId)
+                WHERE p_group_member.group_id = ? AND p_group_member.mem_id = ?;";
 
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ii", $grpid, $memid);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        
+        $row = mysqli_fetch_assoc($res);
+        $status_id = $row['statusId'];
+
+        $q1 = "UPDATE pgrp_mem_status 
+                SET actStatus = ?
+                WHERE statusId = ?;";
+        
+        if(!mysqli_stmt_prepare($stmt, $q1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        $active =0;
+        mysqli_stmt_bind_param($stmt, "ii", $active, $status_id);
+        mysqli_stmt_execute($stmt);
+
+        $q2 = "INSERT INTO private_group_leave(date_and_time) VALUES(?);";
+        
+        $left = date("Y-n-d H:i:s");
+
+        if(!mysqli_stmt_prepare($stmt, $q2)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "s", $left);
+        mysqli_stmt_execute($stmt);
+
+        $leave_id = mysqli_stmt_insert_id($stmt);
+
+        $q3 = "INSERT INTO p_group_leave_mem_map(leave_id, member_id) VALUES(?,?);";
+        
+        if(!mysqli_stmt_prepare($stmt, $q3)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "ii", $leave_id, $memid);
+        mysqli_stmt_execute($stmt);
+
+        $this->connclose($stmt, $conn);
+        return 1;
+        exit();
     }
 
     //connection closing
