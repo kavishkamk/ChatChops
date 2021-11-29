@@ -85,14 +85,15 @@ class displayGroupList extends DbConnection{
     //load all the data of the group list of given userid
     public function load_group_list($userid)
     {
-        $q1 = "SELECT   private_group.group_id, 
+        $q1 = "SELECT   aa.mem_id,
+                        private_group.group_id, 
                         private_group.group_name, 
                         private_group.created_date_time,
                         private_group.bio,
                         private_group.group_icon 
                 FROM private_group INNER JOIN 
-                (SELECT DISTINCT p_group_member.group_id FROM 
-                ((p_grp_mem_status_map 
+                (SELECT DISTINCT p_group_member.group_id, p_group_member.mem_id 
+                FROM ((p_grp_mem_status_map 
                 INNER JOIN p_group_member ON 
                 p_group_member.mem_id = p_grp_mem_status_map.member_id)
                 INNER JOIN pgrp_mem_status ON 
@@ -118,7 +119,8 @@ class displayGroupList extends DbConnection{
         $data = array();
         $i =0;
         while($row = mysqli_fetch_assoc($result)){
-            $data[$i] = array('group_id' => $row['group_id'],
+            $data[$i] = array('member_id'=>$row['mem_id'],
+                            'group_id' => $row['group_id'],
                             'group_name' => $row['group_name'],
                             'created' => $row['created_date_time'],
                             'bio' => $row['bio'],
@@ -130,6 +132,39 @@ class displayGroupList extends DbConnection{
         exit();
 
     }
+
+    //check whether the given user is a member or the admin
+    public function check_admin($memberid)
+    {
+        $q1 = "SELECT * FROM pgrp_admin WHERE memberId = ?";
+        
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt, $q1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        $status =1;
+        mysqli_stmt_bind_param($stmt, "i", $memberid);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        if($row = mysqli_fetch_assoc($result)){
+            //this user is the admin of this group
+            $this->connclose($stmt, $conn);
+            return "1";
+            exit();
+        }else{
+            //this user is not the admin of this group
+            $this->connclose($stmt, $conn);
+            return "0";
+            exit();
+        }
+    }
+
+
 
     private function connclose($stmt, $conn){
         mysqli_stmt_close($stmt);

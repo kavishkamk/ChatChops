@@ -65,7 +65,7 @@
                 <div id="group-info" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <p class = "modal-topic">Public Room Info</p><hr>
+                        <p class = "modal-topic" id= "modal-topic"></p><hr>
                         <div class= "grid-cont">
                             <div class ="room-info-display" class= "column" style="grid-column:1 / 2; grid-row: 1 / 2">
                                 <img src= '' id= "roomicon" alt='group icon' width='200'height='200' class='img-circle room-icon'>
@@ -172,14 +172,30 @@
                     var modal5 = document.getElementById("delete-room");
 
                     open1.onclick = function() {
-                        var res = room_dropdown_menu(1);
+
+                        // a public chat room is selected
+                        if(document.getElementById("roomId").value != ""){
+                            document.getElementById("modal-topic").textContent = "Public Room Info";
+                            var res = room_dropdown_menu(1);
                         
-                        if(res != 0){
-                            modal1.style.display = "block";
-                        }else{
-                            alert("Something went wrong! Try again later.");
+                            if(res != 0){
+                                modal1.style.display = "block";
+                            }else{
+                                alert("Something went wrong! Try again later.");
+                            }
                         }
                         
+                        // a private group is selected
+                        if(document.getElementById("group-id").value != ""){
+                            document.getElementById("modal-topic").textContent = "Private Group Info";
+                            var res = private_group_dropdown(1);
+                        
+                            if(res != 0){
+                                modal1.style.display = "block";
+                            }else{
+                                alert("Something went wrong! Try again later.");
+                            }
+                        }
                     }
 
                     span.onclick = function() {
@@ -240,6 +256,8 @@
                     <input type="hidden" id="created-on" name="created-on" value="">
                     <input type="hidden" id="bio" name="bio" value="">
                     <input type="hidden" id="group-icon" name="group-icon" value="">
+                    <input type="hidden" id="member-id" name="member-id" value="">
+
                     <input type="hidden" id="admin-userid" name="admin-userid" value=""> <!-- admin's user id -->
                     <input type="hidden" id="member-userids" name="member-userids" value=""> <!-- selected user ids -->
 
@@ -521,6 +539,133 @@ function load_group_list()
 function set_private_group_data(data)
 {
     console.log(data);
+
+    //set private chat details null if a group selected
+    document.getElementById("reseverId").value = "";
+    document.getElementById("profilepiclink").value = "";
+
+    //set pubRoom data null
+    document.getElementById("roomId").value = null;
+    document.getElementById("roomMemberId").value = null;
+
+    //set private group data
+    document.getElementById("reserver-name").textContent = data.group_name; // set the chat title
+    document.getElementById("msgType").value = "prig";
+    document.getElementById('pri-chat-message-list').innerHTML = ""; //chat clear
+    document.getElementById('dropdown').style.visibility = 'visible'; //dropdown menu hide
+
+    document.getElementById("group-name").value = data.group_name;
+    document.getElementById("group-id").value = data.group_id ;
+    document.getElementById("created-on").value = data.created ;
+    document.getElementById("bio").value = data.bio ;
+    document.getElementById("group-icon").value = data.icon ;
+    document.getElementById("member-id").value = data.member_id;
+    $.ajax({
+        method: "POST",
+        url: "../private-groups/ajax-handle.php",
+        data: {
+            check_admin: "set",
+            member_id: data.member_id
+        },
+        success: function(result){
+            var res = JSON.parse(result);
+            //admin or a member
+            
+            if(res == 1){   //admin
+
+            }
+            else if(res == 0){ //member
+                
+            }
+            else{
+                displayMsg("Error!", 0);
+                return;
+            }
+
+            //for all members
+        }
+    });
+
+
+    /**
+    
+    if admin ==>    member popup with add remove buttons
+                    delete group
+
+    if member ==>   member list viewing popup
+                    exit group popup
+    
+    for all ==>     group info
+                    last 100 msgs loading
+    
+    */
+}
+
+// set private group info into popup windows
+function private_group_dropdown(option)
+{
+    var groupid = document.getElementById("group-id").value;
+    var groupname = document.getElementById("group-name").value;
+    var icon = document.getElementById("group-icon").value;
+    var bio = document.getElementById("bio").value;
+    var created = document.getElementById("created-on").value;
+
+    if(option == 1)
+    {   // set group info popup
+        
+        //group info setting
+        document.getElementById("gi-roomname").textContent = "Group Name - "+ groupname;
+        document.getElementById("gi-date").textContent = "Created on - "+ created.substring(0,10);
+        document.getElementById("gi-bio").textContent = bio;
+        document.getElementById("roomicon").src= '../private-group-icons/'+ icon;
+
+        //admin info setting
+        var fullname = document.getElementById("ai-fullname").textContent;
+        var username = document.getElementById("ai-username").textContent; 
+        var admindate = document.getElementById("ai-date").textContent;
+        var adminpic = document.getElementById("adminpic").src;
+
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                admin_data: "set",
+                group_id: groupid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }
+                document.getElementById("ai-fullname").textContent = "Admin Name - "+ obj.first_name + " "+ obj.last_name;
+                document.getElementById("ai-username").textContent = "Username - "+ obj.username; 
+                document.getElementById("ai-date").textContent = "Joined on - "+ obj.created_time.substring(0,10);
+                document.getElementById("adminpic").src = "../profile-pic/"+ obj.profilePicLink;
+                return 1;
+            }
+        });
+
+    }
+    else if(option == 2)
+    {   // set the member list popup
+
+    }
+    else if(option == 3)
+    {   // leave the group
+
+    }
+    else if(option == 4)
+    {   // member list for admins
+        
+    }
+    else if(option == 5)
+    {   // admin delete the group
+
+    }
+    else{
+        return 0;
+    }
 }
 
 //a public room was deleted by the admin user
@@ -1032,7 +1177,7 @@ function setPubRoomData(roomData)
     document.getElementById("reserver-name").textContent = roomData.name;
     document.getElementById("msgType").value = "pubg";
     document.getElementById("roomId").value = roomData.id;
-    document.getElementById('pri-chat-message-list').innerHTML = "";
+    document.getElementById('pri-chat-message-list').innerHTML = "";document.getElementById('pri-chat-message-list').innerHTML = "";
     document.getElementById('roomname').value = roomData.name;
     
     //set private chat details null if a room selected

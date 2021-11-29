@@ -2,6 +2,7 @@
 
 require_once "../phpClasses/PrivateChatHandle.class.php";
 require_once "displayGroupList.class.php";
+require_once "dropdownHandle.class.php";
 
 //get the friend list of a given userid
 if(isset($_POST['set_friend_list']))
@@ -32,6 +33,28 @@ if(isset($_POST['load_group_list']))
     $userid = $_POST['userid'];
     $obj = new displayGroupList();
     $res = $obj -> load_group_list($userid);
+    unset($obj);
+    echo json_encode($res);
+}
+
+//check whether the given user is a member or the admin
+if(isset($_POST['check_admin']))
+{
+    $memberid = $_POST['member_id'];
+
+    $obj = new displayGroupList();
+    $res = $obj -> check_admin($memberid);
+    unset($obj);
+    echo json_encode($res);
+}
+
+//get the admin info of the given group
+if(isset($_POST['admin_data']))
+{
+    $grp = $_POST['group_id'];
+
+    $obj = new dropdownHandle();
+    $res = $obj -> get_admin_info($grp);
     unset($obj);
     echo json_encode($res);
 }
