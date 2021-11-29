@@ -58,3 +58,26 @@ if(isset($_POST['admin_data']))
     unset($obj);
     echo json_encode($res);
 }
+
+// get all the member details
+if(isset($_POST['member_list']))
+{
+    $grp = $_POST['group_id'];
+
+    $obj = new dropdownHandle();
+    $res = $obj -> get_member_list_data($grp);
+    unset($obj);
+    echo json_encode($res);
+}
+
+// handle the member leaving
+if(isset($_POST['leave_group']))
+{
+    $grp = $_POST['group_id'];
+    $mem = $_POST['member_id'];
+
+    $obj = new dropdownHandle();
+    $res = $obj -> leave_group($grp, $mem);
+    unset($obj);
+    echo json_encode($res);
+}

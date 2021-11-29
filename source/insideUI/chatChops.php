@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <!-- exit group popup --> 
+                <!-- exit room popup --> 
                 <div id="exit-room" class="modal">
                     <div class="modal-content">
                         <p class = "modal-topic">Exit Group</p><hr>
@@ -169,6 +169,19 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- exit group popup --> 
+                <div id="exit-group" class="modal">
+                    <div class="modal-content">
+                        <p class = "modal-topic">Exit Group</p><hr>
+                        <div class= "leave-msg">
+                            Are you sure you want to leave this group?
+                        </div>
+
+                        <div id= "leave-room-btn" onclick = "private_group_dropdown(3)">Leave</div>
+                        
+                    </div>
+                </div>
 
                 <script>
                     var modal1 = document.getElementById("group-info");
@@ -179,6 +192,8 @@
                     var modal3 = document.getElementById("exit-room");
                     var modal4 = document.getElementById("admin-member-list");
                     var modal5 = document.getElementById("delete-room");
+
+                    var modal6 = document.getElementById("exit-group");
 
                     open1.onclick = function() {
 
@@ -211,12 +226,14 @@
                         modal1.style.display = "none";
                     }
                     window.onclick = function(event) {
-                        if (event.target == modal1 || event.target == modal2 || event.target == modal3 || event.target == modal4 || event.target == modal5) {
+                        if (event.target == modal1 || event.target == modal2 || event.target == modal3 || 
+                        event.target == modal4 || event.target == modal5 || event.target == modal6) {
                             modal1.style.display = "none";
                             modal2.style.display = "none";
                             modal3.style.display = "none";
                             modal4.style.display = "none";
                             modal5.style.display = "none";
+                            modal6.style.display = "none";
                         }
                     }
 
@@ -561,6 +578,7 @@ function set_private_group_data(data)
     document.getElementById("msgType").value = "prig";
     document.getElementById('pri-chat-message-list').innerHTML = ""; //chat clear
     document.getElementById('dropdown').style.visibility = 'visible'; //dropdown menu hide
+    document.getElementById('optional-dropdown').innerHTML = ""; //optional dropdown menu clear
 
     document.getElementById("group-name").value = data.group_name;
     document.getElementById("group-id").value = data.group_id ;
@@ -583,7 +601,29 @@ function set_private_group_data(data)
 
             }
             else if(res == 0){ //member
-                
+                var row = `<hr class= "hrr"><div id="open-member-list" class= "open-popup-link">Members</div>
+                            <hr class= "hrr"><div id="open-exit-group" class= "open-popup-link">Exit Group</div>`;
+
+                $('#optional-dropdown').append(row);
+
+                var open2 = document.getElementById("open-member-list");
+                var open3 = document.getElementById("open-exit-group");
+
+                var modal2 = document.getElementById("member-list");
+                var modal3 = document.getElementById("exit-group");
+
+                open2.onclick = function() {
+                    var res = private_group_dropdown(2);
+                    if(res != 0){
+                        modal2.style.display = "block";
+                    }else{
+                        alert("Something went wrong! Try again later.");
+                    }
+                }
+
+                open3.onclick = function() {
+                    modal3.style.display = "block";
+                }
             }
             else{
                 displayMsg("Error!", 0);
@@ -591,6 +631,7 @@ function set_private_group_data(data)
             }
 
             //for all members
+
         }
     });
 
@@ -617,7 +658,8 @@ function private_group_dropdown(option)
     var icon = document.getElementById("group-icon").value;
     var bio = document.getElementById("bio").value;
     var created = document.getElementById("created-on").value;
-
+    var memberid = document.getElementById("member-id").value;
+    
     if(option == 1)
     {   // set group info popup
         
@@ -657,11 +699,82 @@ function private_group_dropdown(option)
     }
     else if(option == 2)
     {   // set the member list popup
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                member_list: "set",
+                group_id: groupid
+            },
+            success: function(result){
+                //member list display
+
+                var obj = JSON.parse(result);
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }
+                document.getElementById("mem-list").innerHTML = "";
+                document.getElementById("mem-count-show").textContent = "Members";
+
+                var i=0;
+                while(obj[i]){
+                    var member = `<div class= "mem-item">
+                                    <div class="col1">
+                                        <img src= '../profile-pic/`+ obj[i].propic+ `' width='55'height='55' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
+                                    </div>
+                                    <div class="col2">
+                                        <div class= "mem-fullname">`+ obj[i].fname+ " "+ obj[i].lname+ `</div>
+                                        <div class= "mem-username">#`+ obj[i].username+ `</div>
+                                    </div>
+                                </div>
+                                <hr class="hrr">`;
+                    $("#mem-list").append(member);
+                    i++;
+                }
+                var count = i;
+                $("#mem-count-show").append("   ("+ count + ")");
+                return 1;
+            }
+        });
 
     }
     else if(option == 3)
     {   // leave the group
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                leave_group: "set",
+                group_id: groupid,
+                member_id: memberid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }else if(obj == 1){
+                    var msg = "You have left the '"+ title + "' chat room";
+                    document.getElementById("exit-room").style.display = "none";
+                    displayMsg(msg, 0);
 
+                    //send button, dropdown hide
+                    //join button show
+                    document.getElementById("send-msg").style.visibility = "hidden";
+                    document.getElementById("dropdown").style.visibility = "hidden";
+                    document.getElementById("join-room-btn").style.visibility = "visible";
+
+                    var room = document.getElementById("reserver-name").textContent;
+                    //update the member count on the user side
+                    member_count_update_on_user_side(room);
+
+                    var datas = {
+                                msgType: "memCount-update-req",
+                                room: room
+                            };
+                    conn.send(JSON.stringify(datas));
+                }
+            }
+        });
     }
     else if(option == 4)
     {   // member list for admins
@@ -942,8 +1055,6 @@ function room_dropdown_menu(option)
                             };
                     conn.send(JSON.stringify(datas));
                 }
-
-
             }
         });    
     }
