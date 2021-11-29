@@ -73,6 +73,7 @@
     text-decoration: none;
 }
 
+
 .chat-title{
     display: grid;
     grid-template-columns: 95% 5%;
@@ -86,8 +87,7 @@
     padding: 0 20px;
     height: 50px;
     border-bottom: 3px solid rgba(0, 0, 0);
-    position:relative;
-  }
+}
 
 .room:hover,
 .room:active{
@@ -103,19 +103,23 @@
 }
 
 .join-room{
-    position: absolute;
-    top: 5px;
-    left: 375px;
-    color: black;
-    float: center;
-    padding: 7px;
-    border-radius: 12px;
-    font-size:15px;
-    font-weight: bold;
-    background-color: #9acfe2;
-    width: 100px;
-}
+    float: right;
+    width:100px;
+    padding-right: 10px;
+    padding-top: 5px;
 
+    position: relative;
+    color: black;
+    float: right;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size:1.1vw;
+    font-weight: bold;
+    background-color: #5472d3;
+}
+.join-room:hover{
+    background-color: #5e92f3;
+}
 .alert-msg{
     position: fixed;
     z-index: 99;
@@ -371,6 +375,31 @@ color: #323b40;
 }
 
 .first-line:after{
+    clear: both;
+    display: table;
+    content: '';
+}
+
+/*public room join button alignment*/
+
+.cols{
+    box-sizing: border-box;
+    position: relative;
+}
+
+.col-1{
+    float: left;
+    width: 50%;
+
+    
+    padding-top: 5px;
+}
+.col-2{
+    float: right;
+    width: 40%;
+}
+
+.cols:after{
     clear: both;
     display: table;
     content: '';

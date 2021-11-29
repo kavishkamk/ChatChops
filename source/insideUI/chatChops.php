@@ -45,10 +45,19 @@
         <div class="chat" id="chat-gui" style="grid-column:2 / 3; grid-row: 1 / 3">
             <!-- ------------------------------>
             <div class="chat-title">
-                <span id="reserver-name"></span> <!-- to set reserver name -->
+                <div class= "cols">
+                    <div class= "col-1">
+                        <span id="reserver-name"></span> <!-- to set reserver name -->
+                    </div>
+                    
+                    <!-- public room join button -->
+                    <div class= "col-2">
+                        <button type="button" onclick= 'pubRoom_join()' class="join-room" id="join-room-btn" style="visibility:hidden;">Join</button>
+                    </div>
+                </div>
                 
                 <!-- dropdown menu for public chat rooms -->
-                <div class= "final__dropdown" id = "dropdown" style= "visibility:hidden;">
+                <div class= "final__dropdown" id = "dropdown"  style= "visibility:hidden;">
                     <i class="fas fa-ellipsis-v" class ="final__dropdown__hover"></i> <!-- list icon -->
                     <div class= "final__dropdown__menu" id= "dropdown_list">
                         <div id="open-group-info" class= "open-popup-link">Group Info</div>
@@ -212,8 +221,7 @@
                     }
 
                 </script>
-                <!-- public room join button -->
-                <button type="button" onclick= 'pubRoom_join()' class="join-room" id="join-room-btn" style="visibility:hidden;">Join</button>
+                
             </div>
             
             <div class= "alert-msg" id = "alert-msg" style="visibility:hidden;"></div>
@@ -823,6 +831,7 @@ function room_dropdown_menu(option)
             },
             success: function(result){
                 //group info option
+                document.getElementById("modal-topic").textContent = "Public Room Info";
                 document.getElementById("gi-roomname").textContent = "Room Name - "+ title;
 
                 var obj = JSON.parse(result);
