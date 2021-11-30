@@ -285,9 +285,11 @@ $(document).ready(function(){
                     return;
                 }else if(obj == ""){
                     document.getElementById("members-save-btn").style.visibility = "hidden";
+                    return;
                 }
-                var i=0;
+                document.getElementById("cancel-btn").style.visibility = "hidden";
 
+                var i=0;
                 while(obj[i])
                 {
                     console.log(obj[i]);
