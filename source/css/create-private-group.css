@@ -237,10 +237,10 @@ textarea {
 
 /* member adding popup */
 
-.modal {
+.modals {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 100; /* Sit on top */
+    z-index: 1000; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -252,7 +252,7 @@ textarea {
 }
 
 /* Modal Content */
-.modal-content {
+.modal-content1 {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
@@ -261,7 +261,7 @@ textarea {
     padding-bottom: 20px;
 }
 
-.modal-topic{
+.modal-topic1 {
     text-align: center;
     color: #043a6d;
     font-size: 20px;
@@ -309,7 +309,7 @@ textarea {
 }
 
 .button-section{
-    z-index: 102;
+    z-index: 1002;
     padding-top: 30px;
     padding-bottom: 40px;
     padding-left: 10px;
@@ -394,4 +394,14 @@ textarea {
 .mem-username{
     color: rgb(97, 97, 97);
     font-size: 14px;
+}
+
+.modal-backdrop {
+    display: none;
+    z-index: 1040 !important;
+}
+
+.modal-content {
+    margin: 2px auto;
+    z-index: 1100 !important;
 }

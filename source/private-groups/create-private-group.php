@@ -162,9 +162,9 @@
     </form>
 
     <!-- member adding popup -->
-    <div id="member-list" class="modal">
-        <div class="modal-content">
-            <p class = "modal-topic" id= "mem-count-show">Select Members</p><hr class= "hrr">
+    <div id="member-list" class="modals" style= "display:none;">
+        <div class="modal-content1">
+            <p class = "modal-topic1" id= "mem-count-show">Select Members</p><hr class= "hrr">
 
             <div class= "mem-list" id="mem-list" style="max-height: 300px; overflow-y: scroll;">
                 <!-- sample member info -->
@@ -189,8 +189,8 @@
 
             <!-- buttons at the bottom -->
             <div class= "button-section">
-                <div id= "cancel-btn" class= "col1" onclick= "cancel()">Cancel</div>
-                <div id= "members-save-btn" class= "col2" onclick= "members_save()" style= "visibility:visible;">Add Members</div>
+                <div id= "cancel-btn" class= "col1" onclick= "cancel_btn()">Cancel</div>
+                <div id= "members-save-btn" class= "col2" onclick= "members_save()" style= "visibility:hidden;">Add Members</div>
             </div>
 
         </div>
@@ -254,13 +254,14 @@ if(isset($_POST['status'])){
 
 $(document).ready(function(){
 
-    var modal = document.getElementById("member-list");
+    var modals = document.getElementById("member-list");
 
     //this user has just created a new private group
     if(document.getElementById("create-ok").value == 'ok'){
         // add members from his friends list
 
-        modal.style.display = "block";
+        modals.style.display = "block";
+        document.getElementById("members-save-btn").style.visibility = "visible";
         set_friend_list();
     }
 
@@ -394,7 +395,7 @@ $(document).ready(function(){
 		});
 	});
 	
-});
+})
 
 //when click on a add button of a user
 function member_added(userid)
@@ -459,7 +460,7 @@ function member_removed(userid)
 }
 
 // when clicked on cancel button
-function cancel()
+function cancel_btn()
 {
     if(document.getElementById("members-save-btn").style.visibility == "hidden"){
         members_save();

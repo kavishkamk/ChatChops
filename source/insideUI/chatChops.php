@@ -372,10 +372,14 @@
                 <span class= 'memcount' style='float: right'>3 Members</span>*/
 
                         $id = $roomname."count";
+
+                        if($memCount == 1) $mem = $memCount. ' Member';
+                        else $mem = $memCount. ' Members';
+
                         echo "<div onclick= 'setPubRoomData($roomDataJSON)' class= 'friend-conversation1 active' id = '$roomname'>
                         <img src= '../group-icons/$icon' alt='group icon'>
                         <div class= 'title-text'>$roomname</div>
-                        <span class= 'memcount' id = '$id' style='float: right'>$memCount Members</span>
+                        <span class= 'memcount' id = '$id' style='float: right'>$mem</span>
                         </div>";
                         
                     }
@@ -432,6 +436,9 @@ $(document).ready(function(){
             }
             else if((data.msgType).localeCompare("update-room-list") == 0){
                 update_room_list();
+            }
+            else if((data.msgType).localeCompare("new-grp-add-to-list-req") == 0){
+                load_group_list();
             }
             
         };
@@ -521,6 +528,24 @@ $(document).ready(function(){
 
 })
 
+// send the message to update the private group list to the members
+function update_group_list(memlist)
+{
+    var temp = new Array();
+    temp = memlist.split(",");
+
+    for (a in temp){ 
+        //store the userids as base 10 integers instead of strings
+        temp[a] = parseInt(temp[a], 10); 
+    }
+
+    data = {    msgType: "new-grp-add-to-list-req",
+                memlist: temp
+            };   
+
+    conn.send(JSON.stringify(data)); // send data
+}
+
 
 //load the group list
 function load_group_list()
@@ -546,13 +571,13 @@ function load_group_list()
                 var id2 = group.group_name + "prig";
 
                 var datas = `<div onclick='set_private_group_data(`+ grp +`)' id= "`+id2+`" class= "friend-conversation1 active">
-                    <img src="../group-icons/`+group.icon+`" alt='group icon'/>
+                    <img src="../private-group-icons/`+group.icon+`" alt='group icon'/>
                     <div class= "title-text">`+group.group_name+`</div>
                     <span class= 'memcount' id='`+id+`' style='float: right'></span>
                 </div>`;
 
                 $('#prig-list').append(datas);
-
+                set_member_count(group.group_id);
                 i++;
             }
         }
@@ -802,7 +827,11 @@ function set_member_count(grpid)
         success: function(result){
             count = JSON.parse(result);
             var id = grpid + "memcount";
-            var newCount = res + " Members";
+            var newCount;
+
+            if(count == 1) newCount = count + " Member";
+            else newCount = count + " Members";
+
             document.getElementById(id).textContent = newCount;
         }
     }); 
@@ -1551,7 +1580,11 @@ function member_count_update_on_user_side(roomname)
         success: function(result) {
             var res = JSON.parse(result);
             var id = roomname + "count";
-            var newCount = res + " Members";
+            var newCount;
+
+            if(count == 1) newCount = count + " Member";
+            else newCount = count + " Members";
+
             document.getElementById(id).textContent = newCount;
         }
     });
@@ -1610,8 +1643,15 @@ if(isset($_POST['status'])){
 }
 
 // redirect from create new private group
-if(isset($_POST['create-ok'])){
+if(isset($_POST['member-userids'])){
+    $user_list = $_POST['member-userids'];
 
+    echo "<script>
+            update_group_list($user_list);
+        </script>";
+
+
+    unset($_POST['member-userids']);
 }
 
 ?>

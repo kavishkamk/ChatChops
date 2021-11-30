@@ -55,6 +55,7 @@ class Chat implements MessageComponentInterface {
             else if($msgTypes == "pri"){
                $this->privateMsgReserverConn($data);
             }
+            // for public chat rooms
             else if($msgTypes == "pubg-user-remove"){
                 $this-> pubg_user_remove($data);
             }
@@ -69,9 +70,41 @@ class Chat implements MessageComponentInterface {
                     $client->send(json_encode($data));
                 }
             }
+            //for private chat groups
+            else if($msgTypes == "prig-memCount-update-req"){
+                $this-> prig_mem_count_update_req($data);
+            }
+            else if($msgTypes == "new-grp-add-to-list-req"){
+                $this-> new_grp_add_to_list_req($data);
+            }
         }
     }
-  
+
+    // send a message to the members to update the member count in the list
+    // when the count is changed 
+    // (member leave, remove from the group)
+    public function prig_mem_count_update_req($datas)
+    {
+        $data['msgType'] = $datas['msgType'];
+        $data['group_id'] = $datas['group_id'];
+        return;
+    }
+
+    // send a message to update the group list
+    public function new_grp_add_to_list_req($datas)
+    {
+        $data['msgType'] = $datas['msgType'];
+        //$data['memlist'] = $datas['memlist'];
+        $arr = $datas['memlist'];
+
+        foreach ($arr as $user) {
+            if(array_key_exists($user, $this->clientsWithId)){
+                $resConn = $this->clientsWithId[$user];
+                $resConn->send(json_encode($data));
+            }
+        }
+    }
+
     public function multicast($msg) {
         foreach ($this->clientsWithId as $client) $client->send($msg);
     }
