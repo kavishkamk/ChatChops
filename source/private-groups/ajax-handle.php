@@ -91,3 +91,13 @@ if(isset($_POST['member_count']))
     unset($obj);
     echo json_encode($res);
 }
+
+//get the members' userid list of a given private group
+if(isset($_POST['member_userid_list']))
+{
+    $grp = $_POST['group_id'];
+    $obj = new dropdownHandle();
+    $res = $obj -> get_member_userid_list($grp);
+    unset($obj);
+    echo json_encode($res);
+}

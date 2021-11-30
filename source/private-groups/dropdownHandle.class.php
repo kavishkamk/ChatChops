@@ -145,6 +145,40 @@ class dropdownHandle extends DbConnection {
         exit();
     }
 
+    // get the user ids of all the members in a private group
+    public function get_member_userid_list($grpid)
+    {
+        $q1 = "SELECT distinct p_group_member.user_id FROM 
+        ((p_grp_mem_status_map INNER JOIN 
+        p_group_member ON p_group_member.mem_id = p_grp_mem_status_map.member_id) 
+        INNER JOIN pgrp_mem_status ON pgrp_mem_status.statusId = p_grp_mem_status_map.status_id) 
+        WHERE p_group_member.group_id = ? AND pgrp_mem_status.actStatus = ?";
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+
+        if(!mysqli_stmt_prepare($stmt, $q1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        $status =1;
+        mysqli_stmt_bind_param($stmt, "ii", $grpid, $status);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+
+        $data = array();
+        $i=0;
+
+        while($row = mysqli_fetch_assoc($res)){
+            $data[$i]=$row['user_id'];
+            $i++;
+        }
+        $this->connclose($stmt, $conn);
+        return $data;
+        exit();
+    }
+
     //connection closing
     private function connclose($stmt, $conn)
     {

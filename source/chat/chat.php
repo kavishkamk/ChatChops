@@ -7,6 +7,7 @@ require dirname(__DIR__) . "/phpClasses/PrivateChatHandle.class.php";
 require dirname(__DIR__) . "/phpClasses/OnlineOffline.class.php";
 require dirname(__DIR__) . "/public-rooms/publicRoomChat.class.php";
 require dirname(__DIR__) . "/public-rooms/dropDownMenu.class.php";
+require dirname(__DIR__) . "/private-groups/dropdownHandle.class.php";
 
 class Chat implements MessageComponentInterface {
     protected $clients;
@@ -46,7 +47,6 @@ class Chat implements MessageComponentInterface {
             $msgTypes = $data['msgType']; // get message type
 
             if($msgTypes == "pubg"){
-                //multicast($data);
                 $this-> send_pubg_msgs($data);
             }
             else if($msgTypes == "prig"){
@@ -55,6 +55,7 @@ class Chat implements MessageComponentInterface {
             else if($msgTypes == "pri"){
                $this->privateMsgReserverConn($data);
             }
+
             // for public chat rooms
             else if($msgTypes == "pubg-user-remove"){
                 $this-> pubg_user_remove($data);
@@ -70,6 +71,7 @@ class Chat implements MessageComponentInterface {
                     $client->send(json_encode($data));
                 }
             }
+
             //for private chat groups
             else if($msgTypes == "prig-memCount-update-req"){
                 $this-> prig_mem_count_update_req($data);
@@ -87,7 +89,15 @@ class Chat implements MessageComponentInterface {
     {
         $data['msgType'] = $datas['msgType'];
         $data['group_id'] = $datas['group_id'];
-        return;
+
+        $arr = $datas['member_list'];
+
+        foreach ($arr as $user) {
+            if(array_key_exists($user, $this->clientsWithId)){
+                $resConn = $this->clientsWithId[$user];
+                $resConn->send(json_encode($data));
+            }
+        }
     }
 
     // send a message to update the group list

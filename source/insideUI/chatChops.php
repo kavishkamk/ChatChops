@@ -286,6 +286,8 @@
                     <input type="hidden" id="admin-userid" name="admin-userid" value=""> <!-- admin's user id -->
                     <input type="hidden" id="member-userids" name="member-userids" value=""> <!-- selected user ids -->
 
+                    <input type="hidden" id="mem-userid-list" name="mem-userid-list" value=""> <!-- members' userid list -->
+
                     <!-- when select a friend -->
                     <input type="hidden" id="reseverId" name="reseverId" value=""> <!--reserver id-->
                     <input type="hidden" id="profilepiclink" name="profilepiclink" value=""> <!--profie pic link-->
@@ -419,6 +421,8 @@ $(document).ready(function(){
         conn.onmessage = function(e) {
             console.log(e.data);
             var data = JSON.parse(e.data);
+
+            // for private chats
             if((data.msgType).localeCompare("pri") == 0){
                 setReservedPrivatChatData(data);
                 displayLastMsgOfuser(data);
@@ -426,6 +430,8 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("onoff") == 0){
                 setOnlineOrOffline(data);
             }
+
+            // for public chat rooms
             else if((data.msgType).localeCompare("pubg") == 0){
                 set_received_pubg_msgs(data);
             }
@@ -441,8 +447,13 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("update-room-list") == 0){
                 update_room_list();
             }
+
+            // for private groups
             else if((data.msgType).localeCompare("new-grp-add-to-list-req") == 0){
                 load_group_list();
+            }
+            else if((data.msgType).localeCompare("prig-memCount-update-req") == 0){
+                set_member_count(data.group_id);
             }
             
         };
@@ -625,13 +636,17 @@ function set_private_group_data(data)
     document.getElementById('dropdown').style.visibility = 'visible'; //dropdown menu hide
     document.getElementById('optional-dropdown').innerHTML = ""; //optional dropdown menu clear
     document.getElementById('join-room-btn').style.visibility = 'hidden'; // hide the public room join button
-    
+
     document.getElementById("group-name").value = data.group_name;
     document.getElementById("group-id").value = data.group_id ;
     document.getElementById("created-on").value = data.created ;
     document.getElementById("bio").value = data.bio ;
     document.getElementById("group-icon").value = data.icon ;
     document.getElementById("member-id").value = data.member_id;
+
+    //set the group's member list
+    set_prig_member_list(data.group_id);
+
     $.ajax({
         method: "POST",
         url: "../private-groups/ajax-handle.php",
@@ -676,8 +691,6 @@ function set_private_group_data(data)
                 return;
             }
 
-            //for all members
-
         }
     });
 
@@ -694,6 +707,25 @@ function set_private_group_data(data)
                     last 100 msgs loading
     
     */
+}
+
+// get the members' user id list of a given private group chat
+function set_prig_member_list(grpid)
+{
+    $.ajax({
+        method: "POST",
+        url: "../private-groups/ajax-handle.php",
+        data: {
+            member_userid_list: "set",
+            group_id: grpid
+        },
+        success: function(result){
+            var res = JSON.parse(result);
+            var str = res.toString();
+
+            document.getElementById("mem-userid-list").value = str;
+        }
+    });
 }
 
 // set private group info into popup windows
@@ -805,17 +837,29 @@ function private_group_dropdown(option)
 
                     //dropdown hide
                     document.getElementById("dropdown").style.visibility = "hidden";
-                    document.getElementById("reserver-name").textContent = "";
+                    document.getElementById("reserver-name").textContent = "";      // title clear
                     document.getElementById("pri-chat-message-list").innerHTML = ""; // clear chat area
-                    /*
-                    member_count_update_on_user_side(room);
+                    
+                    set_member_count(groupid);
+                    load_group_list();
+                    
+                    var memlist = document.getElementById("mem-userid-list").value;
 
+                    var temp = new Array();
+                    temp = memlist.split(",");
+
+                    for (a in temp){ 
+                        //store the userids as base 10 integers instead of strings
+                        temp[a] = parseInt(temp[a], 10); 
+                    }
+                    
                     var datas = {
                                 msgType: "prig-memCount-update-req",
-                                group: room
+                                group_id: groupid,
+                                member_list: temp
                             };
                     conn.send(JSON.stringify(datas));
-                    */
+                    
                 }
             }
         });
@@ -833,7 +877,7 @@ function private_group_dropdown(option)
     }
 }
 
-// get the member count of a given private group
+// set the member count of a given private group
 function set_member_count(grpid)
 {
     $.ajax({
