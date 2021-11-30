@@ -871,3 +871,6 @@ ADD group_icon VARCHAR(60) NOT NULL;
 
 -- reason column deleted in private group leave 
 ALTER TABLE private_group_leave DROP COLUMN reason;
+
+-- a column deleted in private group chat
+ALTER TABLE p_group_chat DROP block_status;
