@@ -409,6 +409,10 @@ $(document).ready(function(){
 
         //if the user is created a new chat room the roomlist should be updated for others too
         check_to_update_room_list();
+
+        //if the user is created a new private group, 
+        //the group list should be updated for others too
+        check_to_update_group_list();
     };
     
     // set reserved messages
@@ -526,11 +530,21 @@ $(document).ready(function(){
         }
     }
 
+    function check_to_update_group_list()
+    {
+        var str = document.getElementById("member-userids").value;
+
+        if(str != ""){
+            update_group_list(str);
+        }
+    }
+
 })
 
 // send the message to update the private group list to the members
 function update_group_list(memlist)
 {
+    memlist = memlist + "";
     var temp = new Array();
     temp = memlist.split(",");
 
@@ -551,6 +565,10 @@ function update_group_list(memlist)
 function load_group_list()
 {
     var userid = document.getElementById("senderId").value;
+
+    //empty the previous list and load the new list again
+    document.getElementById("prig-list").innerHTML = "";
+
     $.ajax({
         method: "POST",
         url: "../private-groups/ajax-handle.php",
@@ -1647,7 +1665,9 @@ if(isset($_POST['member-userids'])){
     $user_list = $_POST['member-userids'];
 
     echo "<script>
-            update_group_list($user_list);
+            document.getElementById('member-userids').value = '$user_list';
+            console.log(document.getElementById('member-userids').value);
+            
         </script>";
 
 
