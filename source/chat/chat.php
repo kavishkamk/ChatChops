@@ -8,6 +8,7 @@ require dirname(__DIR__) . "/phpClasses/OnlineOffline.class.php";
 require dirname(__DIR__) . "/public-rooms/publicRoomChat.class.php";
 require dirname(__DIR__) . "/public-rooms/dropDownMenu.class.php";
 require dirname(__DIR__) . "/private-groups/dropdownHandle.class.php";
+require dirname(__DIR__) . "/private-groups/privateGroupChat.class.php";
 
 class Chat implements MessageComponentInterface {
     protected $clients;
@@ -46,11 +47,12 @@ class Chat implements MessageComponentInterface {
         if(isset($data['msgType'])){
             $msgTypes = $data['msgType']; // get message type
 
+            // sending messages
             if($msgTypes == "pubg"){
                 $this-> send_pubg_msgs($data);
             }
             else if($msgTypes == "prig"){
-               echo "this is private group <br>";
+                $this-> send_prig_msgs($data);
             }
             else if($msgTypes == "pri"){
                $this->privateMsgReserverConn($data);
@@ -214,6 +216,40 @@ class Chat implements MessageComponentInterface {
             echo $d."message didn't save";
         }
         unset($pubObj);
+    }
+
+    private function send_prig_msgs($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['senderId'] = $details['senderId'];
+        $data['username'] = $details['username'];
+        $data['propic'] = $details['propic'];
+
+        $data['groupid'] = $details['groupid'];
+        $data['groupname'] = $details['groupname'];
+        $data['memberid'] = $details['memberid'];
+        $data['msg'] = $details['msg'];
+
+        $pubObj = new \privateGroupChat();    //store messages in the DB
+        $res = $pubObj->storeMsgs($details['memberid'], $details['msg']);
+
+        if($res != "sqlerror"){
+            // send the msg to each member
+            $arr = $details['memlist'];
+            foreach ($arr as $user) {
+                if(array_key_exists($user, $this->clientsWithId)){
+                    $resConn = $this->clientsWithId[$user];
+                    $resConn->send(json_encode($data));
+                }
+            }
+
+        }else{
+            $d = $this-> timeshow();
+            echo $d."message didn't save";
+        }
+        unset($pubObj);
+
+        
     }
 
     //send the request of updating the member count of the given chat room

@@ -412,7 +412,7 @@ $(document).ready(function(){
         //if the user is created a new chat room the roomlist should be updated for others too
         check_to_update_room_list();
 
-        //if the user is created a new private group, 
+        //if the user created a new private group, 
         //the group list should be updated for other members too
         check_to_update_group_list();
     };
@@ -454,6 +454,9 @@ $(document).ready(function(){
             }
             else if((data.msgType).localeCompare("prig-memCount-update-req") == 0){
                 set_member_count(data.group_id);
+            }
+            else if((data.msgType).localeCompare("prig") == 0){
+                set_received_prig_msgs(data);
             }
             
         };
@@ -506,10 +509,37 @@ $(document).ready(function(){
                     };
                 }
             }
-
             //for private groups
-            //
-            //
+            if(msgType == "prig"){
+                var groupid = $("#group-id").val();
+                var groupname = $("#group-name").val();
+                var memberid = $("#member-id").val();
+                var memlist = $("#mem-userid-list").val();
+
+                var username = $("#username").val(); // get the username
+                var propic = $("#propic").val(); // get the profile picture
+
+                var temp = new Array();
+                temp = memlist.split(",");
+
+                for (a in temp){ 
+                    temp[a] = parseInt(temp[a], 10); 
+                }
+
+                if(groupid != null && memlist != null){
+                    var data = {
+                        msgType: msgType,
+                        senderId: senderId,
+                        username: username,
+                        propic: propic,
+                        groupid: groupid,
+                        groupname: groupname,
+                        memberid: memberid,
+                        memlist: temp,
+                        msg: msg
+                    };
+                }
+            }
 
             console.log(data);
             conn.send(JSON.stringify(data)); // send data
@@ -551,6 +581,43 @@ $(document).ready(function(){
     }
 
 })
+
+// set the received private group msgs
+function set_received_prig_msgs(data)
+{
+    var propic = document.getElementById("propic").value;
+    var title = document.getElementById("reserver-name").textContent;
+
+    //this group is selected to the chat UI
+    if(document.getElementById("senderId").value != data.senderId && title == data.groupname)
+    {
+        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+
+        autoScrollDown();
+    }
+}
+
+//to set previous messages in private groups
+function set_prev_prig_msgs(data)
+{
+    var title = document.getElementById("reserver-name").textContent;
+    var sender = document.getElementById("senderId").value;
+
+    //this group is selected to the chat UI
+    if(sender != data.senderId && title == data.groupname)
+    {
+        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+
+    }else if(sender == data.senderId && title == data.groupname)
+    {
+        // set sended chat message
+        var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data.msg +'</div><div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+    }
+    autoScrollDown();
+}
 
 // send the message to update the private group list to the members
 function update_group_list(memlist)
@@ -690,6 +757,25 @@ function set_private_group_data(data)
                 displayMsg("Error!", 0);
                 return;
             }
+
+            //set msgs for all
+            //load the previous messages in the group
+            $.ajax({
+                method: "POST",
+                url: "../private-groups/ajax-handle.php",
+                data: {
+                    prev_msgs: "set",
+                    groupid: data.group_id
+                },
+                success: function(result){
+                    var res = JSON.parse(result);
+                    var i=0;
+                    while(res[i]){
+                        set_prev_prig_msgs(res[i]);
+                        i++;
+                    }
+                }
+            });
 
         }
     });
@@ -842,7 +928,7 @@ function private_group_dropdown(option)
                     
                     set_member_count(groupid);
                     load_group_list();
-                    
+
                     var memlist = document.getElementById("mem-userid-list").value;
 
                     var temp = new Array();

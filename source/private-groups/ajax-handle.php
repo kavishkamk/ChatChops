@@ -3,6 +3,7 @@
 require_once "../phpClasses/PrivateChatHandle.class.php";
 require_once "displayGroupList.class.php";
 require_once "dropdownHandle.class.php";
+require_once "privateGroupChat.class.php";
 
 //get the friend list of a given userid
 if(isset($_POST['set_friend_list']))
@@ -100,4 +101,15 @@ if(isset($_POST['member_userid_list']))
     $res = $obj -> get_member_userid_list($grp);
     unset($obj);
     echo json_encode($res);
+}
+
+//get the last 100 msgs
+if(isset($_POST['prev_msgs']))
+{
+    $grp = $_POST['groupid'];
+
+    $obj = new privateGroupChat();
+    $result = $obj-> prev_msgs($grp);
+    unset($obj);
+    echo json_encode($result);
 }
