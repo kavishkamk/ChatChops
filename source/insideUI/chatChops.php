@@ -411,7 +411,7 @@ $(document).ready(function(){
         check_to_update_room_list();
 
         //if the user is created a new private group, 
-        //the group list should be updated for others too
+        //the group list should be updated for other members too
         check_to_update_group_list();
     };
     
@@ -624,7 +624,8 @@ function set_private_group_data(data)
     document.getElementById('pri-chat-message-list').innerHTML = ""; //chat clear
     document.getElementById('dropdown').style.visibility = 'visible'; //dropdown menu hide
     document.getElementById('optional-dropdown').innerHTML = ""; //optional dropdown menu clear
-
+    document.getElementById('join-room-btn').style.visibility = 'hidden'; // hide the public room join button
+    
     document.getElementById("group-name").value = data.group_name;
     document.getElementById("group-id").value = data.group_id ;
     document.getElementById("created-on").value = data.created ;
@@ -1665,9 +1666,7 @@ if(isset($_POST['member-userids'])){
     $user_list = $_POST['member-userids'];
 
     echo "<script>
-            document.getElementById('member-userids').value = '$user_list';
-            console.log(document.getElementById('member-userids').value);
-            
+            document.getElementById('member-userids').value = '$user_list';  
         </script>";
 
 
