@@ -184,35 +184,35 @@
                 </div>
                 
                 <!-- member list for group admins popup -->
-                <div id="member-list" class="modals" style= "display:none;">
+                <div id="member-list" class="modals" style= "display: block;">
                     <div class="modal-content1">
-                        <p class = "modal-topic1" id= "mem-count-show">Select Members</p><hr class= "hrr">
+                        <p class = "modal-topic1" id= "mem-count-show">Members</p><hr class= "hrr">
 
                         <div class= "mem-list" id="prig-admin-memlist" style="max-height: 300px; overflow-y: scroll;">
                             <!-- sample member info -->
+                            
                             <!--
                             <div class= "mem-item">
-                                <div class="col11">
-                                    <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
+                                <div class="col-11">
+                                    <img src= '../private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
                                 </div>
-                                <div class="col22">
+                                <div class="col-22">
                                     <div class= "mem-fullname">rashmi wijesekara</div>
                                     <div class= "mem-username">#rashmi</div>
                                 </div>
-                                <div class= "col33">
-                                    <div id= "add-btn" class= "col33-1">Add</div>
-                                    <div id= "remove-btn" class= "col33-2">Remove</div>
+                                <div class= "col-33">
+                                    <div class = "add-btn" class= "col33-1">Add</div>
+                                    <div class = "remove-btn" class= "col33-2">Remove</div>
                                 </div>
                             </div>
                             <hr class="hrr"> 
                             -->
-                            
                         </div>
 
                         <!-- buttons at the bottom -->
                         <div class= "button-section">
-                            <div id= "cancel-btn" class= "col1" onclick= "cancel_btn()">Cancel</div>
-                            <div id= "members-save-btn" class= "col2" onclick= "members_save()" style= "visibility:hidden;">Add Members</div>
+                            <div id= "cancel-btn" class= "col13" onclick= "cancel_btn()">Cancel</div>
+                            <div id= "members-save-btn" class= "col23" onclick= "members_save()" style= "visibility:hidden;">Save</div>
                         </div>
 
                     </div>
