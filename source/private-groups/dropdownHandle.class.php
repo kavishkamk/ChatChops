@@ -179,6 +179,41 @@ class dropdownHandle extends DbConnection {
         exit();
     }
 
+    // admin delete the private group
+    public function delete_group($roomid)
+    {
+        $q = "UPDATE private_group 
+            SET pgrp_status = ?
+            WHERE group_id = ?;";
+
+        $conn = $this->connect();
+        $stmt = mysqli_stmt_init($conn);
+        if(!mysqli_stmt_prepare($stmt, $q)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        $activ = 0;
+        mysqli_stmt_bind_param($stmt, "ii", $activ, $roomid);
+        mysqli_stmt_execute($stmt);
+
+        $q1 = "INSERT INTO p_grp_delete(group_id, date_time) VALUES (?, ?);";
+
+        $deleted  = date("Y-n-d H:i:s");
+
+        if(!mysqli_stmt_prepare($stmt, $q1)){
+            $this->connclose($stmt, $conn);
+            return "sqlerror";
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "is", $roomid, $deleted);
+        mysqli_stmt_execute($stmt);
+
+        $this->connclose($stmt, $conn);
+        return 1; //deleted
+        exit();
+    }
+
     //connection closing
     private function connclose($stmt, $conn)
     {

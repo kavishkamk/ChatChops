@@ -170,6 +170,54 @@
                     </div>
                 </div>
                 
+                <!-- delete group popup --> 
+                <div id="delete-group" class="modal">
+                    <div class="modal-content">
+                        <p class = "modal-topic">Delete Group</p><hr>
+                        <div class= "delete-room-msg">
+                            No one will able to chat on this group anymore.<br>
+                            Are you sure you want to delete this group?
+                        </div>
+
+                        <div id= "delete-group-btn" onclick = "private_group_dropdown(5)">Delete Group</div>    
+                    </div>
+                </div>
+                
+                <!-- member list for group admins popup -->
+                <div id="member-list" class="modals" style= "display:none;">
+                    <div class="modal-content1">
+                        <p class = "modal-topic1" id= "mem-count-show">Select Members</p><hr class= "hrr">
+
+                        <div class= "mem-list" id="prig-admin-memlist" style="max-height: 300px; overflow-y: scroll;">
+                            <!-- sample member info -->
+                            <!--
+                            <div class= "mem-item">
+                                <div class="col11">
+                                    <img src= 'private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
+                                </div>
+                                <div class="col22">
+                                    <div class= "mem-fullname">rashmi wijesekara</div>
+                                    <div class= "mem-username">#rashmi</div>
+                                </div>
+                                <div class= "col33">
+                                    <div id= "add-btn" class= "col33-1">Add</div>
+                                    <div id= "remove-btn" class= "col33-2">Remove</div>
+                                </div>
+                            </div>
+                            <hr class="hrr"> 
+                            -->
+                            
+                        </div>
+
+                        <!-- buttons at the bottom -->
+                        <div class= "button-section">
+                            <div id= "cancel-btn" class= "col1" onclick= "cancel_btn()">Cancel</div>
+                            <div id= "members-save-btn" class= "col2" onclick= "members_save()" style= "visibility:hidden;">Add Members</div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <!-- exit group popup --> 
                 <div id="exit-group" class="modal">
                     <div class="modal-content">
@@ -179,7 +227,6 @@
                         </div>
 
                         <div id= "leave-room-btn" onclick = "private_group_dropdown(3)">Leave</div>
-                        
                     </div>
                 </div>
 
@@ -194,6 +241,7 @@
                     var modal5 = document.getElementById("delete-room");
 
                     var modal6 = document.getElementById("exit-group");
+                    var modal7 = document.getElementById("delete-group");
 
                     open1.onclick = function() {
 
@@ -227,13 +275,14 @@
                     }
                     window.onclick = function(event) {
                         if (event.target == modal1 || event.target == modal2 || event.target == modal3 || 
-                        event.target == modal4 || event.target == modal5 || event.target == modal6) {
+                        event.target == modal4 || event.target == modal5 || event.target == modal6 || event.target == modal7) {
                             modal1.style.display = "none";
                             modal2.style.display = "none";
                             modal3.style.display = "none";
                             modal4.style.display = "none";
                             modal5.style.display = "none";
                             modal6.style.display = "none";
+                            modal7.style.display = "none";
                         }
                     }
 
@@ -458,7 +507,9 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("prig") == 0){
                 set_received_prig_msgs(data);
             }
-            
+            else if((data.msgType).localeCompare("delete-group") == 0){
+                delete_group(data);
+            }
         };
 
         // this used to send message when click send button of the chat area
@@ -581,6 +632,35 @@ $(document).ready(function(){
     }
 
 })
+
+// delete a private group by the admin
+function delete_group(data)
+{
+    console.log(data);
+
+    var myid = document.getElementById("member-id").value;
+    var reserv = document.getElementById("group-name").value;
+
+    // this is the admin user
+    if(myid == data.admin_member_id){
+        var msg = "You have deleted the '"+ data.groupname +"' private group!";
+        displayMsg(msg, 0);
+    }
+
+    // this is a member of the group who selected that as the active chat title
+    else if(reserv == data.groupname && myid != data.admin_member_id){
+        var msg = "'"+ data.groupname +"' group is deleted by the admin!";
+        displayMsg(msg, 0);
+    }
+
+    document.getElementById("reserver-name").textContent = "";
+    document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
+    document.getElementById('dropdown').style.visibility = 'hidden';
+
+    //private group list update for all the members
+    load_group_list();
+
+}
 
 // set the received private group msgs
 function set_received_prig_msgs(data)
@@ -726,6 +806,29 @@ function set_private_group_data(data)
             //admin or a member
             
             if(res == 1){   //admin
+                var row = `<hr class= "hrr"><div id="open-prig-admin-memlist" class= "open-popup-link">Members</div>
+                            <hr class= "hrr"><div id="open-delete-group" class= "open-popup-link">Delete Group</div>`;
+                
+                $('#optional-dropdown').append(row);
+
+                var open2 = document.getElementById("open-prig-admin-memlist");
+                var open3 = document.getElementById("open-delete-group");
+
+                var modal2 = document.getElementById("prig-admin-memlist");
+                var modal3 = document.getElementById("delete-group");
+
+                open2.onclick = function() {
+                    var res = private_group_dropdown(4);
+                    if(res != 0){
+                        modal2.style.display = "block";
+                    }else{
+                        alert("Something went wrong! Try again later.");
+                    }
+                }
+
+                open3.onclick = function() {
+                    modal3.style.display = "block";
+                }
 
             }
             else if(res == 0){ //member
@@ -956,7 +1059,25 @@ function private_group_dropdown(option)
     }
     else if(option == 5)
     {   // admin delete the group
+        document.getElementById("delete-group").style.display = "none";
 
+        var memlist = document.getElementById("mem-userid-list").value;
+
+        var temp = new Array();
+        temp = memlist.split(",");
+
+        for (a in temp){ 
+            temp[a] = parseInt(temp[a], 10); 
+        }
+
+        var data = {
+                msgType: "delete-group",
+                group_id : groupid,
+                admin_member_id : memberid,
+                groupname: groupname,
+                memlist: temp
+        };
+        conn.send(JSON.stringify(data)); // send data
     }
     else{
         return 0;

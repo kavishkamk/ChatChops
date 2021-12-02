@@ -320,7 +320,7 @@ color: #323b40;
     color: rgb(221, 94, 94);
 }
 
-#leave-room-btn, #delete-room-btn{
+#leave-room-btn, #delete-room-btn, #delete-group-btn{
     width: 100px;
     background-color: rgb(221, 94, 94);
     color: white;
@@ -335,9 +335,10 @@ color: #323b40;
     font-size: 20px;
     border-radius: 7px;
 }
-#delete-room-btn{
+#delete-room-btn, #delete-group-btn{
     width: 200px;
 }
+
 .room-member-remove-btn{
     width: 90px;
     background-color: rgb(221, 94, 94);
@@ -353,7 +354,7 @@ color: #323b40;
     font-size: 17px;
     border-radius: 7px;
 }
-#leave-room-btn:hover, .room-member-remove-btn:hover, #delete-room-btn:hover{
+#leave-room-btn:hover, .room-member-remove-btn:hover, #delete-room-btn:hover, #delete-group-btn:hover{
     cursor: pointer;
 }
 

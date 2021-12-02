@@ -81,6 +81,9 @@ class Chat implements MessageComponentInterface {
             else if($msgTypes == "new-grp-add-to-list-req"){
                 $this-> new_grp_add_to_list_req($data);
             }
+            else if($msgTypes == "delete-group"){
+                $this-> delete_group($data);
+            }
         }
     }
 
@@ -279,6 +282,35 @@ class Chat implements MessageComponentInterface {
         if($res == 1){
             foreach ($this->clientsWithId as $client) {
                 $client->send(json_encode($data));
+            }
+        }else{
+            $d = $this-> timeshow();
+            echo $d."public room deleting was unsuccessful";
+        }
+        unset($obj);
+    }
+
+    //admin delete the private group
+    private function delete_group($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['group_id'] = $details['group_id'];
+        $data['admin_member_id'] = $details['admin_member_id'];
+        $data['groupname'] = $details['groupname'];
+
+        $arr = $details['memlist'];
+
+        $obj = new \dropdownHandle();
+        $res = $obj-> delete_group($details['group_id']);
+        
+        echo $res;
+        
+        if($res == 1){
+            foreach ($arr as $user) {
+                if(array_key_exists($user, $this->clientsWithId)){
+                    $resConn = $this->clientsWithId[$user];
+                    $resConn->send(json_encode($data));
+                }
             }
         }else{
             $d = $this-> timeshow();
