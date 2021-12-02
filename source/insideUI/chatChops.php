@@ -184,7 +184,7 @@
                 </div>
                 
                 <!-- member list for group admins popup -->
-                <div id="member-list" class="modals" style= "display: block;">
+                <div id="admin-memlist" class="modals" style= "display: hidden;">
                     <div class="modal-content1">
                         <p class = "modal-topic1" id= "mem-count-show">Members</p><hr class= "hrr">
 
@@ -211,8 +211,8 @@
 
                         <!-- buttons at the bottom -->
                         <div class= "button-section">
-                            <div id= "cancel-btn" class= "col13" onclick= "cancel_btn()">Cancel</div>
-                            <div id= "members-save-btn" class= "col23" onclick= "members_save()" style= "visibility:hidden;">Save</div>
+                            <div id= "cancel-btn" class= "col13" onclick= "cancel_btn()" style= "visibility:visible;">Cancel</div>
+                            <div id= "members-save-btn" class= "col23" onclick= "members_save()" style= "visibility:visible;">Save</div>
                         </div>
 
                     </div>
@@ -242,6 +242,7 @@
 
                     var modal6 = document.getElementById("exit-group");
                     var modal7 = document.getElementById("delete-group");
+                    var modal8 = document.getElementById("admin-memlist");
 
                     open1.onclick = function() {
 
@@ -275,7 +276,8 @@
                     }
                     window.onclick = function(event) {
                         if (event.target == modal1 || event.target == modal2 || event.target == modal3 || 
-                        event.target == modal4 || event.target == modal5 || event.target == modal6 || event.target == modal7) {
+                        event.target == modal4 || event.target == modal5 || event.target == modal6 
+                        || event.target == modal7 || event.target == modal8) {
                             modal1.style.display = "none";
                             modal2.style.display = "none";
                             modal3.style.display = "none";
@@ -283,6 +285,7 @@
                             modal5.style.display = "none";
                             modal6.style.display = "none";
                             modal7.style.display = "none";
+                            modal8.style.display = "none";
                         }
                     }
 
@@ -718,7 +721,6 @@ function update_group_list(memlist)
     conn.send(JSON.stringify(data)); // send data
 }
 
-
 //load the group list
 function load_group_list()
 {
@@ -814,15 +816,16 @@ function set_private_group_data(data)
                 var open2 = document.getElementById("open-prig-admin-memlist");
                 var open3 = document.getElementById("open-delete-group");
 
-                var modal2 = document.getElementById("prig-admin-memlist");
+                var modal2 = document.getElementById("admin-memlist");
                 var modal3 = document.getElementById("delete-group");
 
                 open2.onclick = function() {
                     var res = private_group_dropdown(4);
                     if(res != 0){
                         modal2.style.display = "block";
-                    }else{
-                        alert("Something went wrong! Try again later.");
+                    }
+                    else{
+                        displayMsg("Error!", 0);
                     }
                 }
 
@@ -1056,6 +1059,75 @@ function private_group_dropdown(option)
     else if(option == 4)
     {   // member list for admins
         
+        document.getElementById("prig-admin-memlist").innerHTML = "";
+        var userid = document.getElementById("senderId").value;
+
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                set_friend_list: "set",
+                userid: userid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+
+                var memlist = document.getElementById("mem-userid-list").value;
+                var temp = new Array();
+                temp = memlist.split(",");
+
+                for (a in temp){ 
+                    temp[a] = parseInt(temp[a], 10); 
+                }
+
+                if(obj == "sqlerror"){
+                    return 0;
+                }else if(obj == ""){
+                    document.getElementById("members-save-btn").style.visibility = "hidden";
+                    return 1;
+                }
+                document.getElementById("cancel-btn").style.visibility = "hidden";
+
+                var i=0;
+                while(obj[i])
+                {
+                    console.log(obj[i]);
+                    var userid = obj[i].user_id;
+                    var addid = "add"+ userid;
+                    var removeid = "remove"+ userid;
+
+                    var friend = `<div class= "mem-item">
+                                    <div class="col11">
+                                        <img src= '../profile-pic/`+obj[i].profilePicLink+`' width='60'height='60' class='img-circle mem-icon'>
+                                    </div>
+                                    <div class="col22">
+                                        <div class= "mem-fullname">`+obj[i].first_name+ ' '+ obj[i].last_name +`</div>
+                                        <div class= "mem-username">#`+obj[i].username + `</div>
+                                    </div>
+                                    <div class= "col33">
+                                        <div class= "add-btn" id= "`+addid +`" onclick="member_added(`+userid+`)" class= "col33-1" style= "visibility:visible;">Add</div>
+                                        <div class= "remove-btn" id= "`+removeid+`" onclick="member_removed(`+userid+`)" class= "col33-2" style= "visibility:hidden;">Remove</div>
+                                    </div>
+                                </div>
+                                <hr class="hrr">`;
+                    
+                    $("#prig-admin-memlist").append(friend);
+
+                    var addbtn = document.getElementById(addid);
+                    var removbtn = document.getElementById(removeid);
+                    var len= temp.length;
+
+                    for(var k=0; k< len; k++){
+                        if(userid == temp[k]){
+                            addbtn.style.visibility = "hidden";
+                            removbtn.style.visibility = "visible";
+                        }
+                    }
+                    i++;
+                }
+                return 1;
+            }
+        });
     }
     else if(option == 5)
     {   // admin delete the group
