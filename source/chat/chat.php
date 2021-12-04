@@ -84,7 +84,40 @@ class Chat implements MessageComponentInterface {
             else if($msgTypes == "delete-group"){
                 $this-> delete_group($data);
             }
+            else if($msgTypes == "prig-mem-remove"){
+                $this-> prig_member_remove($data);
+            }
         }
+    }
+
+    //a member was removed from the private group by the admin
+    public function prig_member_remove($datas)
+    {
+        $data['msgType'] = $datas['msgType'];
+        $remov = $datas['remove_list'];
+        $data['group_id'] = $datas['groupid'];
+
+        foreach ($remov as $user) {
+            if(array_key_exists($user, $this->clientsWithId)){
+                $data['userid'] = $user;
+
+                $resConn = $this->clientsWithId[$user];
+                $resConn->send(json_encode($data));
+            }
+        }
+        
+        $arr = $datas['memlist'];
+        $data1['msgType'] = "prig-memCount-update-req";
+        $data1['group_id'] = $datas['groupid'];
+
+        foreach ($arr as $user) {
+            if(array_key_exists($user, $this->clientsWithId)){
+                $resConn = $this->clientsWithId[$user];
+                $resConn->send(json_encode($data1));
+            }
+        }
+        
+
     }
 
     // send a message to the members to update the member count in the list
@@ -109,7 +142,6 @@ class Chat implements MessageComponentInterface {
     public function new_grp_add_to_list_req($datas)
     {
         $data['msgType'] = $datas['msgType'];
-        //$data['memlist'] = $datas['memlist'];
         $arr = $datas['memlist'];
 
         foreach ($arr as $user) {

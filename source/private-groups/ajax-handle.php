@@ -113,3 +113,17 @@ if(isset($_POST['prev_msgs']))
     unset($obj);
     echo json_encode($result);
 }
+
+//update the member list of a group
+if(isset($_POST['update_memlist']))
+{
+    $groupid = $_POST['groupid'];
+    $newlist = $_POST['newlist'];
+    $oldlist = $_POST['oldlist'];
+    $admin_memberid = $_POST['admin_memberid'];
+
+    $obj = new dropdownHandle();
+    $result = $obj-> update_member_list($groupid, $newlist, $oldlist, $admin_memberid);
+    unset($obj);
+    echo json_encode($result);
+}

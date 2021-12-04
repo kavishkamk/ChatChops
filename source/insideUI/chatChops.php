@@ -184,7 +184,7 @@
                 </div>
                 
                 <!-- member list for group admins popup -->
-                <div id="admin-memlist" class="modals" style= "display: hidden;">
+                <div id="admin-memlist" class="modals" style= "display: none;">
                     <div class="modal-content1">
                         <p class = "modal-topic1" id= "mem-count-show">Members</p><hr class= "hrr">
 
@@ -211,7 +211,9 @@
 
                         <!-- buttons at the bottom -->
                         <div class= "button-section">
+                            <!--
                             <div id= "cancel-btn" class= "col13" onclick= "cancel_btn()" style= "visibility:visible;">Cancel</div>
+                            -->
                             <div id= "members-save-btn" class= "col23" onclick= "members_save()" style= "visibility:visible;">Save</div>
                         </div>
 
@@ -513,6 +515,9 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("delete-group") == 0){
                 delete_group(data);
             }
+            else if((data.msgType).localeCompare("prig-mem-remove") == 0){
+                prig_member_remove(data);
+            }
         };
 
         // this used to send message when click send button of the chat area
@@ -636,10 +641,108 @@ $(document).ready(function(){
 
 })
 
+//new member list save into the DB
+function members_save()
+{
+    var groupid = document.getElementById("group-id").value;
+    var memberid = document.getElementById("member-id").value;
+
+    var oldlist = document.getElementById("mem-userid-list").value;
+    var newlist = document.getElementById("member-userids").value;
+
+    var temp1 = new Array();
+    temp1 = oldlist.split(",");
+
+    for (a in temp1){ 
+        temp1[a] = parseInt(temp1[a], 10); 
+    }
+
+    var temp2 = new Array();
+    temp2 = newlist.split(",");
+
+    for (a in temp2){ 
+        temp2[a] = parseInt(temp2[a], 10); 
+    }
+
+    if(oldlist != newlist){
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                update_memlist: "set",
+                groupid: groupid,
+                newlist: temp2,
+                oldlist: temp1,
+                admin_memberid: memberid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+                console.log(obj);
+
+                //members adding successful
+                if(obj.add_status == 1){
+                    var data = {
+                        msgType: "new-grp-add-to-list-req",
+                        memlist: temp2
+                    };
+                    conn.send(JSON.stringify(data)); // send data
+                }
+
+                //members removing successful
+                if(obj.remove_status == 1){
+                    var data = {
+                        msgType: "prig-mem-remove",
+                        remove_list: obj.remove_list,
+                        memlist: temp2,
+                        groupid: groupid,
+                        admin_memberid: memberid
+                    };
+                    conn.send(JSON.stringify(data)); // send data
+                }
+
+                if(obj.add_status != 0 && obj.remove_status != 0){
+                    document.getElementById("mem-userid-list").value = newlist;
+                }
+                document.getElementById("admin-memlist").style.display = "none";
+            }
+        });
+    }
+    else{
+        document.getElementById("admin-memlist").style.display = "none";
+    }
+}
+
+// a member was removed by the admin of a private group
+function prig_member_remove(data)
+{
+    var myid = document.getElementById("senderId").value;
+    var grp = document.getElementById("group-id").value;
+    var dropdown = document.getElementById('dropdown');
+
+    //this is the member who was removed from the group
+    if(grp == data.group_id){
+        displayMsg("You were removed by the admin", 0);
+        
+        dropdown.style.visibility = "hidden"; 
+
+        document.getElementById("reserver-name").textContent = "";
+        document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
+    }
+    load_group_list();
+    
+    /*
+    // this is the admin who removed that member
+    else if(data.admin_memberid == myid && grp == data.groupid){
+        var msg = "You have removed a member";
+        displayMsg(msg, 0);
+    }
+    */
+
+}
+
 // delete a private group by the admin
 function delete_group(data)
 {
-    console.log(data);
 
     var myid = document.getElementById("member-id").value;
     var reserv = document.getElementById("group-name").value;
@@ -738,7 +841,6 @@ function load_group_list()
         },
         success: function(result){
             var obj = JSON.parse(result);
-            console.log(obj);
 
             var i=0;
             while(obj[i]){
@@ -765,7 +867,6 @@ function load_group_list()
 // set selected private group data
 function set_private_group_data(data)
 {
-    console.log(data);
 
     //set the active chat's color in the list
     //document.getElementById(data.group_name).style.backgroundColor = "white";
@@ -1061,6 +1162,7 @@ function private_group_dropdown(option)
         
         document.getElementById("prig-admin-memlist").innerHTML = "";
         var userid = document.getElementById("senderId").value;
+        document.getElementById("member-userids").value = "";
 
         $.ajax({
             method: "POST",
@@ -1073,6 +1175,9 @@ function private_group_dropdown(option)
                 var obj = JSON.parse(result);
 
                 var memlist = document.getElementById("mem-userid-list").value;
+
+                document.getElementById("member-userids").value = memlist;
+
                 var temp = new Array();
                 temp = memlist.split(",");
 
@@ -1086,12 +1191,10 @@ function private_group_dropdown(option)
                     document.getElementById("members-save-btn").style.visibility = "hidden";
                     return 1;
                 }
-                document.getElementById("cancel-btn").style.visibility = "hidden";
-
+                
                 var i=0;
                 while(obj[i])
                 {
-                    console.log(obj[i]);
                     var userid = obj[i].user_id;
                     var addid = "add"+ userid;
                     var removeid = "remove"+ userid;
@@ -1156,6 +1259,67 @@ function private_group_dropdown(option)
     }
 }
 
+//when click on a add button of a user
+function member_added(userid)
+{
+    var removebtn = "remove"+ userid;
+    var addbtn = "add"+ userid;
+
+    var str = document.getElementById("member-userids").value;
+    
+    var add;
+    if(str == ""){
+        add = userid;
+    }else{
+        add = ","+ userid;
+    }
+
+    var newstr = str + add;
+    document.getElementById("member-userids").value = newstr;
+
+    console.log(document.getElementById("member-userids").value);
+
+    document.getElementById(removebtn).style.visibility = 'visible';
+    document.getElementById(addbtn).style.visibility = 'hidden';
+}
+
+//when click on a remove button of a user
+function member_removed(userid)
+{
+    var removebtn = "remove"+ userid;
+    var addbtn = "add"+ userid;
+
+    var str = document.getElementById("member-userids").value;
+    var ids = str.split(",");
+
+    var newstr ="";
+    var str1;
+    var i=0;
+    while(ids[i]){
+        var id = ids[i];
+        
+        if(id != userid){
+            if(newstr == "")
+                str1 = id;
+            else
+                str1 = ","+ id;
+
+            i++;
+        }else{
+            i++;
+            continue;
+        }
+        newstr = newstr+ str1;
+        
+    }
+    document.getElementById("member-userids").value = newstr;
+
+    console.log(document.getElementById("member-userids").value);
+
+    document.getElementById(removebtn).style.visibility = 'hidden';
+    document.getElementById(addbtn).style.visibility = 'visible';
+}
+
 // set the member count of a given private group
 function set_member_count(grpid)
 {
@@ -1181,7 +1345,6 @@ function set_member_count(grpid)
 
 //a public room was deleted by the admin user
 function pubRoom_delete_notification(data){
-    console.log(data);
 
     var myid = document.getElementById("roomMemberId").value;
     var reserv = document.getElementById("roomname").value;
@@ -1241,8 +1404,6 @@ function update_room_list()
                             var roomData = roomlist[i];
                             var roomname = roomData.name;
                             var icon = roomData.icon;
-
-                            console.log(roomData);
                             
                             var roomid = roomData.id;
                             var id = roomname + "count";
@@ -1274,7 +1435,6 @@ function update_room_list()
 //user remove notification received from the server
 function pubg_user_remove_notification(data)
 {
-    console.log(data);
     var room;
 
     var myname = document.getElementById("username").value;
@@ -1683,7 +1843,6 @@ function displayLastMsgOfuser(data){
 //set public chat room data
 function setPubRoomData(roomData)
 {
-    console.log(roomData);
     document.getElementById("reserver-name").textContent = roomData.name;
     document.getElementById("msgType").value = "pubg";
     document.getElementById("roomId").value = roomData.id;
@@ -1722,7 +1881,6 @@ function setPubRoomData(roomData)
                     
                     var i=0;
                     while(res[i]){
-                        //console.log(res[i]);
                         set_prev_pubg_msgs(res[i]);
                         i++;
                     }
