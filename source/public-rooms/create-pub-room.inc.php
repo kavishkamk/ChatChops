@@ -28,7 +28,7 @@ if(isset($_POST['pub-room-submit'])){
 
             if($create == "ok"){
                 echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
-                        <input type='hidden' name='status' value = 'ok' />   
+                        <input type='hidden' id='room-create-status' name='status' value = 'ok' />   
                         <input type='hidden' name='roomname' value = $groupname /> 
                     </form>";
                 
@@ -38,7 +38,7 @@ if(isset($_POST['pub-room-submit'])){
             }
             else{
                 echo "<form method='post' name = 'formAlert' action= 'http://localhost/chatchops/source/insideUI/chatChops.php'>
-                    <input type='hidden' name='status' value = 'wrong' />   
+                    <input type='hidden' id='room-create-status' name='status' value = 'wrong' />   
                 </form>";
             
                 echo '<script>

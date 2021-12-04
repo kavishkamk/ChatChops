@@ -7,6 +7,8 @@ require dirname(__DIR__) . "/phpClasses/PrivateChatHandle.class.php";
 require dirname(__DIR__) . "/phpClasses/OnlineOffline.class.php";
 require dirname(__DIR__) . "/public-rooms/publicRoomChat.class.php";
 require dirname(__DIR__) . "/public-rooms/dropDownMenu.class.php";
+require dirname(__DIR__) . "/private-groups/dropdownHandle.class.php";
+require dirname(__DIR__) . "/private-groups/privateGroupChat.class.php";
 
 class Chat implements MessageComponentInterface {
     protected $clients;
@@ -45,16 +47,18 @@ class Chat implements MessageComponentInterface {
         if(isset($data['msgType'])){
             $msgTypes = $data['msgType']; // get message type
 
+            // sending messages
             if($msgTypes == "pubg"){
-                //multicast($data);
                 $this-> send_pubg_msgs($data);
             }
             else if($msgTypes == "prig"){
-               echo "this is private group <br>";
+                $this-> send_prig_msgs($data);
             }
             else if($msgTypes == "pri"){
                $this->privateMsgReserverConn($data);
             }
+
+            // for public chat rooms
             else if($msgTypes == "pubg-user-remove"){
                 $this-> pubg_user_remove($data);
             }
@@ -64,9 +68,90 @@ class Chat implements MessageComponentInterface {
             else if($msgTypes == "delete-room"){
                 $this-> delete_room($data);
             }
+            else if($msgTypes == "update-room-list"){
+                foreach ($this->clientsWithId as $client) {
+                    $client->send(json_encode($data));
+                }
+            }
+
+            //for private chat groups
+            else if($msgTypes == "prig-memCount-update-req"){
+                $this-> prig_mem_count_update_req($data);
+            }
+            else if($msgTypes == "new-grp-add-to-list-req"){
+                $this-> new_grp_add_to_list_req($data);
+            }
+            else if($msgTypes == "delete-group"){
+                $this-> delete_group($data);
+            }
+            else if($msgTypes == "prig-mem-remove"){
+                $this-> prig_member_remove($data);
+            }
         }
     }
-  
+
+    //a member was removed from the private group by the admin
+    public function prig_member_remove($datas)
+    {
+        $data['msgType'] = $datas['msgType'];
+        $remov = $datas['remove_list'];
+        $data['group_id'] = $datas['groupid'];
+
+        foreach ($remov as $user) {
+            if(array_key_exists($user, $this->clientsWithId)){
+                $data['userid'] = $user;
+
+                $resConn = $this->clientsWithId[$user];
+                $resConn->send(json_encode($data));
+            }
+        }
+        
+        $arr = $datas['memlist'];
+        $data1['msgType'] = "prig-memCount-update-req";
+        $data1['group_id'] = $datas['groupid'];
+
+        foreach ($arr as $user) {
+            if(array_key_exists($user, $this->clientsWithId)){
+                $resConn = $this->clientsWithId[$user];
+                $resConn->send(json_encode($data1));
+            }
+        }
+        
+
+    }
+
+    // send a message to the members to update the member count in the list
+    // when the count is changed 
+    // (member leave, remove from the group)
+    public function prig_mem_count_update_req($datas)
+    {
+        $data['msgType'] = $datas['msgType'];
+        $data['group_id'] = $datas['group_id'];
+
+        $arr = $datas['member_list'];
+
+        foreach ($arr as $user) {
+            if(array_key_exists($user, $this->clientsWithId)){
+                $resConn = $this->clientsWithId[$user];
+                $resConn->send(json_encode($data));
+            }
+        }
+    }
+
+    // send a message to update the group list
+    public function new_grp_add_to_list_req($datas)
+    {
+        $data['msgType'] = $datas['msgType'];
+        $arr = $datas['memlist'];
+
+        foreach ($arr as $user) {
+            if(array_key_exists($user, $this->clientsWithId)){
+                $resConn = $this->clientsWithId[$user];
+                $resConn->send(json_encode($data));
+            }
+        }
+    }
+
     public function multicast($msg) {
         foreach ($this->clientsWithId as $client) $client->send($msg);
     }
@@ -168,6 +253,40 @@ class Chat implements MessageComponentInterface {
         unset($pubObj);
     }
 
+    private function send_prig_msgs($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['senderId'] = $details['senderId'];
+        $data['username'] = $details['username'];
+        $data['propic'] = $details['propic'];
+
+        $data['groupid'] = $details['groupid'];
+        $data['groupname'] = $details['groupname'];
+        $data['memberid'] = $details['memberid'];
+        $data['msg'] = $details['msg'];
+
+        $pubObj = new \privateGroupChat();    //store messages in the DB
+        $res = $pubObj->storeMsgs($details['memberid'], $details['msg']);
+
+        if($res != "sqlerror"){
+            // send the msg to each member
+            $arr = $details['memlist'];
+            foreach ($arr as $user) {
+                if(array_key_exists($user, $this->clientsWithId)){
+                    $resConn = $this->clientsWithId[$user];
+                    $resConn->send(json_encode($data));
+                }
+            }
+
+        }else{
+            $d = $this-> timeshow();
+            echo $d."message didn't save";
+        }
+        unset($pubObj);
+
+        
+    }
+
     //send the request of updating the member count of the given chat room
     private function memCount_update_req($details)
     {
@@ -195,6 +314,35 @@ class Chat implements MessageComponentInterface {
         if($res == 1){
             foreach ($this->clientsWithId as $client) {
                 $client->send(json_encode($data));
+            }
+        }else{
+            $d = $this-> timeshow();
+            echo $d."public room deleting was unsuccessful";
+        }
+        unset($obj);
+    }
+
+    //admin delete the private group
+    private function delete_group($details)
+    {
+        $data['msgType'] = $details['msgType'];
+        $data['group_id'] = $details['group_id'];
+        $data['admin_member_id'] = $details['admin_member_id'];
+        $data['groupname'] = $details['groupname'];
+
+        $arr = $details['memlist'];
+
+        $obj = new \dropdownHandle();
+        $res = $obj-> delete_group($details['group_id']);
+        
+        echo $res;
+        
+        if($res == 1){
+            foreach ($arr as $user) {
+                if(array_key_exists($user, $this->clientsWithId)){
+                    $resConn = $this->clientsWithId[$user];
+                    $resConn->send(json_encode($data));
+                }
             }
         }else{
             $d = $this-> timeshow();

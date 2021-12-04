@@ -4,7 +4,7 @@ require_once "DbConnection.class.php";
     class PrivateChatHandle extends DbConnection{
 
         public function getFriendList($uid){
-            $sqlQ = "SELECT users.user_id, users.profilePicLink, users.first_name, users.last_name, users.onlineStatus
+            $sqlQ = "SELECT users.user_id, users.profilePicLink, users.first_name, users.last_name, users.onlineStatus, users.username
             FROM users WHERE users.user_id IN
             (SELECT friends.to_user_id FROM ((friends INNER JOIN friend_req_friend_map ON friends.friend_id = friend_req_friend_map.friend_id)
             INNER JOIN friend_request ON friend_req_friend_map.req_id = friend_request.req_id AND

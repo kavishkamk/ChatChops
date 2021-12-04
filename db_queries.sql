@@ -862,3 +862,15 @@ ADD CONSTRAINT UC_frqmap UNIQUE (user_id,active_id);
 
 -- foreign key dropped
 ALTER TABLE `pub_grp_delete` DROP FOREIGN KEY `pub_grp_delete_ibfk_1`;
+
+-- private group column changed
+ALTER TABLE private_group DROP COLUMN group_icon;
+
+ALTER TABLE private_group
+ADD group_icon VARCHAR(60) NOT NULL;
+
+-- reason column deleted in private group leave 
+ALTER TABLE private_group_leave DROP COLUMN reason;
+
+-- a column deleted in private group chat
+ALTER TABLE p_group_chat DROP block_status;

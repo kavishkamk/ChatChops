@@ -73,6 +73,7 @@
     text-decoration: none;
 }
 
+
 .chat-title{
     display: grid;
     grid-template-columns: 95% 5%;
@@ -86,8 +87,7 @@
     padding: 0 20px;
     height: 50px;
     border-bottom: 3px solid rgba(0, 0, 0);
-    position:relative;
-  }
+}
 
 .room:hover,
 .room:active{
@@ -103,19 +103,23 @@
 }
 
 .join-room{
-    position: absolute;
-    top: 5px;
-    left: 375px;
-    color: black;
-    float: center;
-    padding: 7px;
-    border-radius: 12px;
-    font-size:15px;
-    font-weight: bold;
-    background-color: #9acfe2;
-    width: 100px;
-}
+    float: right;
+    width:100px;
+    padding-right: 10px;
+    padding-top: 5px;
 
+    position: relative;
+    color: black;
+    float: right;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size:1.1vw;
+    font-weight: bold;
+    background-color: #5472d3;
+}
+.join-room:hover{
+    background-color: #5e92f3;
+}
 .alert-msg{
     position: fixed;
     z-index: 99;
@@ -316,7 +320,7 @@ color: #323b40;
     color: rgb(221, 94, 94);
 }
 
-#leave-room-btn, #delete-room-btn{
+#leave-room-btn, #delete-room-btn, #delete-group-btn{
     width: 100px;
     background-color: rgb(221, 94, 94);
     color: white;
@@ -331,9 +335,10 @@ color: #323b40;
     font-size: 20px;
     border-radius: 7px;
 }
-#delete-room-btn{
+#delete-room-btn, #delete-group-btn{
     width: 200px;
 }
+
 .room-member-remove-btn{
     width: 90px;
     background-color: rgb(221, 94, 94);
@@ -349,7 +354,7 @@ color: #323b40;
     font-size: 17px;
     border-radius: 7px;
 }
-#leave-room-btn:hover, .room-member-remove-btn:hover, #delete-room-btn:hover{
+#leave-room-btn:hover, .room-member-remove-btn:hover, #delete-room-btn:hover, #delete-group-btn:hover{
     cursor: pointer;
 }
 
@@ -375,3 +380,192 @@ color: #323b40;
     display: table;
     content: '';
 }
+
+/*public room join button alignment*/
+
+.cols{
+    box-sizing: border-box;
+    position: relative;
+}
+
+.col-1{
+    float: left;
+    width: 50%;
+
+    
+    padding-top: 5px;
+}
+.col-2{
+    float: right;
+    width: 40%;
+}
+
+.cols:after{
+    clear: both;
+    display: table;
+    content: '';
+}
+
+/* member adding popup */
+
+.modals {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content1 {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: fit-content;
+    padding-bottom: 20px;
+}
+
+.modal-topic1 {
+    text-align: center;
+    color: #043a6d;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.col13{
+    float: left;
+    width: 40%;
+    padding-right: 50px;
+}
+
+.col23{
+    float: right;
+    width: 60%;
+    padding-left: 50px;
+}
+
+.col-11{
+    float: left;
+    width: 30%;
+}
+.col-22{
+    float: left;
+    width: 20%;
+}
+.col-33{
+    float: right;
+    width: 50%;
+    padding-left: 50px;
+}
+
+.col33-1{
+    float: left;
+    width: 40%;
+}
+
+.col33-2{
+    float: right;
+    width: 40%;
+}
+
+.button-section{
+    z-index: 1002;
+    padding-top: 30px;
+    padding-bottom: 40px;
+    padding-left: 10px;
+}
+
+.add-btn{
+    text-align: center;
+    padding: 4px 5px;
+    width: 50px;
+    background-color: #39b6f0;
+    font-size:15px;
+    border:none;
+    border-radius:5px;
+    color:black;
+    justify-self: left;
+    margin-left: 25px;
+}
+
+.remove-btn{
+    text-align: center;
+    padding: 4px 5px;
+    width: 75px;
+    background-color: #df6c7b;
+    font-size:15px;
+    border:none;
+    border-radius:5px;
+    color: black;
+    justify-self: right;
+    margin-right: 15px;
+    margin-top: 5px;
+    margin-left: 12px;
+}
+
+#members-save-btn{
+    text-align: center;
+    padding:10px 10px;
+    width: 150px;
+    background-color: #207398;
+    font-size:17px;
+    border:none;
+    border-radius:5px;
+    color:#caeef5;
+    justify-self: right;
+}
+
+#cancel-btn{
+    text-align: center;
+    padding:10px 10px;
+    width: 100px;
+    background-color: #207398;
+    font-size:17px;
+    border:none;
+    border-radius:5px;
+    color:#caeef5;
+    justify-self: left;
+}
+
+#members-save-btn:hover, #cancel-btn:hover{
+    background-color: #12B0E8;
+    color:white;
+    cursor:pointer;
+}
+
+.add-btn:hover{
+    color:white;
+    cursor:pointer;
+    background-color: #63c3f0;
+}
+
+.remove-btn:hover{
+    color:white;
+    cursor:pointer;
+    background-color: #e48592;
+}
+
+.mem-fullname{
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+}
+
+.mem-username{
+    color: rgb(97, 97, 97);
+    font-size: 14px;
+}
+
+/*
+.modal-backdrop {
+    display: none;
+    z-index: 1040 !important;
+}
+*/

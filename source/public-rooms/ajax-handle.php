@@ -5,7 +5,7 @@ require "showPrevMsgs.class.php";
 require "dropDownMenu.class.php";
 require "displayRoomList.class.php";
 
-//get the last msgId for all the chat rooms
+//get the last 100 msgs
 if(isset($_POST['prev_msgs']))
 {
     $roomid = $_POST['roomid'];

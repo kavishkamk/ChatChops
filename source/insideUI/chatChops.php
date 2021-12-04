@@ -45,10 +45,19 @@
         <div class="chat" id="chat-gui" style="grid-column:2 / 3; grid-row: 1 / 3">
             <!-- ------------------------------>
             <div class="chat-title">
-                <span id="reserver-name"></span> <!-- to set reserver name -->
+                <div class= "cols">
+                    <div class= "col-1">
+                        <span id="reserver-name"></span> <!-- to set reserver name -->
+                    </div>
+                    
+                    <!-- public room join button -->
+                    <div class= "col-2">
+                        <button type="button" onclick= 'pubRoom_join()' class="join-room" id="join-room-btn" style="visibility:hidden;">Join</button>
+                    </div>
+                </div>
                 
                 <!-- dropdown menu for public chat rooms -->
-                <div class= "final__dropdown" id = "dropdown" style= "visibility:hidden;">
+                <div class= "final__dropdown" id = "dropdown"  style= "visibility:hidden;">
                     <i class="fas fa-ellipsis-v" class ="final__dropdown__hover"></i> <!-- list icon -->
                     <div class= "final__dropdown__menu" id= "dropdown_list">
                         <div id="open-group-info" class= "open-popup-link">Group Info</div>
@@ -65,7 +74,7 @@
                 <div id="group-info" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <p class = "modal-topic">Public Room Info</p><hr>
+                        <p class = "modal-topic" id= "modal-topic"></p><hr>
                         <div class= "grid-cont">
                             <div class ="room-info-display" class= "column" style="grid-column:1 / 2; grid-row: 1 / 2">
                                 <img src= '' id= "roomicon" alt='group icon' width='200'height='200' class='img-circle room-icon'>
@@ -109,7 +118,7 @@
                     </div>
                 </div>
 
-                <!-- exit group popup --> 
+                <!-- exit room popup --> 
                 <div id="exit-room" class="modal">
                     <div class="modal-content">
                         <p class = "modal-topic">Exit Group</p><hr>
@@ -160,6 +169,68 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- delete group popup --> 
+                <div id="delete-group" class="modal">
+                    <div class="modal-content">
+                        <p class = "modal-topic">Delete Group</p><hr>
+                        <div class= "delete-room-msg">
+                            No one will able to chat on this group anymore.<br>
+                            Are you sure you want to delete this group?
+                        </div>
+
+                        <div id= "delete-group-btn" onclick = "private_group_dropdown(5)">Delete Group</div>    
+                    </div>
+                </div>
+                
+                <!-- member list for group admins popup -->
+                <div id="admin-memlist" class="modals" style= "display: none;">
+                    <div class="modal-content1">
+                        <p class = "modal-topic1" id= "mem-count-show">Members</p><hr class= "hrr">
+
+                        <div class= "mem-list" id="prig-admin-memlist" style="max-height: 300px; overflow-y: scroll;">
+                            <!-- sample member info -->
+                            
+                            <!--
+                            <div class= "mem-item">
+                                <div class="col-11">
+                                    <img src= '../private-group-icons/groupchat-icon.png' width='60'height='60' class='img-circle mem-icon'>
+                                </div>
+                                <div class="col-22">
+                                    <div class= "mem-fullname">rashmi wijesekara</div>
+                                    <div class= "mem-username">#rashmi</div>
+                                </div>
+                                <div class= "col-33">
+                                    <div class = "add-btn" class= "col33-1">Add</div>
+                                    <div class = "remove-btn" class= "col33-2">Remove</div>
+                                </div>
+                            </div>
+                            <hr class="hrr"> 
+                            -->
+                        </div>
+
+                        <!-- buttons at the bottom -->
+                        <div class= "button-section">
+                            <!--
+                            <div id= "cancel-btn" class= "col13" onclick= "cancel_btn()" style= "visibility:visible;">Cancel</div>
+                            -->
+                            <div id= "members-save-btn" class= "col23" onclick= "members_save()" style= "visibility:visible;">Save</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- exit group popup --> 
+                <div id="exit-group" class="modal">
+                    <div class="modal-content">
+                        <p class = "modal-topic">Exit Group</p><hr>
+                        <div class= "leave-msg">
+                            Are you sure you want to leave this group?
+                        </div>
+
+                        <div id= "leave-room-btn" onclick = "private_group_dropdown(3)">Leave</div>
+                    </div>
+                </div>
 
                 <script>
                     var modal1 = document.getElementById("group-info");
@@ -171,33 +242,57 @@
                     var modal4 = document.getElementById("admin-member-list");
                     var modal5 = document.getElementById("delete-room");
 
+                    var modal6 = document.getElementById("exit-group");
+                    var modal7 = document.getElementById("delete-group");
+                    var modal8 = document.getElementById("admin-memlist");
+
                     open1.onclick = function() {
-                        var res = room_dropdown_menu(1);
+
+                        // a public chat room is selected
+                        if(document.getElementById("roomId").value != ""){
+                            document.getElementById("modal-topic").textContent = "Public Room Info";
+                            var res = room_dropdown_menu(1);
                         
-                        if(res != 0){
-                            modal1.style.display = "block";
-                        }else{
-                            alert("Something went wrong! Try again later.");
+                            if(res != 0){
+                                modal1.style.display = "block";
+                            }else{
+                                alert("Something went wrong! Try again later.");
+                            }
                         }
                         
+                        // a private group is selected
+                        if(document.getElementById("group-id").value != ""){
+                            document.getElementById("modal-topic").textContent = "Private Group Info";
+                            var res = private_group_dropdown(1);
+                        
+                            if(res != 0){
+                                modal1.style.display = "block";
+                            }else{
+                                alert("Something went wrong! Try again later.");
+                            }
+                        }
                     }
 
                     span.onclick = function() {
                         modal1.style.display = "none";
                     }
                     window.onclick = function(event) {
-                        if (event.target == modal1 || event.target == modal2 || event.target == modal3 || event.target == modal4 || event.target == modal5) {
+                        if (event.target == modal1 || event.target == modal2 || event.target == modal3 || 
+                        event.target == modal4 || event.target == modal5 || event.target == modal6 
+                        || event.target == modal7 || event.target == modal8) {
                             modal1.style.display = "none";
                             modal2.style.display = "none";
                             modal3.style.display = "none";
                             modal4.style.display = "none";
                             modal5.style.display = "none";
+                            modal6.style.display = "none";
+                            modal7.style.display = "none";
+                            modal8.style.display = "none";
                         }
                     }
 
                 </script>
-                <!-- public room join button -->
-                <button type="button" onclick= 'pubRoom_join()' class="join-room" id="join-room-btn" style="visibility:hidden;">Join</button>
+                
             </div>
             
             <div class= "alert-msg" id = "alert-msg" style="visibility:hidden;"></div>
@@ -232,9 +327,21 @@
                     <input type="hidden" id="roomMemberId" name="roomMemberId" value=""> <!-- set room member id -->
                     <input type="hidden" id="roomname" name="roomname" value=""> <!-- set room name -->
                     <input type="hidden" id="roomicon" name="roomicon" value=""> <!-- set room icon -->
-
-                    <!-- when select a private group -->
+                    <input type="hidden" id="room-list-status" name="roomListStatus" value="">
                     
+                    <!-- when select a private group -->
+                    <input type="hidden" id="group-id" name="group-id" value="">
+                    <input type="hidden" id="group-name" name="group-name" value=""> <!-- group name -->
+                    <input type="hidden" id="created-on" name="created-on" value="">
+                    <input type="hidden" id="bio" name="bio" value="">
+                    <input type="hidden" id="group-icon" name="group-icon" value="">
+                    <input type="hidden" id="member-id" name="member-id" value="">
+
+                    <input type="hidden" id="admin-userid" name="admin-userid" value=""> <!-- admin's user id -->
+                    <input type="hidden" id="member-userids" name="member-userids" value=""> <!-- selected user ids -->
+
+                    <input type="hidden" id="mem-userid-list" name="mem-userid-list" value=""> <!-- members' userid list -->
+
                     <!-- when select a friend -->
                     <input type="hidden" id="reseverId" name="reseverId" value=""> <!--reserver id-->
                     <input type="hidden" id="profilepiclink" name="profilepiclink" value=""> <!--profie pic link-->
@@ -254,7 +361,7 @@
                 </div>
 
                 <div class = "create-grp-btn">
-                    <a href="#">
+                    <a href="../private-groups/create-private-group.php">
                     <button id= "grp">Create Group</button>
                     </a>
                 </div>
@@ -268,7 +375,6 @@
                     <span class= 'memcount' style='float: right'>3 Members</span>
                 </div>
                 -->
-                
             </div>
         </div>
         
@@ -322,10 +428,14 @@
                 <span class= 'memcount' style='float: right'>3 Members</span>*/
 
                         $id = $roomname."count";
+
+                        if($memCount == 1) $mem = $memCount. ' Member';
+                        else $mem = $memCount. ' Members';
+
                         echo "<div onclick= 'setPubRoomData($roomDataJSON)' class= 'friend-conversation1 active' id = '$roomname'>
                         <img src= '../group-icons/$icon' alt='group icon'>
                         <div class= 'title-text'>$roomname</div>
-                        <span class= 'memcount' id = '$id' style='float: right'>$memCount Members</span>
+                        <span class= 'memcount' id = '$id' style='float: right'>$mem</span>
                         </div>";
                         
                     }
@@ -341,40 +451,32 @@
 </body>
 </html>
 
-<?php
-    $msg = "";
-    if(isset($_GET['status'])){
-        $msg = setMessage();
-        echo '<script>alert ("'.$msg.'")</script>';
-    }
-    
-    function setMessage()
-    {
-        if(isset($_GET['status'])){
-            if($_GET['status'] == 'ok'){
-                return "You have successfully created a new chat room";
-            }
-            else if($_GET['status'] == 'wrong'){
-                return "Something went wrong";
-            }
-        }
-    }
-?>
-
 <script type="text/javascript">
 var conn;
 
 $(document).ready(function(){
     conn = new WebSocket('ws://localhost:8080');
+
+    load_group_list();
+
     conn.onopen = function(e) {
         console.log("Connection established!");
         sendIntroduceData(); // send data to user introduce
+
+        //if the user is created a new chat room the roomlist should be updated for others too
+        check_to_update_room_list();
+
+        //if the user created a new private group, 
+        //the group list should be updated for other members too
+        check_to_update_group_list();
     };
     
     // set reserved messages
         conn.onmessage = function(e) {
             console.log(e.data);
             var data = JSON.parse(e.data);
+
+            // for private chats
             if((data.msgType).localeCompare("pri") == 0){
                 setReservedPrivatChatData(data);
                 displayLastMsgOfuser(data);
@@ -382,6 +484,8 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("onoff") == 0){
                 setOnlineOrOffline(data);
             }
+
+            // for public chat rooms
             else if((data.msgType).localeCompare("pubg") == 0){
                 set_received_pubg_msgs(data);
             }
@@ -394,7 +498,26 @@ $(document).ready(function(){
             else if((data.msgType).localeCompare("delete-room") == 0){
                 pubRoom_delete_notification(data);
             }
-            
+            else if((data.msgType).localeCompare("update-room-list") == 0){
+                update_room_list();
+            }
+
+            // for private groups
+            else if((data.msgType).localeCompare("new-grp-add-to-list-req") == 0){
+                load_group_list();
+            }
+            else if((data.msgType).localeCompare("prig-memCount-update-req") == 0){
+                set_member_count(data.group_id);
+            }
+            else if((data.msgType).localeCompare("prig") == 0){
+                set_received_prig_msgs(data);
+            }
+            else if((data.msgType).localeCompare("delete-group") == 0){
+                delete_group(data);
+            }
+            else if((data.msgType).localeCompare("prig-mem-remove") == 0){
+                prig_member_remove(data);
+            }
         };
 
         // this used to send message when click send button of the chat area
@@ -445,10 +568,37 @@ $(document).ready(function(){
                     };
                 }
             }
-
             //for private groups
-            //
-            //
+            if(msgType == "prig"){
+                var groupid = $("#group-id").val();
+                var groupname = $("#group-name").val();
+                var memberid = $("#member-id").val();
+                var memlist = $("#mem-userid-list").val();
+
+                var username = $("#username").val(); // get the username
+                var propic = $("#propic").val(); // get the profile picture
+
+                var temp = new Array();
+                temp = memlist.split(",");
+
+                for (a in temp){ 
+                    temp[a] = parseInt(temp[a], 10); 
+                }
+
+                if(groupid != null && memlist != null){
+                    var data = {
+                        msgType: msgType,
+                        senderId: senderId,
+                        username: username,
+                        propic: propic,
+                        groupid: groupid,
+                        groupname: groupname,
+                        memberid: memberid,
+                        memlist: temp,
+                        msg: msg
+                    };
+                }
+            }
 
             console.log(data);
             conn.send(JSON.stringify(data)); // send data
@@ -469,11 +619,732 @@ $(document).ready(function(){
         conn.send(JSON.stringify(introdata));
     }
 
+    //send a msg to the server when a new chat room was created
+    //then the server will broadcast the message asking them to update the roomlist
+    function check_to_update_room_list()
+    {
+        var st = document.getElementById("room-list-status").value;
+
+        if(st == 'ok'){
+            update_room_list_broadcast();
+        }
+    }
+
+    function check_to_update_group_list()
+    {
+        var str = document.getElementById("member-userids").value;
+
+        if(str != ""){
+            update_group_list(str);
+        }
+    }
+
 })
+
+//new member list save into the DB
+function members_save()
+{
+    var groupid = document.getElementById("group-id").value;
+    var memberid = document.getElementById("member-id").value;
+
+    var oldlist = document.getElementById("mem-userid-list").value;
+    var newlist = document.getElementById("member-userids").value;
+
+    var temp1 = new Array();
+    temp1 = oldlist.split(",");
+
+    for (a in temp1){ 
+        temp1[a] = parseInt(temp1[a], 10); 
+    }
+
+    var temp2 = new Array();
+    temp2 = newlist.split(",");
+
+    for (a in temp2){ 
+        temp2[a] = parseInt(temp2[a], 10); 
+    }
+
+    if(oldlist != newlist){
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                update_memlist: "set",
+                groupid: groupid,
+                newlist: temp2,
+                oldlist: temp1,
+                admin_memberid: memberid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+                console.log(obj);
+
+                //members adding successful
+                if(obj.add_status == 1){
+                    var data = {
+                        msgType: "new-grp-add-to-list-req",
+                        memlist: temp2
+                    };
+                    conn.send(JSON.stringify(data)); // send data
+                }
+
+                //members removing successful
+                if(obj.remove_status == 1){
+                    var data = {
+                        msgType: "prig-mem-remove",
+                        remove_list: obj.remove_list,
+                        memlist: temp2,
+                        groupid: groupid,
+                        admin_memberid: memberid
+                    };
+                    conn.send(JSON.stringify(data)); // send data
+                }
+
+                if(obj.add_status != 0 && obj.remove_status != 0){
+                    document.getElementById("mem-userid-list").value = newlist;
+                }
+                document.getElementById("admin-memlist").style.display = "none";
+            }
+        });
+    }
+    else{
+        document.getElementById("admin-memlist").style.display = "none";
+    }
+}
+
+// a member was removed by the admin of a private group
+function prig_member_remove(data)
+{
+    var myid = document.getElementById("senderId").value;
+    var grp = document.getElementById("group-id").value;
+    var dropdown = document.getElementById('dropdown');
+
+    //this is the member who was removed from the group
+    if(grp == data.group_id){
+        displayMsg("You were removed by the admin", 0);
+        
+        dropdown.style.visibility = "hidden"; 
+
+        document.getElementById("reserver-name").textContent = "";
+        document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
+    }
+    load_group_list();
+    
+    /*
+    // this is the admin who removed that member
+    else if(data.admin_memberid == myid && grp == data.groupid){
+        var msg = "You have removed a member";
+        displayMsg(msg, 0);
+    }
+    */
+
+}
+
+// delete a private group by the admin
+function delete_group(data)
+{
+
+    var myid = document.getElementById("member-id").value;
+    var reserv = document.getElementById("group-name").value;
+
+    // this is the admin user
+    if(myid == data.admin_member_id){
+        var msg = "You have deleted the '"+ data.groupname +"' private group!";
+        displayMsg(msg, 0);
+    }
+
+    // this is a member of the group who selected that as the active chat title
+    else if(reserv == data.groupname && myid != data.admin_member_id){
+        var msg = "'"+ data.groupname +"' group is deleted by the admin!";
+        displayMsg(msg, 0);
+    }
+
+    document.getElementById("reserver-name").textContent = "";
+    document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
+    document.getElementById('dropdown').style.visibility = 'hidden';
+
+    //private group list update for all the members
+    load_group_list();
+
+}
+
+// set the received private group msgs
+function set_received_prig_msgs(data)
+{
+    var propic = document.getElementById("propic").value;
+    var title = document.getElementById("reserver-name").textContent;
+
+    //this group is selected to the chat UI
+    if(document.getElementById("senderId").value != data.senderId && title == data.groupname)
+    {
+        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+
+        autoScrollDown();
+    }
+}
+
+//to set previous messages in private groups
+function set_prev_prig_msgs(data)
+{
+    var title = document.getElementById("reserver-name").textContent;
+    var sender = document.getElementById("senderId").value;
+
+    //this group is selected to the chat UI
+    if(sender != data.senderId && title == data.groupname)
+    {
+        var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+data.propic+'"/> <div class = "username">'+ data.username +'</div><div class="message-text">'+ data.msg +'</div> <div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+
+    }else if(sender == data.senderId && title == data.groupname)
+    {
+        // set sended chat message
+        var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data.msg +'</div><div class="message-time"></div></div></div>';
+        $('#pri-chat-message-list').append(row);
+    }
+    autoScrollDown();
+}
+
+// send the message to update the private group list to the members
+function update_group_list(memlist)
+{
+    memlist = memlist + "";
+    var temp = new Array();
+    temp = memlist.split(",");
+
+    for (a in temp){ 
+        //store the userids as base 10 integers instead of strings
+        temp[a] = parseInt(temp[a], 10); 
+    }
+
+    data = {    msgType: "new-grp-add-to-list-req",
+                memlist: temp
+            };   
+
+    conn.send(JSON.stringify(data)); // send data
+}
+
+//load the group list
+function load_group_list()
+{
+    var userid = document.getElementById("senderId").value;
+
+    //empty the previous list and load the new list again
+    document.getElementById("prig-list").innerHTML = "";
+
+    $.ajax({
+        method: "POST",
+        url: "../private-groups/ajax-handle.php",
+        data: {
+            load_group_list: "set",
+            userid: userid
+        },
+        success: function(result){
+            var obj = JSON.parse(result);
+
+            var i=0;
+            while(obj[i]){
+                var group = obj[i];
+                grp = JSON.stringify(group);
+
+                var id = group.group_id + "memcount";
+                var id2 = group.group_name + "prig";
+
+                var datas = `<div onclick='set_private_group_data(`+ grp +`)' id= "`+id2+`" class= "friend-conversation1 active">
+                    <img src="../private-group-icons/`+group.icon+`" alt='group icon'/>
+                    <div class= "title-text">`+group.group_name+`</div>
+                    <span class= 'memcount' id='`+id+`' style='float: right'></span>
+                </div>`;
+
+                $('#prig-list').append(datas);
+                set_member_count(group.group_id);
+                i++;
+            }
+        }
+    });
+}
+
+// set selected private group data
+function set_private_group_data(data)
+{
+
+    //set the active chat's color in the list
+    //document.getElementById(data.group_name).style.backgroundColor = "white";
+
+    //set private chat details null if a group selected
+    document.getElementById("reseverId").value = "";
+    document.getElementById("profilepiclink").value = "";
+
+    //set pubRoom data null
+    document.getElementById("roomId").value = null;
+    document.getElementById("roomMemberId").value = null;
+
+    //set private group data
+    document.getElementById("reserver-name").textContent = data.group_name; // set the chat title
+    document.getElementById("msgType").value = "prig";
+    document.getElementById('pri-chat-message-list').innerHTML = ""; //chat clear
+    document.getElementById('dropdown').style.visibility = 'visible'; //dropdown menu hide
+    document.getElementById('optional-dropdown').innerHTML = ""; //optional dropdown menu clear
+    document.getElementById('join-room-btn').style.visibility = 'hidden'; // hide the public room join button
+
+    document.getElementById("group-name").value = data.group_name;
+    document.getElementById("group-id").value = data.group_id ;
+    document.getElementById("created-on").value = data.created ;
+    document.getElementById("bio").value = data.bio ;
+    document.getElementById("group-icon").value = data.icon ;
+    document.getElementById("member-id").value = data.member_id;
+
+    //set the group's member list
+    set_prig_member_list(data.group_id);
+
+    $.ajax({
+        method: "POST",
+        url: "../private-groups/ajax-handle.php",
+        data: {
+            check_admin: "set",
+            member_id: data.member_id
+        },
+        success: function(result){
+            var res = JSON.parse(result);
+            //admin or a member
+            
+            if(res == 1){   //admin
+                var row = `<hr class= "hrr"><div id="open-prig-admin-memlist" class= "open-popup-link">Members</div>
+                            <hr class= "hrr"><div id="open-delete-group" class= "open-popup-link">Delete Group</div>`;
+                
+                $('#optional-dropdown').append(row);
+
+                var open2 = document.getElementById("open-prig-admin-memlist");
+                var open3 = document.getElementById("open-delete-group");
+
+                var modal2 = document.getElementById("admin-memlist");
+                var modal3 = document.getElementById("delete-group");
+
+                open2.onclick = function() {
+                    var res = private_group_dropdown(4);
+                    if(res != 0){
+                        modal2.style.display = "block";
+                    }
+                    else{
+                        displayMsg("Error!", 0);
+                    }
+                }
+
+                open3.onclick = function() {
+                    modal3.style.display = "block";
+                }
+
+            }
+            else if(res == 0){ //member
+                var row = `<hr class= "hrr"><div id="open-member-list" class= "open-popup-link">Members</div>
+                            <hr class= "hrr"><div id="open-exit-group" class= "open-popup-link">Exit Group</div>`;
+
+                $('#optional-dropdown').append(row);
+
+                var open2 = document.getElementById("open-member-list");
+                var open3 = document.getElementById("open-exit-group");
+
+                var modal2 = document.getElementById("member-list");
+                var modal3 = document.getElementById("exit-group");
+
+                open2.onclick = function() {
+                    var res = private_group_dropdown(2);
+                    if(res != 0){
+                        modal2.style.display = "block";
+                    }else{
+                        alert("Something went wrong! Try again later.");
+                    }
+                }
+
+                open3.onclick = function() {
+                    modal3.style.display = "block";
+                }
+            }
+            else{
+                displayMsg("Error!", 0);
+                return;
+            }
+
+            //set msgs for all
+            //load the previous messages in the group
+            $.ajax({
+                method: "POST",
+                url: "../private-groups/ajax-handle.php",
+                data: {
+                    prev_msgs: "set",
+                    groupid: data.group_id
+                },
+                success: function(result){
+                    var res = JSON.parse(result);
+                    var i=0;
+                    while(res[i]){
+                        set_prev_prig_msgs(res[i]);
+                        i++;
+                    }
+                }
+            });
+
+        }
+    });
+
+
+    /**
+    
+    if admin ==>    member popup with add remove buttons
+                    delete group
+
+    if member ==>   member list viewing popup
+                    exit group popup
+    
+    for all ==>     group info
+                    last 100 msgs loading
+    
+    */
+}
+
+// get the members' user id list of a given private group chat
+function set_prig_member_list(grpid)
+{
+    $.ajax({
+        method: "POST",
+        url: "../private-groups/ajax-handle.php",
+        data: {
+            member_userid_list: "set",
+            group_id: grpid
+        },
+        success: function(result){
+            var res = JSON.parse(result);
+            var str = res.toString();
+
+            document.getElementById("mem-userid-list").value = str;
+        }
+    });
+}
+
+// set private group info into popup windows
+function private_group_dropdown(option)
+{
+    var groupid = document.getElementById("group-id").value;
+    var groupname = document.getElementById("group-name").value;
+    var icon = document.getElementById("group-icon").value;
+    var bio = document.getElementById("bio").value;
+    var created = document.getElementById("created-on").value;
+    var memberid = document.getElementById("member-id").value;
+
+    if(option == 1)
+    {   // set group info popup
+        
+        //group info setting
+        document.getElementById("gi-roomname").textContent = "Group Name - "+ groupname;
+        document.getElementById("gi-date").textContent = "Created on - "+ created.substring(0,10);
+        document.getElementById("gi-bio").textContent = bio;
+        document.getElementById("roomicon").src= '../private-group-icons/'+ icon;
+
+        //admin info setting
+        var fullname = document.getElementById("ai-fullname").textContent;
+        var username = document.getElementById("ai-username").textContent; 
+        var admindate = document.getElementById("ai-date").textContent;
+        var adminpic = document.getElementById("adminpic").src;
+
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                admin_data: "set",
+                group_id: groupid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }
+                document.getElementById("ai-fullname").textContent = "Admin Name - "+ obj.first_name + " "+ obj.last_name;
+                document.getElementById("ai-username").textContent = "Username - "+ obj.username; 
+                document.getElementById("ai-date").textContent = "Joined on - "+ obj.created_time.substring(0,10);
+                document.getElementById("adminpic").src = "../profile-pic/"+ obj.profilePicLink;
+                return 1;
+            }
+        });
+
+    }
+    else if(option == 2)
+    {   // set the member list popup
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                member_list: "set",
+                group_id: groupid
+            },
+            success: function(result){
+                //member list display
+
+                var obj = JSON.parse(result);
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }
+                document.getElementById("mem-list").innerHTML = "";
+                document.getElementById("mem-count-show").textContent = "Members";
+
+                var i=0;
+                while(obj[i]){
+                    var member = `<div class= "mem-item">
+                                    <div class="col1">
+                                        <img src= '../profile-pic/`+ obj[i].propic+ `' width='55'height='55' class='img-circle mem-icon' style="grid-column:1 / 2; grid-row: 1 / 2">
+                                    </div>
+                                    <div class="col2">
+                                        <div class= "mem-fullname">`+ obj[i].fname+ " "+ obj[i].lname+ `</div>
+                                        <div class= "mem-username">#`+ obj[i].username+ `</div>
+                                    </div>
+                                </div>
+                                <hr class="hrr">`;
+                    $("#mem-list").append(member);
+                    i++;
+                }
+                var count = i;
+                $("#mem-count-show").append("   ("+ count + ")");
+                return 1;
+            }
+        });
+
+    }
+    else if(option == 3)
+    {   // leave the group
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                leave_group: "set",
+                group_id: groupid,
+                member_id: memberid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+                if(obj == 0 || obj == "sqlerror"){
+                    return 0;
+                }else if(obj == 1){
+                    var msg = "You have left the '"+ groupname + "' group";
+                    document.getElementById("exit-group").style.display = "none";
+                    displayMsg(msg, 0);
+
+                    //dropdown hide
+                    document.getElementById("dropdown").style.visibility = "hidden";
+                    document.getElementById("reserver-name").textContent = "";      // title clear
+                    document.getElementById("pri-chat-message-list").innerHTML = ""; // clear chat area
+                    
+                    set_member_count(groupid);
+                    load_group_list();
+
+                    var memlist = document.getElementById("mem-userid-list").value;
+
+                    var temp = new Array();
+                    temp = memlist.split(",");
+
+                    for (a in temp){ 
+                        //store the userids as base 10 integers instead of strings
+                        temp[a] = parseInt(temp[a], 10); 
+                    }
+                    
+                    var datas = {
+                                msgType: "prig-memCount-update-req",
+                                group_id: groupid,
+                                member_list: temp
+                            };
+                    conn.send(JSON.stringify(datas));
+                    
+                }
+            }
+        });
+    }
+    else if(option == 4)
+    {   // member list for admins
+        
+        document.getElementById("prig-admin-memlist").innerHTML = "";
+        var userid = document.getElementById("senderId").value;
+        document.getElementById("member-userids").value = "";
+
+        $.ajax({
+            method: "POST",
+            url: "../private-groups/ajax-handle.php",
+            data: {
+                set_friend_list: "set",
+                userid: userid
+            },
+            success: function(result){
+                var obj = JSON.parse(result);
+
+                var memlist = document.getElementById("mem-userid-list").value;
+
+                document.getElementById("member-userids").value = memlist;
+
+                var temp = new Array();
+                temp = memlist.split(",");
+
+                for (a in temp){ 
+                    temp[a] = parseInt(temp[a], 10); 
+                }
+
+                if(obj == "sqlerror"){
+                    return 0;
+                }else if(obj == ""){
+                    document.getElementById("members-save-btn").style.visibility = "hidden";
+                    return 1;
+                }
+                
+                var i=0;
+                while(obj[i])
+                {
+                    var userid = obj[i].user_id;
+                    var addid = "add"+ userid;
+                    var removeid = "remove"+ userid;
+
+                    var friend = `<div class= "mem-item">
+                                    <div class="col11">
+                                        <img src= '../profile-pic/`+obj[i].profilePicLink+`' width='60'height='60' class='img-circle mem-icon'>
+                                    </div>
+                                    <div class="col22">
+                                        <div class= "mem-fullname">`+obj[i].first_name+ ' '+ obj[i].last_name +`</div>
+                                        <div class= "mem-username">#`+obj[i].username + `</div>
+                                    </div>
+                                    <div class= "col33">
+                                        <div class= "add-btn" id= "`+addid +`" onclick="member_added(`+userid+`)" class= "col33-1" style= "visibility:visible;">Add</div>
+                                        <div class= "remove-btn" id= "`+removeid+`" onclick="member_removed(`+userid+`)" class= "col33-2" style= "visibility:hidden;">Remove</div>
+                                    </div>
+                                </div>
+                                <hr class="hrr">`;
+                    
+                    $("#prig-admin-memlist").append(friend);
+
+                    var addbtn = document.getElementById(addid);
+                    var removbtn = document.getElementById(removeid);
+                    var len= temp.length;
+
+                    for(var k=0; k< len; k++){
+                        if(userid == temp[k]){
+                            addbtn.style.visibility = "hidden";
+                            removbtn.style.visibility = "visible";
+                        }
+                    }
+                    i++;
+                }
+                return 1;
+            }
+        });
+    }
+    else if(option == 5)
+    {   // admin delete the group
+        document.getElementById("delete-group").style.display = "none";
+
+        var memlist = document.getElementById("mem-userid-list").value;
+
+        var temp = new Array();
+        temp = memlist.split(",");
+
+        for (a in temp){ 
+            temp[a] = parseInt(temp[a], 10); 
+        }
+
+        var data = {
+                msgType: "delete-group",
+                group_id : groupid,
+                admin_member_id : memberid,
+                groupname: groupname,
+                memlist: temp
+        };
+        conn.send(JSON.stringify(data)); // send data
+    }
+    else{
+        return 0;
+    }
+}
+
+//when click on a add button of a user
+function member_added(userid)
+{
+    var removebtn = "remove"+ userid;
+    var addbtn = "add"+ userid;
+
+    var str = document.getElementById("member-userids").value;
+    
+    var add;
+    if(str == ""){
+        add = userid;
+    }else{
+        add = ","+ userid;
+    }
+
+    var newstr = str + add;
+    document.getElementById("member-userids").value = newstr;
+
+    console.log(document.getElementById("member-userids").value);
+
+    document.getElementById(removebtn).style.visibility = 'visible';
+    document.getElementById(addbtn).style.visibility = 'hidden';
+}
+
+//when click on a remove button of a user
+function member_removed(userid)
+{
+    var removebtn = "remove"+ userid;
+    var addbtn = "add"+ userid;
+
+    var str = document.getElementById("member-userids").value;
+    var ids = str.split(",");
+
+    var newstr ="";
+    var str1;
+    var i=0;
+    while(ids[i]){
+        var id = ids[i];
+        
+        if(id != userid){
+            if(newstr == "")
+                str1 = id;
+            else
+                str1 = ","+ id;
+
+            i++;
+        }else{
+            i++;
+            continue;
+        }
+        newstr = newstr+ str1;
+        
+    }
+    document.getElementById("member-userids").value = newstr;
+
+    console.log(document.getElementById("member-userids").value);
+
+    document.getElementById(removebtn).style.visibility = 'hidden';
+    document.getElementById(addbtn).style.visibility = 'visible';
+}
+
+// set the member count of a given private group
+function set_member_count(grpid)
+{
+    $.ajax({
+        method: "POST",
+        url: "../private-groups/ajax-handle.php",
+        data: {
+            member_count: "set",
+            group_id: grpid
+        },
+        success: function(result){
+            count = JSON.parse(result);
+            var id = grpid + "memcount";
+            var newCount;
+
+            if(count == 1) newCount = count + " Member";
+            else newCount = count + " Members";
+
+            document.getElementById(id).textContent = newCount;
+        }
+    }); 
+}
 
 //a public room was deleted by the admin user
 function pubRoom_delete_notification(data){
-    console.log(data);
 
     var myid = document.getElementById("roomMemberId").value;
     var reserv = document.getElementById("roomname").value;
@@ -496,11 +1367,17 @@ function pubRoom_delete_notification(data){
         pubRoom_join_sendMsg_select("delete-room");
         document.getElementById('pri-chat-message-list').innerHTML = ""; // clear chat area
     }
+
     //chat room list update for all the users
-    /************************************* */
+    update_room_list();
 
+}
+
+//public room list update
+function update_room_list()
+{
     $("#pub-room-list").empty(); // clear the room list
-
+    
     $.ajax({    // get the total count of public rooms available
         method: "POST",
         url: "../public-rooms/ajax-handle.php",
@@ -527,8 +1404,6 @@ function pubRoom_delete_notification(data){
                             var roomData = roomlist[i];
                             var roomname = roomData.name;
                             var icon = roomData.icon;
-
-                            console.log(roomData);
                             
                             var roomid = roomData.id;
                             var id = roomname + "count";
@@ -560,7 +1435,6 @@ function pubRoom_delete_notification(data){
 //user remove notification received from the server
 function pubg_user_remove_notification(data)
 {
-    console.log(data);
     var room;
 
     var myname = document.getElementById("username").value;
@@ -620,6 +1494,7 @@ function room_dropdown_menu(option)
             },
             success: function(result){
                 //group info option
+                document.getElementById("modal-topic").textContent = "Public Room Info";
                 document.getElementById("gi-roomname").textContent = "Room Name - "+ title;
 
                 var obj = JSON.parse(result);
@@ -730,8 +1605,6 @@ function room_dropdown_menu(option)
                             };
                     conn.send(JSON.stringify(datas));
                 }
-
-
             }
         });    
     }
@@ -807,7 +1680,6 @@ function room_dropdown_menu(option)
     }   
 }
   
-
 //public room admin removes members from the chat room
 function user_remove(username){
     //alert("User removed: " + username);
@@ -925,19 +1797,19 @@ function setChatRoomDetails(val){
 }
            
 // set previous messages in chat windows
-    function setPreviousMessages(data, senderId){
-        var propic = document.getElementById("profilepiclink").value;
-        for (var i=0; i<data.length; i++) {
-            if(data[i][1] != senderId){
-                var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data[i][0] +'</div><div class="message-time"></div></div></div>';
-                $('#pri-chat-message-list').append(row); // add to chat interface
-            }
-            else{
-                var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i][0] +'</div> <div class="message-time"></div></div></div>';
-                $('#pri-chat-message-list').append(row);
-            }
+function setPreviousMessages(data, senderId){
+    var propic = document.getElementById("profilepiclink").value;
+    for (var i=0; i<data.length; i++) {
+        if(data[i][1] != senderId){
+            var row = '<div class="message-row your-message"><div class="message-content"><div class="message-text">'+ data[i][0] +'</div><div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row); // add to chat interface
         }
-    }  
+        else{
+            var row = '<div class="message-row other-message"> <div class="message-content"> <img src="../profile-pic/'+propic+'"/> <div class="message-text">'+ data[i][0] +'</div> <div class="message-time"></div></div></div>';
+            $('#pri-chat-message-list').append(row);
+        }
+    }
+}  
       
 //auto scroll down when send button is pressed
 function autoScrollDown(){
@@ -971,11 +1843,10 @@ function displayLastMsgOfuser(data){
 //set public chat room data
 function setPubRoomData(roomData)
 {
-    console.log(roomData);
     document.getElementById("reserver-name").textContent = roomData.name;
     document.getElementById("msgType").value = "pubg";
     document.getElementById("roomId").value = roomData.id;
-    document.getElementById('pri-chat-message-list').innerHTML = "";
+    document.getElementById('pri-chat-message-list').innerHTML = "";document.getElementById('pri-chat-message-list').innerHTML = "";
     document.getElementById('roomname').value = roomData.name;
     
     //set private chat details null if a room selected
@@ -1010,7 +1881,6 @@ function setPubRoomData(roomData)
                     
                     var i=0;
                     while(res[i]){
-                        //console.log(res[i]);
                         set_prev_pubg_msgs(res[i]);
                         i++;
                     }
@@ -1210,24 +2080,12 @@ function member_count_update_on_user_side(roomname)
         success: function(result) {
             var res = JSON.parse(result);
             var id = roomname + "count";
-            var newCount = res + " Members";
-            document.getElementById(id).textContent = newCount;
-        }
-    });
-}
+            var newCount;
 
-//get the member count of the given public chat room
-function get_pubg_member_count(roomname, countArray, num)
-{
-    $.ajax({
-        method: "POST",
-        url: "../public-rooms/ajax-handle.php",
-        data: {
-            mem_count_update: "set",
-            roomname: roomname
-        },
-        success: function(result) {
-            countArray[num] = JSON.parse(result);
+            if(count == 1) newCount = count + " Member";
+            else newCount = count + " Members";
+
+            document.getElementById(id).textContent = newCount;
         }
     });
 }
@@ -1255,17 +2113,26 @@ function hideMsg(msg)
     alertmsg.style.visibility = 'hidden';
 }
 
+//send a msg to the server to update the room list for all
+function update_room_list_broadcast()
+{
+    var datas = { msgType: 'update-room-list'};
+    conn.send(JSON.stringify(datas));
+}
+
 </script>
 
-<!--redirect from create new chat room-->
 <?php
 
+// redirect from create new chat room
 if(isset($_POST['status'])){
     if($_POST['status'] == 'ok'){
         $name = $_POST['roomname'];
+        $room_list_status = $_POST['status'];
         echo "<script>
-            displayMsg('You have successfully created $name', 1);
-        </script>";
+                displayMsg('You have successfully created $name', 1);
+                document.getElementById('room-list-status').value = 'ok';
+            </script>";
     }
     else if($_POST['status'] == 'wrong'){
         echo "<script>
@@ -1274,4 +2141,17 @@ if(isset($_POST['status'])){
     }
     unset($_POST['status']);
 }
+
+// redirect from create new private group
+if(isset($_POST['member-userids'])){
+    $user_list = $_POST['member-userids'];
+
+    echo "<script>
+            document.getElementById('member-userids').value = '$user_list';  
+        </script>";
+
+
+    unset($_POST['member-userids']);
+}
+
 ?>

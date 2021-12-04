@@ -233,7 +233,7 @@ h1 {
 }
 
 #private-chat {
-  background-color: white;
+  background-color: #2d4675;
 }
 
 #chat-gui {
@@ -243,11 +243,11 @@ h1 {
 }
 
 #private-group {
-  background-color:#5e92f3;
+  background-color:#2d4675;
 }
 
 #public-group {
-  background-color:#5e92f3;
+  background-color:#2d4675;
 }
 
 .friend-container{
@@ -284,6 +284,9 @@ h1 {
   font-size: 1.3rem;
   border-bottom: 1px solid black;
   padding: 5px 5px 5px 15px;
+
+  box-shadow: 2px 10px 15px 2px rgb(21, 31, 73);
+  border-radius: 8px;
 }
 
 .friend-conversation.active,
@@ -482,9 +485,27 @@ h1 {
 
 .send-msg {
   height: 40px;
+  border-radius: 8px;
+  border-width: thin;
 }
 
 .fas fa-ellipsis-v{
   position: absolute;
   float: right;
+}
+
+/*scrollbar designs*/
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #c0bfbf; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #001035;
 }

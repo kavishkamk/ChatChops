@@ -52,4 +52,30 @@ if(isset($_POST['pubGIcon']))
 
 	echo $image_name;
 }
+
+//private group icons upload
+if(isset($_POST['priGIcon']))
+{
+	$data = $_POST['priGIcon'];
+	$prePic = $_POST['pre'];
+
+	if($prePic != "000"){
+		if(file_exists("private-group-icons/".$prePic)){
+			unlink("private-group-icons/".$prePic);
+		}
+	}
+
+	$image_array_1 = explode(";", $data);
+
+	$image_array_2 = explode(",", $image_array_1[1]);
+
+	$data = base64_decode($image_array_2[1]);
+
+	$image_name = 'private-group-icons/' . time() . '.png';
+
+	file_put_contents($image_name, $data);
+
+	echo $image_name;
+}
+
 ?>
