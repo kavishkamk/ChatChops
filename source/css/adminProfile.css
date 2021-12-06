@@ -110,6 +110,10 @@ body {
     justify-self: right;
 }
 
+#user-ch{
+    text-align: right;
+}
+
 .btn:hover {
     background-color: #12B0E8;
     color:white;
@@ -134,7 +138,18 @@ body {
 
 .back-btn {
     display: grid;
-    grid-template-columns: 20% 60% 20%;}
+    grid-template-columns: 20% 60% 20%;
+    margin-top: 10px;
+}
+
+.c-div {
+    display: grid;
+    grid-template-columns: 85% 15%;
+}
+
+.div-btn {
+    margin-right: 35px;
+}
 
 /* .admin-profile-body {
     display: grid;

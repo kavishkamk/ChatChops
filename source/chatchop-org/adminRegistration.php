@@ -128,10 +128,7 @@
                     <button type="submit" name="register-submit" class="btn" >Create</button>
                 </div>
             </form>
-        </div>
-        <footer>
-            <p>Copyright &copy; 2021 ChatChops. Inc. All rights reserved</p>
-        </footer>    
+        </div>   
     </body>
 </html>
 

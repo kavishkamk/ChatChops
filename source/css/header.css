@@ -120,3 +120,7 @@ li a:hover:not(.active) {
 #userprofile {
     margin: 5px;
 }
+
+#logolink {
+    padding:0%
+}

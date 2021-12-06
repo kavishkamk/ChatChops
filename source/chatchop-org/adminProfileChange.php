@@ -62,7 +62,7 @@
                                             echo '<span style="grid-column:1 / 3;" class="success-bar">'.$msg.'</span>';
                                         }   
                                     ?>
-                                    <div style="grid-column:3 / 4;">
+                                    <div style="grid-column:3 / 4;" id="user-ch">
                                         <button type="submit" name="profile-submit" class="btn">Change</button>
                                     </div>
                                 </div>
@@ -72,15 +72,19 @@
                     <div class="ad-email" style="grid-row: 2 / 3;">
                         <form action="../include/ChaangeAdminMail.inc.php" method="post">
                             <label for="umeil" class="label-title">Change Email</label>
-                            <input type="email" name="umeil" placeholder="Enter user mail" class="form-input">
-                            <button type="submit" name="email-submit" class="btn">Change</button>
+                            <div class="c-div">
+                                <input type="email" name="umeil" placeholder="Enter user mail" class="form-input">
+                                <button type="submit" name="email-submit" class="btn div-btn">Change</button>
+                            </div>
                         </form>
                     </div>
                     <div style="grid-row: 3 / 4;">
                         <form action="../include/AdminPwdChange.inc.php" method="post">
                             <label for="upwd" class="label-title">Change Password</label>
-                            <input type="password" name="upwd" placeholder="enter current password" class="form-input">
-                            <button type="submit" name="pwd-submit" class="btn">Change</button>
+                            <div class="c-div">
+                                <input type="password" name="upwd" placeholder="enter current password" class="form-input">
+                                <button type="submit" name="pwd-submit" class="btn div-btn">Change</button>
+                            </div>
                         </form>
                     </div>
                     <div style="grid-row: 4 / 5;" class="footer-div back-btn">

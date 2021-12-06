@@ -50,14 +50,13 @@
         <!--navigation bar-->
         <header>
             <ul>
-            <li id="proName" style="float:left"><img src="../images/s-chatchops.png" height="10"></img></li>
+            <li id="proName" style="float:left"><a href="../insideUI/chatChops.php" id="logolink"><img src="../images/s-chatchops.png" height="10"></img></a></li>
                 <li class="navbar navbar-dark bg-dark navbar-expand-sm dropdown pronav"><img src="../profile-pic/unknownPerson.jpg" width="36" height="36" class="img-circle" id="userprofile">
                     <div class="dropdown-content">
                     <img src="../profile-pic/unknownPerson.jpg" alt="Cinque Terre" width="200" height="200" class="img-circle pro-img" id="userprofile-dropdown">
                     <div class="desc"><p id="profileuser" style="color:white;">Name</p><p id="profileuname" style="color:white;">User Name</p></div>
                     <div class="dropdown-list">
                         <a href="../insideUI/profile.php">Profile</a>
-                        <a href="#">Setting</a>
                         <a href="../include/logout.inc.php">Logout</a>
                     </div>
                     </div>

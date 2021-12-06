@@ -29,6 +29,10 @@ nav {
   grid-area: nav;
   border-radius: var(--main-radius);
 }
+
+body {
+  background-color: rgb(37, 183, 219);
+}
 main {
   background-color: rgb(37, 183, 219);
   grid-area: main;
@@ -87,6 +91,7 @@ img {
 
 .report-time {
   float: right;
+  color:white;
 }
 
 .button {
@@ -208,4 +213,16 @@ img {
   float: right;
   padding: 10px 30px;
   font-weight: bold;
+}
+
+#lantime{
+  padding-right: 10px;
+}
+
+.f-button {
+  color:white;
+}
+
+.ad-class{
+  margin: auto;
 }
