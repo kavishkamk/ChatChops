@@ -1,5 +1,5 @@
 # Chat-Application
-:speech_balloon:This is a web-based chat application developing by using PHP sockets.
+:speech_balloon:This is a web-based chat application developing by using Ratchet.
 - 
 :arrow_down_small:Followings are the features that we are going to add.
   * User registration and login, google login
