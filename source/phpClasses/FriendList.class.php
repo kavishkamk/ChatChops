@@ -111,6 +111,28 @@
             }
         }
 
+        public function blockFriend($userId, $friendId){
+            $friendfieldid = $this->getFriendId($userId, $friendId);
+            $reqid = $this->getRequestId($friendfieldid);
+            $sqlQ = "UPDATE friend_request SET block_status = ? WHERE req_id = ? ;";
+            $conn = $this->connect();
+            $stmt = mysqli_stmt_init($conn);
+
+            if(!mysqli_stmt_prepare($stmt, $sqlQ)){
+                $this->connclose($stmt, $conn);
+                return "0"; // sql error
+                exit();
+            }
+            else{
+                $val1 = 1;
+                mysqli_stmt_bind_param($stmt, "ii", $val1, $reqid);
+                mysqli_stmt_execute($stmt);
+                $this->connclose($stmt, $conn);
+                return "1"; // success
+                exit();
+            }
+        }
+
         // this for get friend_id for friends table for given users and friend
         private function getFriendId($userId, $friendId){
             $sqlQ = "SELECT friend_id FROM friends WHERE from_user_id = ? AND  to_user_id = ?;";

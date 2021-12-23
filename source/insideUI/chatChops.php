@@ -271,6 +271,11 @@
                                 alert("Something went wrong! Try again later.");
                             }
                         }
+
+                        // friend block
+                        if(document.getElementById("reseverId").value != ""){
+                            friendBlock();
+                        }
                     }
 
                     span.onclick = function() {
@@ -712,6 +717,21 @@ function members_save()
     }
 }
 
+// block friend
+function friendBlock(){
+    var fid = document.getElementById("reseverId").value;
+    var sid = document.getElementById("senderId").value;
+
+    $.ajax({
+            method: "POST",
+            url: "../include/blockFriend.php",
+            data: { frid:fid, userid:sid }
+        });
+    
+    var cid = "pchat" + fid;
+    document.getElementById(cid).style.visibility = 'hidden';
+}
+
 // a member was removed by the admin of a private group
 function prig_member_remove(data)
 {
@@ -883,6 +903,7 @@ function set_private_group_data(data)
     document.getElementById("reserver-name").textContent = data.group_name; // set the chat title
     document.getElementById("msgType").value = "prig";
     document.getElementById('pri-chat-message-list').innerHTML = ""; //chat clear
+    document.getElementById("open-group-info").innerHTML = "Group Info";
     document.getElementById('dropdown').style.visibility = 'visible'; //dropdown menu hide
     document.getElementById('optional-dropdown').innerHTML = ""; //optional dropdown menu clear
     document.getElementById('join-room-btn').style.visibility = 'hidden'; // hide the public room join button
@@ -1771,9 +1792,11 @@ function setChatRoomDetails(val){
     //set pubRoom data null
     document.getElementById("roomId").value = null;
     document.getElementById("roomMemberId").value = null;
-
+    document.getElementById("group-id").value = null;
     //change visibilities
-    document.getElementById("dropdown").style.visibility = "hidden";
+    document.getElementById("optional-dropdown").innerHTML = "";
+    document.getElementById("open-group-info").innerHTML = "Block";
+    document.getElementById("dropdown").style.visibility = "visible";
     document.getElementById("send-msg").style.visibility = "visible";
     document.getElementById("join-room-btn").style.visibility = "hidden";
     
@@ -1848,6 +1871,7 @@ function setPubRoomData(roomData)
     document.getElementById("roomId").value = roomData.id;
     document.getElementById('pri-chat-message-list').innerHTML = "";document.getElementById('pri-chat-message-list').innerHTML = "";
     document.getElementById('roomname').value = roomData.name;
+    document.getElementById("open-group-info").innerHTML = "Group Info";
     
     //set private chat details null if a room selected
     document.getElementById("reseverId").value = "";
