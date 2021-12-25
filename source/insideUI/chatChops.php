@@ -275,6 +275,8 @@
                         // friend block
                         if(document.getElementById("reseverId").value != ""){
                             friendBlock();
+                            document.getElementById("reseverId").value = "-";
+                            document.getElementById('send-msg').style.visibility = 'hidden';
                         }
                     }
 
@@ -907,6 +909,7 @@ function set_private_group_data(data)
     document.getElementById('dropdown').style.visibility = 'visible'; //dropdown menu hide
     document.getElementById('optional-dropdown').innerHTML = ""; //optional dropdown menu clear
     document.getElementById('join-room-btn').style.visibility = 'hidden'; // hide the public room join button
+    document.getElementById('send-msg').style.visibility = 'visible';
 
     document.getElementById("group-name").value = data.group_name;
     document.getElementById("group-id").value = data.group_id ;
