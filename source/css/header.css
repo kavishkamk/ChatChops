@@ -46,6 +46,7 @@ li a:hover:not(.active) {
 }
 
 /*ChatApp name */
+/*
 #proName{
     display: block;
     color: #23C4ED;
@@ -57,7 +58,7 @@ li a:hover:not(.active) {
     text-shadow: 2px 2px 5px #23C4ED;
     font-style: italic;
     font-weight: bold;
-}
+}*/
 
 .logo img{
     display: block;
@@ -122,5 +123,5 @@ li a:hover:not(.active) {
 }
 
 #logolink {
-    padding:0%
+    padding:0;
 }
