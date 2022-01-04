@@ -40,7 +40,7 @@
         </center>
         <div id= "box" style= "position: center;">
             <!-- registration form -->
-            <form class= "signup-form" action="../include/adminRegistration.inc.php" method="post">
+            <form class= "signup-form" action="../include/AdminRegistration.inc.php" method="post">
                 <div class="form-header">
                     <h1>Create Account</h1>
                 </div>
