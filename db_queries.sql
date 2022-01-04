@@ -14,27 +14,27 @@ CREATE TABLE admins (
 );
 
 -- userUserActiveIDMap
-CREATE TABLE user_User_Act_ID_Map (
+CREATE TABLE user_user_act_id_map (
 	user_id int NOT NULL,
     active_id int NOT NULL,
     CONSTRAINT Pk_userActIdMap PRIMARY KEY(user_id, active_id)
 );
 
-CREATE TABLE acc_Status_User_Map (
+CREATE TABLE acc_status_user_map (
 	status_id int NOT NULL,
     user_id int NOT NULL,
     CONSTRAINT Pk_accStatus PRIMARY KEY(status_id, user_id)
 );
 
 -- privateGroupLeave_MemberMap
-CREATE TABLE p_Group_Leave_Mem_Map (
+CREATE TABLE p_group_leave_mem_map (
 	leave_id int NOT NULL,
     member_id int NOT NULL,
     CONSTRAINT Pk_pGrpLveMemMap PRIMARY KEY(leave_id, member_id)
 );
 
 -- privateGroupUserRemove
-CREATE TABLE p_Group_User_Remove (
+CREATE TABLE p_group_user_remove (
 	pgu_id int AUTO_INCREMENT,
     member_id int NOT NULL,
     admin_id int NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE p_Group_User_Remove (
 );
 
 -- public group member status
-CREATE TABLE pub_Grp_Mem_Status (
+CREATE TABLE pub_grp_mem_status (
 	status_id int AUTO_INCREMENT,
     DateAndTime DATETIME NOT NULL,
     active BOOLEAN NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE pub_Grp_Mem_Status (
 );
 
 -- public group member
-CREATE TABLE pub_Grp_Member (
+CREATE TABLE pub_grp_member (
 	member_id int AUTO_INCREMENT,
     group_id int NOT NULL,
     user_id int NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE pub_Grp_Member (
 );
 
 -- publicGroupAdmin
-CREATE TABLE pub_Grp_Admin (
+CREATE TABLE pub_grp_admin (
 	grpAdmin_id int AUTO_INCREMENT,
     member_id int NOT NULL,
     PRIMARY KEY(grpAdmin_id)
@@ -67,7 +67,7 @@ CREATE TABLE pub_Grp_Admin (
 
 -- ---------------------------------------------------
 -- privateMessage
-CREATE TABLE private_Message(
+CREATE TABLE private_message(
     p_id int AUTO_INCREMENT,
     message text NOT null,
     send_time datetime not null,
@@ -96,13 +96,13 @@ CREATE TABLE users(
     PRIMARY KEY(user_id));
 
 -- privateGroupChat_MemberMap	
-CREATE TABLE pGroup_Mem_Map(
+CREATE TABLE pgroup_mem_map(
     msg_id int not null,
     member_id int not null,
     CONSTRAINT Pk_pGroupMemMap PRIMARY KEY(msg_id, member_id));
 
 -- userPrivateGroupMap
-CREATE TABLE user_PGroup_Map(
+CREATE TABLE user_pgroup_map(
     created_user_id int not null,
     group_id int not null,
     CONSTRAINT Pk_userPGrpMap PRIMARY KEY(created_user_id, group_id));
@@ -114,13 +114,13 @@ CREATE TABLE pub_group_mem_status_map(
     CONSTRAINT Pk_pgrpmemstatusMap PRIMARY KEY(status_id, member_id));
 
 -- publicGroupLeave_MemberMap
-CREATE TABLE pub_group_Leave_mem_map(
+CREATE TABLE pub_group_leave_mem_map(
     leave_id int not null,
     member_id int not null,
     CONSTRAINT Pk_pGrpLeaveMemMap PRIMARY KEY(leave_id, member_id));
 
 -- publicGroupUserRemove
-CREATE TABLE pub_Group_User_Remove(
+CREATE TABLE pub_group_user_remove(
     remove_id int not null AUTO_INCREMENT,
     member_id int not null,
     admin_id int not null,
@@ -320,38 +320,38 @@ ADD FOREIGN KEY (member_id) REFERENCES p_group_member(mem_id);
 ALTER TABLE p_grp_mem_status_map
 ADD FOREIGN KEY (status_id) REFERENCES pgrp_mem_status(statusId);
 
-ALTER TABLE pub_Group_User_Remove
-ADD FOREIGN KEY (member_id) REFERENCES pub_Grp_Member(member_id);
+ALTER TABLE pub_group_user_remove
+ADD FOREIGN KEY (member_id) REFERENCES pub_grp_member(member_id);
 
-ALTER TABLE pub_Group_User_Remove
-ADD FOREIGN KEY (admin_id) REFERENCES pub_Grp_Admin(grpAdmin_id);
+ALTER TABLE pub_group_user_remove
+ADD FOREIGN KEY (admin_id) REFERENCES pub_grp_admin(grpAdmin_id);
 
-ALTER TABLE pub_Grp_Admin
-ADD FOREIGN KEY (member_id) REFERENCES pub_Grp_Member(member_id);
+ALTER TABLE pub_grp_admin
+ADD FOREIGN KEY (member_id) REFERENCES pub_grp_member(member_id);
 
 ALTER TABLE pub_grp_chat_mem_map
 ADD FOREIGN KEY (msg_id) REFERENCES pub_grp_chat(msg_id);
 
 ALTER TABLE pub_grp_chat_mem_map
-ADD FOREIGN KEY (member_id) REFERENCES pub_Grp_Member(member_id);
+ADD FOREIGN KEY (member_id) REFERENCES pub_grp_member(member_id);
 
-ALTER TABLE pub_group_Leave_mem_map
+ALTER TABLE pub_group_leave_mem_map
 ADD FOREIGN KEY (leave_id) REFERENCES pub_group_leave(leave_id);
 
-ALTER TABLE pub_group_Leave_mem_map
-ADD FOREIGN KEY (member_id) REFERENCES pub_Grp_Member(member_id);
+ALTER TABLE pub_group_leave_mem_map
+ADD FOREIGN KEY (member_id) REFERENCES pub_grp_member(member_id);
 
-ALTER TABLE pub_Grp_Member
+ALTER TABLE pub_grp_member
 ADD FOREIGN KEY (group_id) REFERENCES public_group(group_id);
 
-ALTER TABLE pub_Grp_Member
+ALTER TABLE pub_grp_member
 ADD FOREIGN KEY (user_id) REFERENCES users(user_id);
 
 ALTER TABLE pub_group_mem_status_map
-ADD FOREIGN KEY (member_id) REFERENCES pub_Grp_Member(member_id);
+ADD FOREIGN KEY (member_id) REFERENCES pub_grp_member(member_id);
 
 ALTER TABLE pub_group_mem_status_map
-ADD FOREIGN KEY (status_id) REFERENCES pub_Grp_Mem_Status(status_id);
+ADD FOREIGN KEY (status_id) REFERENCES pub_grp_mem_status(status_id);
 
 ALTER TABLE pub_grp_user_map
 ADD FOREIGN KEY (group_id) REFERENCES public_group(group_id);
@@ -359,28 +359,28 @@ ADD FOREIGN KEY (group_id) REFERENCES public_group(group_id);
 ALTER TABLE pub_grp_user_map
 ADD FOREIGN KEY (created_user_id) REFERENCES users(user_id);
 
-ALTER TABLE user_PGroup_Map
+ALTER TABLE user_pgroup_Map
 ADD FOREIGN KEY (group_id) REFERENCES private_group(group_id);
 
-ALTER TABLE user_PGroup_Map
+ALTER TABLE user_pgroup_Map
 ADD FOREIGN KEY (created_user_id) REFERENCES users(user_id);
 
-ALTER TABLE p_Group_User_Remove
+ALTER TABLE p_group_user_remove
 ADD FOREIGN KEY (admin_id) REFERENCES pgrp_admin(adminId);
 
 ALTER TABLE pgrp_admin
 ADD FOREIGN KEY (memberId) REFERENCES p_group_member(mem_id);
 
-ALTER TABLE p_Group_Leave_Mem_Map
+ALTER TABLE p_group_leave_mem_map
 ADD FOREIGN KEY (leave_id) REFERENCES private_group_leave(leave_id);
 
-ALTER TABLE p_Group_Leave_Mem_Map
+ALTER TABLE p_group_leave_mem_map
 ADD FOREIGN KEY (member_id) REFERENCES p_group_member(mem_id);
 
 ALTER TABLE p_group_member
 ADD FOREIGN KEY (group_id) REFERENCES private_group(group_id);
 
-ALTER TABLE p_Group_User_Remove
+ALTER TABLE p_group_user_remove
 ADD FOREIGN KEY (member_id) REFERENCES p_group_member(mem_id);
 
 ALTER TABLE p_group_member
@@ -466,7 +466,7 @@ CREATE TABLE analizeReords (
 
 -- create table for store user online analize data accourding to DATE
 
-CREATE TABLE analizeOnlineEachDateH(
+CREATE TABLE analizeonlineeachdateh(
 	recId INT AUTO_INCREMENT,
 	recDate DATE NOT NULL,
 	h1 INT NOT NULL DEFAULT 0,
@@ -499,7 +499,7 @@ CREATE TABLE analizeOnlineEachDateH(
 
 -- create table for store user online data accouding to MONTH
 
-CREATE TABLE analizeOnlineEachMonthD(
+CREATE TABLE analizeonlineeachmonthd(
 	recId INT AUTO_INCREMENT,
 	recYear YEAR NOT NULL,
 	recMonth INT NOT NULL,
@@ -540,7 +540,7 @@ CREATE TABLE analizeOnlineEachMonthD(
 
 -- create table for store private messages analize data accourding to DATE
 
-CREATE TABLE analizePriMsgEachDateH(
+CREATE TABLE analizeprimsgeachdateh(
 	recId INT AUTO_INCREMENT,
 	recDate DATE NOT NULL,
 	h1 INT NOT NULL DEFAULT 0,
@@ -573,7 +573,7 @@ CREATE TABLE analizePriMsgEachDateH(
 
 -- create table for store private message analized data accouding to MONTH
 
-CREATE TABLE analizePriMsgEachMonthD(
+CREATE TABLE analizeprimsgeachmonthd(
 	recId INT AUTO_INCREMENT,
 	recYear YEAR NOT NULL,
 	recMonth INT NOT NULL,
@@ -614,7 +614,7 @@ CREATE TABLE analizePriMsgEachMonthD(
 
 -- create table for store private group messages analize data accourding to DATE
 
-CREATE TABLE analizePriGrpMsgEachDateH(
+CREATE TABLE analizeprigrpmsgeachdateh(
 	recId INT AUTO_INCREMENT,
 	recDate DATE NOT NULL,
 	h1 INT NOT NULL DEFAULT 0,
@@ -647,7 +647,7 @@ CREATE TABLE analizePriGrpMsgEachDateH(
 
 -- create table for store private group message analized data accouding to MONTH
 
-CREATE TABLE analizePriGrpMsgEachMonthD(
+CREATE TABLE analizeprigrpmsgeachmonthd(
 	recId INT AUTO_INCREMENT,
 	recYear YEAR NOT NULL,
 	recMonth INT NOT NULL,
@@ -688,7 +688,7 @@ CREATE TABLE analizePriGrpMsgEachMonthD(
 
 -- create table for store private group messages analize data accourding to DATE
 
-CREATE TABLE analizePubGrpMsgEachDateH(
+CREATE TABLE analizepubgrpmsgeachdateh(
 	recId INT AUTO_INCREMENT,
 	recDate DATE NOT NULL,
 	h1 INT NOT NULL DEFAULT 0,
@@ -721,7 +721,7 @@ CREATE TABLE analizePubGrpMsgEachDateH(
 
 -- create table for store private group message analized data accouding to MONTH
 
-CREATE TABLE analizePubGrpMsgEachMonthD(
+CREATE TABLE analizepubgrpmsgeachmonthd(
 	recId INT AUTO_INCREMENT,
 	recYear YEAR NOT NULL,
 	recMonth INT NOT NULL,
