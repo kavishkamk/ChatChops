@@ -73,7 +73,9 @@
                 $result = mysqli_stmt_get_result($stmt);
                 if($row = mysqli_fetch_assoc($result)){
                     if($sessionval == $row['session_id']){
-                        if($row['session_expire'] < date("Y-n-d H:i:s")){
+                        $d1 = new DateTime($row['session_expire']);
+                        $d2 = new DateTime(date("Y-n-d H:i:s"));
+                        if($d1 < $d2){
                             $delres = $this->deleteSesseion($uid);
                             $this->connclose($stmt, $conn);
                             return "sessionexp"; // session expired
