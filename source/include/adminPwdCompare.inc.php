@@ -28,7 +28,7 @@
         }
         else{
             if($upwd == $compwd){
-                require_once "../phpClasses/AdminProfileEdit.class.php";
+                require_once "../phpClasses/adminProfileEdit.class.php";
                 $proObj = new AdminProfileEdit();
                 $prores = $proObj->changePassword($uid, $upwd);
                 unset($proObj);
