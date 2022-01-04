@@ -359,10 +359,10 @@ ADD FOREIGN KEY (group_id) REFERENCES public_group(group_id);
 ALTER TABLE pub_grp_user_map
 ADD FOREIGN KEY (created_user_id) REFERENCES users(user_id);
 
-ALTER TABLE user_pgroup_Map
+ALTER TABLE user_pgroup_map
 ADD FOREIGN KEY (group_id) REFERENCES private_group(group_id);
 
-ALTER TABLE user_pgroup_Map
+ALTER TABLE user_pgroup_map
 ADD FOREIGN KEY (created_user_id) REFERENCES users(user_id);
 
 ALTER TABLE p_group_user_remove
@@ -458,7 +458,7 @@ ADD FOREIGN KEY (reserveId) REFERENCES users(user_id);
 
 -- added table to store analize TIME
 
-CREATE TABLE analizeReords (
+CREATE TABLE analizereords (
 	dataId INT AUTO_INCREMENT,
     lastData DATETIME NOT NULL,
     PRIMARY KEY (dataId)
