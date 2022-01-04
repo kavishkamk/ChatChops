@@ -42,7 +42,7 @@
                 }
             }
             else{
-                header("Location:../chatchop-org/AdminPwdChange.php?pwdtatus=wrongpwd&userid=$uid");
+                header("Location:../chatchop-org/adminPwdChange.php?pwdtatus=wrongpwd&userid=$uid");
                 exit();
             }
         }
