@@ -241,7 +241,6 @@ require_once "../phpClasses/DbConnection.class.php";
             $dayTime = date('Y-n-d', strtotime($day . ' +1 day'));
             // get dates until today 
 		$dayTime = date('Y-m-d',(strtotime ( '+1 month' , strtotime ( $dayTime) ) ));
-		echo $dayTime;
             $arr2 = explode("-",$dayTime);
             $mon = $arr2[1];
             $ye = $arr2[0];
