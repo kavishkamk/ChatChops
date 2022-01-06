@@ -102,11 +102,11 @@
                 unset($anzPriOn);
                 require_once "../reportPriGroupPhpClass/AnalizePriGrpData.class.php";
                 $anzPriGrp = new AnalizePriGrpData();
-                //$anzPriGrp->analizePriGrpDetails($ldate);
+                $anzPriGrp->analizePriGrpDetails($ldate);
                 unset($anzPriGrp);
                 require_once "../reportPubGroupPhpClass/AnalizePubGrpData.class.php";
                 $anzPubGrp = new AnalizePubGrpData();
-                //$anzPubGrp->analizepubGrpDetails($ldate);
+                $anzPubGrp->analizepubGrpDetails($ldate);
                 unset($anzPubGrp);
                 return "susses";
                 exit();
