@@ -107,9 +107,9 @@
                 require_once "../reportPubGroupPhpClass/AnalizePubGrpData.class.php";
                 $anzPubGrp = new AnalizePubGrpData();
                 //$anzPubGrp->analizepubGrpDetails($ldate);
-                unset($anzPubGrp);
-                return "susses";
-                exit();
+                //unset($anzPubGrp);
+                //return "susses";
+                //exit();
             }
         }
 
