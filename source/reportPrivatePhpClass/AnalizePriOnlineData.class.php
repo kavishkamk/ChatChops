@@ -7,15 +7,9 @@ require_once "../phpClasses/DbConnection.class.php";
         // this method used to analize private user details
         public function analizePrivateMemberDetails($ldate){
             $this->calOnlineInHours($ldate);
-		echo '<span>First method over</span>';
-		echo $ldate;
-		    echo '<br>';
             $this->calOnlineInDay($ldate);
-		echo '<span>second method over</span>';
-		echo $ldate;
-		    echo '<br>';
-            //$this->calPriMsgInHours($ldate);
-            //$this->calPriMsgInDay($ldate);
+            $this->calPriMsgInHours($ldate);
+            $this->calPriMsgInDay($ldate);
         }
 
         // this function used to analize user online data accourding to hours in day
@@ -26,9 +20,6 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             }
             else{
-		    echo '<span>in f method over</span>';
-		echo $ldate;
-		    echo '<br>';
                 $ldate = date('Y-n-d', strtotime($ldate . ' -1 day'));
                 $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             } 
@@ -37,43 +28,21 @@ require_once "../phpClasses/DbConnection.class.php";
         // this function used to analize user online data accourding to months
         private function calOnlineInDay($ldate){
             $recval = $this->check_analizeonlineeachmonthd_Empty();
-		echo '<span>second method over.......</span>';
-		echo $ldate;
-		    echo '<br>';
-            
+		
             if($recval != 0){
                 $this->updateOnlineRecEachDayGivenMonth($ldate); // update last update record (in previous analize)
                 $this->analizeOnlineRecAfterLastAnalizeDateInMonth($ldate);
             }
             else{
-		    echo '<span>in sec method over</span>';
-		echo $ldate;
-		    echo '<br>';
-		    echo $ldate;
-		    echo '<br>';
 		    $ldate = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $ldate) ) ));
                 $arr = explode("-",$ldate);
-		    print_r($arr);
-		    echo '<br>';
 		    $mon = $arr[1];
-		    echo $mon;
-		    echo '<br>';
                 $ye = $arr[0];
-		    echo $ye;
-		    echo '<br>';
                 $day = $arr[2];
-		    echo $day;
-		    echo '<br>';
                 $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
-		    echo $d;
-		    echo '<br>';
                 $date=date_create("$ye-$mon-$day");   
                 $resDate = date_format($date,"Y-n-d");
-		    echo $resDate;
-		    echo '<br>';
                 $resDate = date('Y-n-d', strtotime($resDate . ' -1 day'));
-		    echo $resDate;
-		    echo '<br>';
                 $this->analizeOnlineRecAfterLastAnalizeDateInMonth($resDate);
             }  
         }
