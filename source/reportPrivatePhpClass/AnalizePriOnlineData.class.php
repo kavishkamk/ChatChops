@@ -54,7 +54,12 @@ require_once "../phpClasses/DbConnection.class.php";
                 $arr = explode("-",$ldate);
 		    print_r($arr);
 		    echo '<br>';
-                $mon = $arr[1] - 1;
+		    if($arr[1] == 1){
+			$mon = 12;
+		    }
+		    else{
+			$mon = $arr[1] - 1;
+		    }
 		    echo $mon;
 		    echo '<br>';
                 $ye = $arr[0];
