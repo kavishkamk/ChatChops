@@ -29,7 +29,7 @@ require_once "../phpClasses/DbConnection.class.php";
 		    echo '<span>in f method over</span>';
 		echo $ldate;
 		    echo '<br>';
-                $ldate = date('Y-n-d', strtotime($ldate . ' -1 month'));
+                $ldate = date('Y-n-d', strtotime($ldate . ' -1 day'));
                 $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             } 
         }
@@ -51,7 +51,7 @@ require_once "../phpClasses/DbConnection.class.php";
 		    echo '<br>';
 		    echo $ldate;
 		    echo '<br>';
-		    $ldate = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $ldate) ) ));
+		    $ldate = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $ldate) ) ));
                 $arr = explode("-",$ldate);
 		    print_r($arr);
 		    echo '<br>';
