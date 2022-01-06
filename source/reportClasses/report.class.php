@@ -85,9 +85,6 @@
             
             if($ldate == "sqlerror" || $ldate == "noRec"){
                 $ldate = $this->getFirstOnlineDate();
-                if ($ldate == 0) {
-                    $ldate = date("Y-n-d");
-                }
             }
 
             if($ldate == "sqlerror" || $ldate == "noRec"){
