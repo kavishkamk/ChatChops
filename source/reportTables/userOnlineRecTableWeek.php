@@ -41,28 +41,14 @@
                     if(isset($_GET['reporttime']) && !empty($_GET['reporttime'])){
                         // get week and year from
                         $yeMonth = $_GET['reporttime'];
-                        echo $yeMonth;
-                        echo "<br>";
                         $year = substr($yeMonth, 0, 4);
-                        echo $year;
-                        echo "<br>";
                         $week_no = substr($yeMonth, 6);
-                        echo $week_no;
-                        echo "<br>";
                         $week_start = new DateTime();
                         $week_start->setISODate($year,$week_no);
                         $sd = $week_start->format('Y-n-d');
-                        echo $sd;
-                        echo "<br>";
                         $ed = date('Y-n-d', strtotime($sd . ' +6 day'));
-                        echo $ed;
-                        echo "<br>";
                         $arr = explode("-",$sd);
-                        print_r($arr);
-                        echo "<br>";
                         $d = cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
-                        echo $d;
-                        echo "<br>";
                         require_once "../reportPrivatePhpClass/GetPriTableData.class.php";
                         $priobj = new GetPriTableData();
                         $datas = $priobj->getWeekOnlineUsers($arr[0], $arr[1], $arr[2], $d);
