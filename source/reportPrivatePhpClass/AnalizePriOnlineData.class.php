@@ -288,7 +288,7 @@ require_once "../phpClasses/DbConnection.class.php";
             // get dates until today 
 		$dayTime = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $dayTime) ) ));
             $arr2 = explode("-",$dayTime);
-            $mon = $arr2[1] + 1;
+            $mon = $arr2[1];
             $ye = $arr2[0];
             $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
             $date=date_create("$ye-$mon-1");      
