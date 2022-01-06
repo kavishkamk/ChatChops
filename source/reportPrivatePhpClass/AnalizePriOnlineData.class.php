@@ -7,9 +7,9 @@ require_once "../phpClasses/DbConnection.class.php";
         // this method used to analize private user details
         public function analizePrivateMemberDetails($ldate){
             $this->calOnlineInHours($ldate);
-            $this->calOnlineInDay($ldate);
+            //$this->calOnlineInDay($ldate);
             $this->calPriMsgInHours($ldate);
-            $this->calPriMsgInDay($ldate);
+            //$this->calPriMsgInDay($ldate);
         }
 
         // this function used to analize user online data accourding to hours in day
