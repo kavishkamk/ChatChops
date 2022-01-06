@@ -51,15 +51,11 @@ require_once "../phpClasses/DbConnection.class.php";
 		    echo '<br>';
 		    echo $ldate;
 		    echo '<br>';
+		    $ldate = date("Y-m-d", strtotime ( '-1 month' , strtotime ( $ldate ) )) ;
                 $arr = explode("-",$ldate);
 		    print_r($arr);
 		    echo '<br>';
-		    if($arr[1] == 1){
-			$mon = 12;
-		    }
-		    else{
-			$mon = $arr[1] - 1;
-		    }
+		    $mon = $arr[1];
 		    echo $mon;
 		    echo '<br>';
                 $ye = $arr[0];
