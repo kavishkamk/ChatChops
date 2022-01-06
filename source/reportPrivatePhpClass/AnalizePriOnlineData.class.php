@@ -7,7 +7,13 @@ require_once "../phpClasses/DbConnection.class.php";
         // this method used to analize private user details
         public function analizePrivateMemberDetails($ldate){
             $this->calOnlineInHours($ldate);
+		echo '<span>First method over</span>';
+		echo $ldate;
+		    echo '<br>';
             $this->calOnlineInDay($ldate);
+		echo '<span>second method over</span>';
+		echo $ldate;
+		    echo '<br>';
             //$this->calPriMsgInHours($ldate);
             //$this->calPriMsgInDay($ldate);
         }
@@ -20,6 +26,9 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             }
             else{
+		    echo '<span>in f method over</span>';
+		echo $ldate;
+		    echo '<br>';
                 $ldate = date('Y-n-d', strtotime($ldate . ' -1 day'));
                 $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             } 
@@ -28,12 +37,18 @@ require_once "../phpClasses/DbConnection.class.php";
         // this function used to analize user online data accourding to months
         private function calOnlineInDay($ldate){
             $recval = $this->check_analizeonlineeachmonthd_Empty();
+		echo '<span>second method over.......</span>';
+		echo $ldate;
+		    echo '<br>';
             
             if($recval != 0){
                 $this->updateOnlineRecEachDayGivenMonth($ldate); // update last update record (in previous analize)
                 $this->analizeOnlineRecAfterLastAnalizeDateInMonth($ldate);
             }
             else{
+		    echo '<span>in sec method over</span>';
+		echo $ldate;
+		    echo '<br>';
 		    echo $ldate;
 		    echo '<br>';
                 $arr = explode("-",$ldate);
