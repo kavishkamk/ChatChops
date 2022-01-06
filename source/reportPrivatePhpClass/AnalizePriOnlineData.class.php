@@ -29,7 +29,7 @@ require_once "../phpClasses/DbConnection.class.php";
 		    echo '<span>in f method over</span>';
 		echo $ldate;
 		    echo '<br>';
-                $ldate = date('Y-n-d', strtotime($ldate . ' -1 day'));
+                $ldate = date('Y-n-d', strtotime($ldate . ' -1 month'));
                 $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             } 
         }
