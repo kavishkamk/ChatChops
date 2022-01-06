@@ -8,8 +8,8 @@ require_once "../phpClasses/DbConnection.class.php";
         public function analizePrivateMemberDetails($ldate){
             $this->calOnlineInHours($ldate);
             $this->calOnlineInDay($ldate);
-            $this->calPriMsgInHours($ldate);
-            $this->calPriMsgInDay($ldate);
+            //$this->calPriMsgInHours($ldate);
+            //$this->calPriMsgInDay($ldate);
         }
 
         // this function used to analize user online data accourding to hours in day
