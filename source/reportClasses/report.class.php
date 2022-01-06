@@ -82,6 +82,9 @@
         // this method used to analize all system data and store that in relavant tables
         public function analizeSystemData(){
             $ldate = $this->getLastAnalizeDate(); // get last updated date and time
+            echo $ldate;
+                echo '<span>......</span>';
+                echo '<br>';
             
             if($ldate == "sqlerror" || $ldate == "noRec"){
                 $ldate = $this->getFirstOnlineDate();
