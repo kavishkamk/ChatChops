@@ -51,7 +51,7 @@ require_once "../phpClasses/DbConnection.class.php";
 		    echo '<br>';
 		    echo $ldate;
 		    echo '<br>';
-		    date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $ldate) ) ));
+		    $ldate = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $ldate) ) ));
                 $arr = explode("-",$ldate);
 		    print_r($arr);
 		    echo '<br>';
