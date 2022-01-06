@@ -6,7 +6,7 @@ require_once "../phpClasses/DbConnection.class.php";
         // this method used to analize private group chat details
         public function analizePriGrpDetails($ldate){
             $this->calPriGrpInHours($ldate);
-            $this->calPriGrpInDay($ldate);
+            //$this->calPriGrpInDay($ldate);
         }
 
         // this function used to analize user private group data accourding to months
