@@ -59,7 +59,8 @@
                         echo "<br>";
                         $arr = explode("-",$sd);
                         print_r($arr);
-                        $d=cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
+                        echo "<br>";
+                        $d = cal_days_in_month(CAL_GREGORIAN,$arr[1],$arr[0]);
                         echo $d;
                         echo "<br>";
                         require_once "../reportPrivatePhpClass/GetPriTableData.class.php";
