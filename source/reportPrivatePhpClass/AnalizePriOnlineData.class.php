@@ -68,8 +68,6 @@ require_once "../phpClasses/DbConnection.class.php";
 		    echo $d;
 		    echo '<br>';
                 $date=date_create("$ye-$mon-$day");   
-		    echo $date;
-		    echo '<br>';
                 $resDate = date_format($date,"Y-n-d");
 		    echo $resDate;
 		    echo '<br>';
