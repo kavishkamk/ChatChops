@@ -82,22 +82,12 @@
         // this method used to analize all system data and store that in relavant tables
         public function analizeSystemData(){
             $ldate = $this->getLastAnalizeDate(); // get last updated date and time
-            echo $ldate;
-                echo '<span>......</span>';
-                echo '<br>';
             
             if($ldate == "sqlerror" || $ldate == "noRec"){
                 $ldate = $this->getFirstOnlineDate();
-                echo '<span>I am in</span>';
-                echo $ldate;
-                echo '<span>......</span>';
-                echo '<br>';
                 if ($ldate == 0) {
                     $ldate = date("Y-n-d");
                 }
-                echo $ldate;
-                echo '<span>......</span>';
-                echo '<br>';
             }
 
             if($ldate == "sqlerror" || $ldate == "noRec"){
@@ -112,11 +102,11 @@
                 unset($anzPriOn);
                 require_once "../reportPriGroupPhpClass/AnalizePriGrpData.class.php";
                 $anzPriGrp = new AnalizePriGrpData();
-                //$anzPriGrp->analizePriGrpDetails($ldate);
+                $anzPriGrp->analizePriGrpDetails($ldate);
                 unset($anzPriGrp);
                 require_once "../reportPubGroupPhpClass/AnalizePubGrpData.class.php";
                 $anzPubGrp = new AnalizePubGrpData();
-                //$anzPubGrp->analizepubGrpDetails($ldate);
+                $anzPubGrp->analizepubGrpDetails($ldate);
                 unset($anzPubGrp);
                 return "susses";
                 exit();
