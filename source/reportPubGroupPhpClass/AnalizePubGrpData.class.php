@@ -18,8 +18,9 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizePubGrpMsgRecAfterLastAnalizeDateInMonth($ldate);
             }
             else{
+                $ldate = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $ldate) ) ));
                 $arr = explode("-",$ldate);
-                $mon = $arr[1] - 1;
+                $mon = $arr[1];
                 $ye = $arr[0];
                 $day = $arr[2];
                 $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
