@@ -85,6 +85,10 @@
             
             if($ldate == "sqlerror" || $ldate == "noRec"){
                 $ldate = $this->getFirstOnlineDate();
+                echo '<span>I am in</span>';
+                echo $ldate;
+                echo '<span>......</span>';
+                echo '<br>';
             }
 
             if($ldate == "sqlerror" || $ldate == "noRec"){
