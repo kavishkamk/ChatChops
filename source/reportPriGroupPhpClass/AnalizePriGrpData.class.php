@@ -6,7 +6,7 @@ require_once "../phpClasses/DbConnection.class.php";
         // this method used to analize private group chat details
         public function analizePriGrpDetails($ldate){
             $this->calPriGrpInHours($ldate);
-            //$this->calPriGrpInDay($ldate);
+            $this->calPriGrpInDay($ldate);
         }
 
         // this function used to analize user private group data accourding to months
@@ -18,42 +18,15 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizePriGrpMsgRecAfterLastAnalizeDateInMonth($ldate);
             }
             else{
-                echo $ldate;
-                echo '<br>';
-                echo '<span>------</span>';
                 $ldate = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $ldate) ) ));
-                echo $ldate;
-                echo '<br>';
-                echo '<span>------</span>';
                 $arr = explode("-",$ldate);
-                print_r($arr);
-                echo '<br>';
-                echo '<span>------</span>';
                 $mon = $arr[1];
-                echo $mon;
-                echo '<br>';
-                echo '<span>------</span>';
                 $ye = $arr[0];
-                echo $ye;
-                echo '<br>';
-                echo '<span>------</span>';
                 $day = $arr[2];
-                echo $day;
-                echo '<br>';
-                echo '<span>------</span>';
                 $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
-                echo $d;
-                echo '<br>';
-                echo '<span>------</span>';
                 $date=date_create("$ye-$mon-$day");
                 $resDate = date_format($date,"Y-n-d");
-                echo $resDate;
-                echo '<br>';
-                echo '<span>------</span>';
                 $resDate = date('Y-n-d', strtotime($resDate . ' -1 day'));
-                echo $resDate;
-                echo '<br>';
-                echo '<span>------</span>';
                 $this->analizePriGrpMsgRecAfterLastAnalizeDateInMonth($resDate);
             }  
         }
