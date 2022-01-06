@@ -34,14 +34,32 @@ require_once "../phpClasses/DbConnection.class.php";
                 $this->analizeOnlineRecAfterLastAnalizeDateInMonth($ldate);
             }
             else{
+		    echo $ldate;
+		    echo '<br>';
                 $arr = explode("-",$ldate);
+		    print_r($arr);
+		    echo '<br>';
                 $mon = $arr[1] - 1;
+		    echo $mon;
+		    echo '<br>';
                 $ye = $arr[0];
+		    echo $ye;
+		    echo '<br>';
                 $day = $arr[2];
+		    echo $day;
+		    echo '<br>';
                 $d=cal_days_in_month(CAL_GREGORIAN,$mon,$ye);
-                $date=date_create("$ye-$mon-$day");       
+		    echo $d;
+		    echo '<br>';
+                $date=date_create("$ye-$mon-$day");   
+		    echo $date;
+		    echo '<br>';
                 $resDate = date_format($date,"Y-n-d");
+		    echo $resDate;
+		    echo '<br>';
                 $resDate = date('Y-n-d', strtotime($resDate . ' -1 day'));
+		    echo $resDate;
+		    echo '<br>';
                 $this->analizeOnlineRecAfterLastAnalizeDateInMonth($resDate);
             }  
         }
