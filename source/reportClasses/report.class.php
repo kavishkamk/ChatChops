@@ -92,6 +92,12 @@
                 echo $ldate;
                 echo '<span>......</span>';
                 echo '<br>';
+                if ($ldate == 0) {
+                    $ldate = date("Y-n-d");
+                }
+                echo $ldate;
+                echo '<span>......</span>';
+                echo '<br>';
             }
 
             if($ldate == "sqlerror" || $ldate == "noRec"){
