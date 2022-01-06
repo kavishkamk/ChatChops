@@ -7,27 +7,21 @@ require_once "../phpClasses/DbConnection.class.php";
         // this method used to analize private user details
         public function analizePrivateMemberDetails($ldate){
             $this->calOnlineInHours($ldate);
-            //$this->calOnlineInDay($ldate);
-            //$this->calPriMsgInHours($ldate);
-            //$this->calPriMsgInDay($ldate);
+            $this->calOnlineInDay($ldate);
+            $this->calPriMsgInHours($ldate);
+            $this->calPriMsgInDay($ldate);
         }
 
         // this function used to analize user online data accourding to hours in day
         private function calOnlineInHours($ldate){
-		echo $ldate;
-		echo '<br>';
             $recval = $this->check_analizeonlineeachdateh_Empty();
-		echo $recval;
-		echo '<br>';
             if($recval != 0){
-                //$this->UpdateOnlineRecInHourInGivenDate($ldate); // update last update record (in previous analize)
-                //$this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
+                $this->UpdateOnlineRecInHourInGivenDate($ldate); // update last update record (in previous analize)
+                $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             }
             else{
                 $ldate = date('Y-n-d', strtotime($ldate . ' -1 day'));
-		    echo $ldate;
-		    echo '<br>';
-                //$this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
+                $this->analizeOnlineRecFromAfterLastAnalizeDate($ldate); // analize not analized records
             } 
         }
 
