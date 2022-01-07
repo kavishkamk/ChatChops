@@ -6,7 +6,7 @@
     "scripts": {
     "post-install-cmd": [
       "cd source/PHPMailer && composer.phar install",
-      'cd source/GoogleAuth && composer require google/apiclient:"^2.0"'
+      "cd source/GoogleAuth && composer.phar install"
     ]
   }
 }
