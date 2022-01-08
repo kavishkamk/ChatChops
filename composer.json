@@ -3,14 +3,4 @@
         "ext-calendar": "*"
     }
     
-    /*
-    //build failed
-    
-    "scripts": {
-    "post-install-cmd": [
-      "cd source/PHPMailer && composer.phar install",
-      "cd source/GoogleAuth && composer.phar install"
-    ]
-  }
-  */
 }
